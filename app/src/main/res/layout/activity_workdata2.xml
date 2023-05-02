@@ -86,7 +86,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="다음"
+            android:text="계산하기"
             android:id="@+id/btnNext" />
         <Button
             android:layout_width="match_parent"
