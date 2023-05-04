@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_margin="30dp">
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,10 +16,10 @@
             android:textAlignment="center"
             android:textSize="30dp"
             android:textStyle="bold"
-            android:text="<"/>
+            android:text="&lt;"/>
 
         <TextView
-            android:layout_width="285dp"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:text="어디에서 일하시나요?"
             android:textAlignment="center"
