@@ -3,10 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_calendar.xml" value="0.1" />
+        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/drawable/edge.xml" value="0.2385" />
+        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_calendar.xml" value="0.264" />
+        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_checklist.xml" value="0.24739583333333334" />
+        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_help.xml" value="0.24739583333333334" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_main.xml" value="0.21693840579710144" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_workdata.xml" value="0.29393939393939394" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_workdata2.xml" value="0.264" />
+        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_workdetail.xml" value="0.24739583333333334" />
+        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_workdetail2.xml" value="0.2056159420289855" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/test.xml" value="0.185546875" />
       </map>
     </option>
