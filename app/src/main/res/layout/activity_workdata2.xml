@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_margin="30dp">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,10 +17,10 @@
             android:textAlignment="center"
             android:textSize="30dp"
             android:textStyle="bold"
-            android:text="<"/>
+            android:text="&lt;"/>
 
         <TextView
-            android:layout_width="289dp"
+            android:layout_width="351dp"
             android:layout_height="wrap_content"
             android:text="언제 얼마나 일하시나요?"
             android:textAlignment="center"
@@ -60,11 +59,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginBottom="30dp">
-        <EditText
+        <TextView
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:hint="5월1일 외 3건"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:id="@+id/btnCalendar" />
     </LinearLayout>
 
     <TextView
