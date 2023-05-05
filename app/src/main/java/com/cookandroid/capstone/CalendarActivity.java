@@ -3,6 +3,8 @@ package com.cookandroid.capstone;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,12 +18,15 @@ public class CalendarActivity extends AppCompatActivity {
 
     BottomSheet_Calendar_date bottomSheet;
     private MaterialCalendarView calendarView;
-    private Context mContext;
+    BottomSheet_Calendar test;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+
 
         calendarView = findViewById(R.id.calendar);
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
@@ -31,7 +36,10 @@ public class CalendarActivity extends AppCompatActivity {
                 bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
             }
         });
+
+
     }
+
 }
 
 
