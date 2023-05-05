@@ -1,5 +1,6 @@
 package com.cookandroid.capstone;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 public class BottomSheet_Calendar_date extends BottomSheetDialogFragment {
 
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_bottom_sheet__calendar_date, container, false);
     }
@@ -20,11 +22,14 @@ public class BottomSheet_Calendar_date extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.btnAdd).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.btnAdd);
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dismiss();
+                    dismiss();
             }
         });
     }
 }
+
+

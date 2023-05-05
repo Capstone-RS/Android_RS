@@ -1,5 +1,7 @@
 package com.cookandroid.capstone;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     BottomSheet_Calendar_date bottomSheet;
     private MaterialCalendarView calendarView;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,14 @@ public class CalendarActivity extends AppCompatActivity {
                 bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
             }
         });
+    }
+}
+
+
+
+
+
+
 
         //캘린더뷰 바텀시트 연결 해야해
 
@@ -38,5 +49,4 @@ public class CalendarActivity extends AppCompatActivity {
 //                bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
 //            }
 //        });
-    }
-}
+
