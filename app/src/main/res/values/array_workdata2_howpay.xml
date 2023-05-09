@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="array_workdata2_howpay">
+        <item>시급</item>
+        <item>일급</item>
+    </string-array>
+</resources>
