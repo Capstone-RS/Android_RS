@@ -12,6 +12,7 @@ import org.w3c.dom.Text;
 public class WorkDetail2Activity extends AppCompatActivity {
 
    TextView textView_editbtn;
+   TextView textView_backbtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +20,7 @@ public class WorkDetail2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_workdetail2); // workdata xml이랑 연결된 자바파일이라는 뜻
 
         textView_editbtn = findViewById(R.id.btnCorrect);
+        textView_backbtn = findViewById(R.id.btnBack);
 
         textView_editbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,6 +31,16 @@ public class WorkDetail2Activity extends AppCompatActivity {
 
             }
         });
+        textView_backbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),
+                        WorkDetailActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
 
 
     }
