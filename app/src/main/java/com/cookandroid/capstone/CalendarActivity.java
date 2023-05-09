@@ -1,15 +1,24 @@
 package com.cookandroid.capstone;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CalendarView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+
 
 public class CalendarActivity extends AppCompatActivity {
 
     BottomSheet_Calendar_date bottomSheet;
+    private MaterialCalendarView calendarView;
+    BottomSheet_Calendar test;
 
 
     @Override
@@ -17,7 +26,28 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-        View calendarView = findViewById(R.id.calendar);
+
+
+        calendarView = findViewById(R.id.calendar);
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                bottomSheet = new BottomSheet_Calendar_date();
+                bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
+            }
+        });
+
+
+    }
+
+}
+
+
+
+
+
+
+
         //캘린더뷰 바텀시트 연결 해야해
 
 //        calendarView.setOnClickListener(new View.OnClickListener() {
@@ -27,5 +57,4 @@ public class CalendarActivity extends AppCompatActivity {
 //                bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
 //            }
 //        });
-    }
-}
+
