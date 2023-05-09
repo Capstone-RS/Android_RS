@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         // 기본 화면 설정
         getSupportFragmentManager().beginTransaction().replace(R.id.containers, homeFragment).commit();
 
+
         NavigationBarView navigationBarView = findViewById(R.id.bottomNav);
         navigationBarView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override

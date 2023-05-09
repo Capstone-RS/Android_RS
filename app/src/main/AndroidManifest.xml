@@ -28,6 +28,7 @@
         <activity android:name=".WorkDetailActivity" android:label="정보상세 액티비티"/>
         <activity android:name=".WorkDetail2Activity" android:label="정보상세2 액티비티"/>
         <activity android:name=".HelpActivity" android:label="도움말 액티비티"/>
+        <activity android:name=".ChooseWorkActivity" android:label="근무등록 액티비티"/>
 
     </application>
 
