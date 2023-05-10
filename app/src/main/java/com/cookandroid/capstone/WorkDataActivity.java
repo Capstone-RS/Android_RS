@@ -18,13 +18,7 @@ public class WorkDataActivity extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_workdata); // workdata xml이랑 연결된 자바파일이라는 뜻
-
-//        Spinner spnPay = (Spinner) findViewById(R.id.spnPay);
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-//                R.array.workData_array, android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spnPay.setAdapter(adapter);
-
+        
 
     }
 }
