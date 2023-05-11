@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="20dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,6 +17,7 @@
             android:textAlignment="center"
             android:textSize="30dp"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:text="&lt;"/>
 
         <TextView
@@ -24,14 +26,16 @@
             android:text="어디에서 일하시나요?"
             android:textAlignment="center"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@android:color/black"/>
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="근무지명"
-        android:textSize="15dp"/>
+        android:textSize="15dp"
+        android:textColor="@android:color/black"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,7 +48,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="월급일"
-        android:textSize="15dp"/>
+        android:textSize="15dp"
+        android:textColor="@android:color/black"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -58,7 +63,8 @@
             android:layout_height="wrap_content"
             android:text="근무한 돈을"
             android:textSize="15dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:textColor="@android:color/black"/>
     </LinearLayout>
 
 
@@ -75,7 +81,8 @@
             android:layout_height="wrap_content"
             android:text="에 받아요"
             android:textSize="15dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:textColor="@android:color/black"/>
     </LinearLayout>
 
 
@@ -87,13 +94,18 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:text="다음"
-            android:id="@+id/btnNext" />
+            android:id="@+id/btnNext"
+            android:background="@drawable/button_round_black"
+            android:textColor="@android:color/white" />
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="나중에하기"
-            android:id="@+id/btnHome"/>
+            android:id="@+id/btnHome"
+            android:background="@drawable/button_round_gray"
+            android:textColor="@android:color/white"/>
 
     </LinearLayout>
 
