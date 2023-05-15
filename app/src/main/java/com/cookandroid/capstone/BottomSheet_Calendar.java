@@ -12,10 +12,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
 public class BottomSheet_Calendar extends BottomSheetDialogFragment {
 
+    private MaterialCalendarView calendarView;
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_bottom_sheet__calendar, container, false);
+        View v = inflater.inflate(R.layout.fragment_bottom_sheet__calendar, container, false);
+
+        calendarView = v.findViewById(R.id.calendar);
+        calendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE);
+
+        return v;
     }
 
     @Override
