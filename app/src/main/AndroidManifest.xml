@@ -23,7 +23,6 @@
         </activity>
         <activity android:name=".WorkDataActivity" android:label="정보입력 액티비티"/>
         <activity android:name=".WorkData2Activity" android:label="정보입력2 액티비티"/>
-        <activity android:name=".CalendarActivity" android:label="캘린더 액티비티"/>
         <activity android:name=".CheckListActivity" android:label="체크리스트 액티비티"/>
         <activity android:name=".WorkDetailActivity" android:label="정보상세 액티비티"/>
         <activity android:name=".WorkDetail2Activity" android:label="정보상세2 액티비티"/>

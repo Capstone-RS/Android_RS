@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,6 +18,7 @@
             android:textAlignment="center"
             android:textSize="30dp"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:text="&lt;"/>
 
         <TextView
@@ -25,13 +27,15 @@
             android:text="언제 얼마나 일하시나요?"
             android:textAlignment="center"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@android:color/black"/>
     </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="급여"
-        android:textSize="15dp"/>
+        android:textSize="15dp"
+        android:textColor="@android:color/black"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,7 +57,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="근무 날짜(복수 선택 가능)"
-        android:textSize="15dp"/>
+        android:textSize="15dp"
+        android:textColor="@android:color/black"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,34 +69,40 @@
             android:layout_height="wrap_content"
             android:hint="5월1일 외 3건"
             android:textSize="20dp"
-            android:id="@+id/btnCalendar" />
+            android:id="@+id/btnCalendar"
+            android:textColor="@android:color/black"/>
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="근무 시간"
-        android:textSize="15dp"/>
+        android:textSize="15dp"
+        android:textColor="@android:color/black"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         android:orientation="horizontal">
-        <EditText
-            android:layout_width="100dp"
+        <TextView
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:hint="9:00"
-            android:textSize="20dp" />
+            android:hint="AM 9:00"
+            android:textSize="20dp"
+            android:textAlignment="center"
+            android:id="@+id/startTime"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-"
             android:textSize="30dp"/>
-        <EditText
-            android:layout_width="100dp"
+        <TextView
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:hint="18:00"
-            android:textSize="20dp" />
+            android:hint="PM 6:00"
+            android:textSize="20dp"
+            android:textAlignment="center"
+            android:id="@+id/endTime"/>
     </LinearLayout>
 
 
@@ -99,13 +110,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="휴게 시간"
-        android:textSize="15dp"/>
+        android:textSize="15dp"
+        android:textColor="@android:color/black"/>
     <Spinner
         android:id="@+id/spnRestTime"
         android:layout_width="130dp"
         android:layout_height="50dp"
         android:spinnerMode="dropdown"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="100dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -114,13 +126,18 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:text="계산하기"
-            android:id="@+id/btnNext" />
+            android:id="@+id/btnNext"
+            android:background="@drawable/button_round_black"
+            android:textColor="@android:color/white" />
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="나중에하기"
-            android:id="@+id/btnHome"/>
+            android:id="@+id/btnHome"
+            android:background="@drawable/button_round_gray"
+            android:textColor="@android:color/white"/>
 
     </LinearLayout>
 

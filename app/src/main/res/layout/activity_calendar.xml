@@ -8,30 +8,15 @@
     android:orientation="vertical"
     tools:context=".Fragment.CalendarFragment">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:orientation="horizontal">
+        android:text="달력"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:id="@+id/btn"/>
 
-        <TextView
-            android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="50dp"
-            android:textAlignment="center"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:text="&lt;"/>
-
-        <TextView
-            android:layout_width="334dp"
-            android:layout_height="wrap_content"
-            android:text="달력"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:id="@+id/btn"/>
-    </LinearLayout>
 
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/calendar"
