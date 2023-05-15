@@ -29,7 +29,7 @@ public class WorkData2Activity extends AppCompatActivity {
         TextView btnBack = (TextView) findViewById(R.id.btnBack);
         Button btnNext = (Button) findViewById(R.id.btnNext);
         Button btnHome = (Button) findViewById(R.id.btnHome);
-        TextView btnCalendar = (findViewById(R.id.btnCalendar));
+        TextView btnDate = (findViewById(R.id.btnDate));
         TextView startTime = (TextView)findViewById(R.id.startTime) ;
         TextView endTime = (TextView)findViewById(R.id.endTime);
 
@@ -50,7 +50,7 @@ public class WorkData2Activity extends AppCompatActivity {
 
 
         //달력바텀시트 연결
-        btnCalendar.setOnClickListener(new View.OnClickListener() {
+        btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 bottomSheet = new BottomSheet_Calendar();

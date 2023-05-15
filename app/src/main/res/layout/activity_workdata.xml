@@ -41,6 +41,7 @@
         android:layout_height="wrap_content"
         android:hint="카페"
         android:textSize="15dp"
+        android:id="@+id/name"
         android:layout_marginBottom="30dp"/>
 
 

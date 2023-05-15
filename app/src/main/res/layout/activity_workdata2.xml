@@ -50,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="0원"
+            android:id="@+id/money"
             android:textSize="15dp" />
     </LinearLayout>
 
@@ -69,7 +70,7 @@
             android:layout_height="wrap_content"
             android:hint="5월1일 외 3건"
             android:textSize="20dp"
-            android:id="@+id/btnCalendar"
+            android:id="@+id/btnDate"
             android:textColor="@android:color/black"/>
     </LinearLayout>
 
