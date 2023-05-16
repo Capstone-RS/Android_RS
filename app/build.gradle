@@ -57,4 +57,7 @@ dependencies {
     //바텀 네비게이터 사용을 위해서
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'
+
+    //리사이클뷰
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
 }
