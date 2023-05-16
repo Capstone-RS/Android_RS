@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
@@ -11,18 +12,21 @@
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_calendar.xml" value="0.264" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_checklist.xml" value="0.264" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_choosework.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_community_detail.xml" value="0.24739583333333334" />
+        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_community_list.xml" value="0.24739583333333334" />
+        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_community_main.xml" value="0.24739583333333334" />
+        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_community_write.xml" value="0.24739583333333334" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_help.xml" value="0.24739583333333334" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_profile.xml" value="0.2" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_workdata.xml" value="0.264" />
-        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_workdata2.xml" value="0.16" />
+        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_workdata2.xml" value="0.1" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_workdetail.xml" value="0.24739583333333334" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_workdetail2.xml" value="0.2056159420289855" />
-        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_workdetail_edit.xml" value="0.1" />
+        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/activity_workdetail_edit.xml" value="0.264" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/dialog_addwork.xml" value="0.1" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/fragment_bottom_sheet__calendar.xml" value="0.176" />
-        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/fragment_bottom_sheet__calendar_date.xml" value="0.2" />
-        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/fragment_bottom_sheet__push_notification.xml" value="0.1" />
+        <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/fragment_bottom_sheet__calendar_date.xml" value="0.1" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/fragment_bottom_sheet_addwork.xml" value="0.12006079027355623" />
         <entry key="..\:/Users/user/Github_Capstone/Android_RS/app/src/main/res/layout/test.xml" value="0.185546875" />
       </map>
