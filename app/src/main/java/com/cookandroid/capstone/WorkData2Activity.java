@@ -29,9 +29,14 @@ public class WorkData2Activity extends AppCompatActivity {
         TextView btnBack = (TextView) findViewById(R.id.btnBack);
         Button btnNext = (Button) findViewById(R.id.btnNext);
         Button btnHome = (Button) findViewById(R.id.btnHome);
-        TextView btnCalendar = (findViewById(R.id.btnCalendar));
+        TextView btnDate = (findViewById(R.id.btnDate));
         TextView startTime = (TextView)findViewById(R.id.startTime) ;
         TextView endTime = (TextView)findViewById(R.id.endTime);
+
+        //BottomSheet_Calendar 에서 선택된 날짜 Textview(btnDate)에 출력하기
+        Intent intent = getIntent();
+        String text = intent.getStringExtra("text");
+        btnDate.setText(text);
 
 
         //스피너
@@ -50,13 +55,14 @@ public class WorkData2Activity extends AppCompatActivity {
 
 
         //달력바텀시트 연결
-        btnCalendar.setOnClickListener(new View.OnClickListener() {
+        btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 bottomSheet = new BottomSheet_Calendar();
                 bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
             }
         });
+
 
         //타임피커
         startTime.setOnClickListener(new View.OnClickListener() {
