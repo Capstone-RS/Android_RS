@@ -18,12 +18,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class WorkDataActivity extends AppCompatActivity {
-
-    //파이어베이스 데이터 연동
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
 
     @Override
@@ -49,8 +46,9 @@ public class WorkDataActivity extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addworkdata_firebase(name.getText().toString());
+                String getName = name.getText().toString();
                 Intent intent = new Intent(getApplicationContext(), WorkData2Activity.class);
+                intent.putExtra("name",getName);
                 startActivity(intent);
             }
         });
@@ -62,13 +60,6 @@ public class WorkDataActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-
-    public void addworkdata_firebase(String name){
-
-        workdata_firebase workdata_firebase = new workdata_firebase((name));
-        databaseReference.child("data").child(name).setValue(workdata_firebase);
     }
 
 }
