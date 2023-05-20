@@ -5,7 +5,9 @@
     android:layout_height="wrap_content"
     tools:context=".BottomSheet_Push_Notification"
     android:orientation="vertical"
-    android:paddingStart="16dp">
+    android:padding="24dp"
+    android:background="@drawable/bottom_sheet_background"
+    android:clipToOutline="true">
 
     <TextView
         android:layout_width="match_parent"
@@ -109,6 +111,7 @@
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="30dp"
         android:gravity="center_vertical">
 
         <ImageView

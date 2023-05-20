@@ -51,13 +51,13 @@
 
                     </LinearLayout>
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/editProfileButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:background="@null"
-                        android:src="@drawable/edit_profile_icon" />
+                        android:src="@drawable/edit_profile_icon"
+                        android:clickable="true"/>
 
                 </LinearLayout>
 
@@ -67,11 +67,12 @@
                     android:background="#E5E5E5" />
 
                 <LinearLayout
-                    android:id="@+id/notificationSettingsLayout"
+                    android:id="@+id/notification_settings_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:clickable="true">
 
                     <TextView
                         android:layout_width="0dp"
@@ -137,7 +138,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:clickable="true">
 
                     <TextView
                         android:layout_width="0dp"
@@ -168,7 +170,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:clickable="true">
 
                     <TextView
                         android:layout_width="0dp"
@@ -205,7 +208,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:clickable="true">
 
                     <TextView
                         android:layout_width="0dp"
