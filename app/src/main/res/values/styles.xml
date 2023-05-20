@@ -8,6 +8,6 @@
 </style>
 
 <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
-<item name="android:background">@drawable/bottom_sheet_background</item>
+<item name="android:backgroundTint">@drawable/rounded_dialog</item>
 </style>
 </resources>

@@ -23,14 +23,12 @@ public class ProfileFragment extends Fragment {
         notificationSettingsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBottomSheetDialogFragment();
+                BottomSheet_Push_Notification bottomSheet = new BottomSheet_Push_Notification();
+                bottomSheet.show(getParentFragmentManager(), "bottomSheet");
             }
         });
 
         return view;
     }
-    private void showBottomSheetDialogFragment() {
-        BottomSheet_Push_Notification bottomSheet = new BottomSheet_Push_Notification();
-        bottomSheet.show(getParentFragmentManager(), "push_notification_bottom_sheet");
-    }
 }
+
