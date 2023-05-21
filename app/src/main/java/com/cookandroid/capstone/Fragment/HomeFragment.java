@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 
+import com.cookandroid.capstone.HelpActivity;
 import com.cookandroid.capstone.R;
 
 
@@ -19,14 +21,22 @@ import com.cookandroid.capstone.R;
 public class HomeFragment extends Fragment {
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_home, container, false);
+        View view = inflater.inflate(R.layout.activity_home, container, false);
 
+        ImageView fragHelp = view.findViewById(R.id.frag_help);
+        fragHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 클릭 이벤트 처리
+                Intent intent = new Intent(getActivity(), HelpActivity.class);
+                startActivity(intent);
+            }
+        });
 
-
+        return view;
     }
+
 }
