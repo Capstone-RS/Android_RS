@@ -47,8 +47,6 @@ public class WorkData2Activity extends AppCompatActivity {
         String name = intent2.getStringExtra("name");
 
 
-
-
         //BottomSheet_Calendar 에서 선택된 날짜 Textview(btnDate)에 출력하기
         Intent intent = getIntent();
         String text = intent.getStringExtra("text");
@@ -68,6 +66,12 @@ public class WorkData2Activity extends AppCompatActivity {
                 R.array.array_workdata2_rest, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnRestTime.setAdapter(adapter1);
+
+
+
+        //스피너 선택값 String으로 저장
+        String selectPay = spnPay.getSelectedItem().toString();
+        String selectRest = spnRestTime.getSelectedItem().toString();
 
 
         //달력바텀시트 연결
@@ -146,6 +150,7 @@ public class WorkData2Activity extends AppCompatActivity {
                String getMoney = money.getText().toString();
                String getStartTime = startTime.getText().toString();
                String getEndTime = endTime.getText().toString();
+               String getSelectPay = selectPay;
 
 
 
@@ -154,7 +159,8 @@ public class WorkData2Activity extends AppCompatActivity {
                 result.put("money",getMoney);
                 result.put("startTime",getStartTime);
                 result.put("endTime",getEndTime);
-                writeData(getName,getMoney,getStartTime,getEndTime);
+                result.put("selectPay",getSelectPay);
+                writeData(getName,getMoney,getStartTime,getEndTime,getSelectPay);
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
@@ -169,8 +175,10 @@ public class WorkData2Activity extends AppCompatActivity {
             }
         });
     }
-   private void writeData(String name, String money,String startTime,String endTime){
-       workdata2_firebase workdata2_firebase = new workdata2_firebase(name,money,startTime,endTime);
+
+
+   private void writeData(String name, String money,String startTime,String endTime,String selectPay){
+       workdata2_firebase workdata2_firebase = new workdata2_firebase(name,money,startTime,endTime,selectPay);
 
        databaseReference.child("data").child(name).push().setValue(workdata2_firebase);
    }
