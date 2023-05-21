@@ -175,6 +175,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="근무지 추가"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/black"
                         android:id="@+id/btnAdd"/>
                 </LinearLayout>
                 <LinearLayout
