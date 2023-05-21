@@ -58,7 +58,8 @@
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/edit_profile_icon"
                         android:clickable="true"
-                        android:focusable="true"/>
+                        android:focusable="true"
+                        android:background="?android:attr/selectableItemBackground"/>
 
                 </LinearLayout>
 
@@ -74,7 +75,8 @@
                     android:orientation="horizontal"
                     android:padding="16dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackground">
 
                     <TextView
                         android:layout_width="0dp"
@@ -142,7 +144,8 @@
                     android:orientation="horizontal"
                     android:padding="16dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackground">
 
                     <TextView
                         android:layout_width="0dp"
@@ -176,7 +179,8 @@
                     android:orientation="horizontal"
                     android:padding="16dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackground">
 
                     <TextView
                         android:layout_width="0dp"
@@ -215,7 +219,8 @@
                     android:orientation="horizontal"
                     android:padding="16dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackground">
 
                     <TextView
                         android:layout_width="0dp"
