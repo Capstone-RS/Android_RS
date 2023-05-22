@@ -9,15 +9,17 @@ public class workdata2_firebase {
     String endTime;
     String name;
     String selectPay;
+    String selectRestTime;
 
     public workdata2_firebase(){};
 
-    public workdata2_firebase(String name,String money, String startTime,String endTime,String selectPay){
+    public workdata2_firebase(String name,String money, String startTime,String endTime,String selectPay,String selectRestTime){
         this.name = name;
         this.money = money;
         this.startTime = startTime;
         this.endTime = endTime;
         this.selectPay = selectPay;
+        this.selectRestTime = selectRestTime;
     }
     public String getName(){
         return name;
@@ -59,6 +61,14 @@ public class workdata2_firebase {
         this.selectPay = selectPay;
     }
 
+    public String getSelectRestTime(){
+        return selectRestTime;
+    }
+
+    public void setSelectRestTime(String selectRestTime){
+        this.selectRestTime = selectRestTime;
+    }
+
 
     @Override
     public String toString() {
@@ -67,7 +77,8 @@ public class workdata2_firebase {
                 "money='" + money + '\'' +
                 ", startTime='" + startTime + '\'' +
                 ", endTime=" + endTime + '\'' +
-                ", selectPay=" + selectPay +
+                ", selectPay=" + selectPay + '\'' +
+                ", selectRestTime=" + selectRestTime +
                 '}';
     }
 
