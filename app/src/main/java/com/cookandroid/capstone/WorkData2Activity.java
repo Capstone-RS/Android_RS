@@ -4,6 +4,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,13 +14,22 @@ import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.w3c.dom.Text;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class WorkData2Activity extends AppCompatActivity {
 
+    //파이어베이스 데이터 연동
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
+
     BottomSheet_Calendar bottomSheet;
+    int i =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +42,11 @@ public class WorkData2Activity extends AppCompatActivity {
         TextView btnDate = (findViewById(R.id.btnDate));
         TextView startTime = (TextView)findViewById(R.id.startTime) ;
         TextView endTime = (TextView)findViewById(R.id.endTime);
+        EditText money = (EditText)findViewById(R.id.money);
+
+        Intent intent2 = getIntent();
+        String name = intent2.getStringExtra("name");
+
 
         //BottomSheet_Calendar 에서 선택된 날짜 Textview(btnDate)에 출력하기
         Intent intent = getIntent();
@@ -47,11 +62,14 @@ public class WorkData2Activity extends AppCompatActivity {
         spnPay.setAdapter(adapter);
 
 
+
         Spinner spnRestTime = (Spinner) findViewById(R.id.spnRestTime);
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this,
                 R.array.array_workdata2_rest, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnRestTime.setAdapter(adapter1);
+
+
 
 
         //달력바텀시트 연결
@@ -114,7 +132,7 @@ public class WorkData2Activity extends AppCompatActivity {
 
 
 
-        //버튼
+        //뒤로가기버튼
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,15 +140,33 @@ public class WorkData2Activity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        //계산하기 버튼
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String getName = name;
+               String getMoney = money.getText().toString();
+               String getStartTime = startTime.getText().toString();
+               String getEndTime = endTime.getText().toString();
+               String getSelectPay = spnPay.getSelectedItem().toString(); //스피너 선택값 가져오기
+                String getSelectRestTime = spnRestTime.getSelectedItem().toString();
+
+
+
+                HashMap result = new HashMap<>();
+                result.put("name",getName);
+                result.put("money",getMoney);
+                result.put("startTime",getStartTime);
+                result.put("endTime",getEndTime);
+                result.put("Pay",getSelectPay);
+                result.put("RestTime",getSelectRestTime);
+                writeData(getName,getMoney,getStartTime,getEndTime,getSelectPay,getSelectRestTime);
+
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
         });
-
+        //나중에하기 버튼
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,5 +175,12 @@ public class WorkData2Activity extends AppCompatActivity {
             }
         });
     }
+
+
+   private void writeData(String name, String money,String startTime,String endTime,String selectPay, String selectRestTime){
+       workdata2_firebase workdata2_firebase = new workdata2_firebase(name,money,startTime,endTime,selectPay,selectRestTime);
+
+       databaseReference.child("data").child(name).push().setValue(workdata2_firebase);
+   }
 
 }
