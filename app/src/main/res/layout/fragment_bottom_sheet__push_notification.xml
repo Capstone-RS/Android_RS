@@ -5,7 +5,9 @@
     android:layout_height="wrap_content"
     tools:context=".BottomSheet_Push_Notification"
     android:orientation="vertical"
-    android:paddingStart="16dp">
+    android:padding="24dp"
+    android:background="@drawable/rounded_dialog"
+    android:clipToOutline="true">
 
     <TextView
         android:layout_width="match_parent"
@@ -17,13 +19,16 @@
         android:layout_marginTop="20dp" />
 
     <LinearLayout
+        android:id="@+id/layout_none"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:layout_marginTop="15dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:clickable="true">
 
         <ImageView
+            android:id="@+id/check_none"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:gravity="center_vertical"
@@ -39,13 +44,16 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_start_time"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:layout_marginTop="15dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:clickable="true">
 
         <ImageView
+            android:id="@+id/check_start"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:gravity="center_vertical"
@@ -61,13 +69,16 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_10_minutes"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:layout_marginTop="15dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:clickable="true">
 
         <ImageView
+            android:id="@+id/check_10"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:gravity="center_vertical"
@@ -83,13 +94,16 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_30_minutes"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:layout_marginTop="15dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:clickable="true">
 
         <ImageView
+            android:id="@+id/check_30"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:gravity="center_vertical"
@@ -105,13 +119,17 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_1_hour"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:layout_marginTop="15dp"
-        android:gravity="center_vertical">
+        android:layout_marginBottom="30dp"
+        android:gravity="center_vertical"
+        android:clickable="true">
 
         <ImageView
+            android:id="@+id/check_1"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:gravity="center_vertical"
