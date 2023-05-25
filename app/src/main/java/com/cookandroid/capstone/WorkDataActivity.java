@@ -54,7 +54,7 @@ public class WorkDataActivity extends AppCompatActivity {
                 R.array.array_workdata_payweek, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        //index 값을 사용하여 선택 시 해당 스피너 뜨도록
+        //index 값을 사용하여 spn1에 스피너 값 선택시 해당 스피너 출력 되도록 구현
         spn1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -89,8 +89,12 @@ public class WorkDataActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String getName = name.getText().toString();
+                String getWorkPeriod = spn1.getSelectedItem().toString();
+                String getPayDay = spn2.getSelectedItem().toString();
                 Intent intent = new Intent(getApplicationContext(), WorkData2Activity.class);
                 intent.putExtra("name",getName);
+                intent.putExtra("workPeriod",getWorkPeriod);
+                intent.putExtra("payDay",getPayDay);
                 startActivity(intent);
             }
         });
