@@ -13,14 +13,11 @@ android:orientation="vertical">
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
+        <Button
             android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:text="&lt;"
-            android:textStyle="bold"
-            android:textSize="30sp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back" />
 
         <TextView
             android:layout_width="342dp"
@@ -46,13 +43,12 @@ android:orientation="vertical">
             android:layout_height="match_parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/write"
+            android:id="@+id/btn_write"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_margin="30dp"
-            app:fabSize="normal"
             android:clickable="true"
             app:srcCompat="@drawable/edit_profile_icon" />
     </RelativeLayout>
