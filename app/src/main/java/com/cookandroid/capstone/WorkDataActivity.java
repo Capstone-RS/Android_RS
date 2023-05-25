@@ -3,6 +3,7 @@ package com.cookandroid.capstone;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,11 +29,52 @@ public class WorkDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workdata);
 
-
         TextView btnBack = (TextView) findViewById(R.id.btnBack);
         Button btnNext = (Button) findViewById(R.id.btnNext);
         Button btnHome = (Button) findViewById(R.id.btnHome);
         EditText name = (EditText) findViewById(R.id.name);
+        //사용할 스피너 선언
+        Spinner spn1 = (Spinner) findViewById(R.id.spn1);
+        Spinner spn2 = (Spinner) findViewById(R.id.spn2);
+
+        //스피너
+        //스피너 workperiod(한달, 일주일) Adapter로 연결
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.array_workdata_workperiod, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spn1.setAdapter(adapter); //spn1 위치에 adapter 연결
+
+        //스피너 paydate(1일~) Adapter1로 연결
+        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this,
+                R.array.array_workdata_paydate, android.R.layout.simple_spinner_item);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //스피너 payweek(월~일) Adapter2로 연결
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
+                R.array.array_workdata_payweek, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //index 값을 사용하여 선택 시 해당 스피너 뜨도록
+        spn1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int item = spn1.getSelectedItemPosition(); // spn1에서 선택한 값 index번호를 int형으로 저장
+                if(item == 0){
+                    spn2.setAdapter(adapter1);
+                } else if (item == 1){
+                    spn2.setAdapter(adapter2);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
+
 
         //뒤로가기버튼
         btnBack.setOnClickListener(new View.OnClickListener() {

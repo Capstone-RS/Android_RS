@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="array_workdata_workperiod">
+        <item>한 달 동안</item>
+        <item>일주일 동안</item>
 
     </string-array>
 </resources>
