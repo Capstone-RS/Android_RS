@@ -29,6 +29,8 @@
         <activity android:name=".HelpActivity" android:label="도움말 액티비티"/>
         <activity android:name=".ChooseWorkActivity" android:label="근무등록 액티비티"/>
         <activity android:name=".WorkDetailEditActivity"/>
+        <activity android:name=".comActivity" android:label="커뮤니티 액티비티" />
+        <activity android:name=".Com_listActivity" android:label="커뮤니티 게시판 리스트 액티비티" />
 
     </application>
 
