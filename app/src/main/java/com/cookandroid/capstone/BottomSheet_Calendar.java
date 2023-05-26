@@ -37,7 +37,6 @@ public class BottomSheet_Calendar extends BottomSheetDialogFragment {
 
         calendarView = v.findViewById(R.id.calendar);
         calendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE);//캘린더 날짜 다중 선택
-
         //선택된 날짜 workData2로 전달
         btnFinish = v.findViewById(R.id.btnFinish);
         btnFinish.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +44,8 @@ public class BottomSheet_Calendar extends BottomSheetDialogFragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), WorkData2Activity.class);
                 String Date = calendarView.getSelectedDates().toString();
-                intent.putExtra("text",Date);
+                String Date2 = Date.replaceAll("[{CalendarDay}]","");
+                intent.putExtra("text",Date2);
                 startActivity(intent);
             }
         });
