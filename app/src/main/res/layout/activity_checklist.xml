@@ -30,6 +30,27 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="15dp"
+            android:text="*수정 - 할 일을 한 번 눌러주세요"
+            android:textStyle="italic"
+            android:textColor="#c8386b"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="*삭제 - 할 일을 꾹 눌러주세요."
+            android:textStyle="italic"
+            android:textColor="#c8386b"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:orientation="horizontal">
     <EditText
@@ -46,13 +67,13 @@
         android:layout_margin="10dp"
         android:text="등록" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <ListView
         android:id="@+id/lvWork"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"/>
-
 </LinearLayout>

@@ -1,15 +1,22 @@
 package com.cookandroid.capstone;
 
+import static android.media.CamcorderProfile.get;
+
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.ChildEventListener;
@@ -17,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -25,61 +33,116 @@ import java.util.List;
 public class CheckListActivity extends AppCompatActivity {
 
     TextView textView_backbtn;
-    private Button sendbt;
-    private EditText editdt;
-    public String msg;
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mDatabaseReference;
-    private ChildEventListener mChildEventListener;
+    Button sendbt;
+    EditText editdt;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+    ArrayList<String> arrayList = new ArrayList<>();
+    ArrayAdapter<String> adapter;
+    ListView listView;
+    String sOldValue;
 
-    private ListView listView;
-    private ArrayAdapter<String> adapter;
-    
-
-    List<Object> Array = new ArrayList<Object>();
-
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checklist); // workdata xml이랑 연결된 자바파일이라는 뜻
 
-        //등록하기
-        sendbt = (Button) findViewById(R.id.btnRegist);
-        editdt = (EditText) findViewById(R.id.etWork);
-        listView = (ListView) findViewById(R.id.lvWork);
+        sendbt = findViewById(R.id.btnRegist);
+        editdt = findViewById(R.id.etWork);
+        listView = findViewById(R.id.lvWork);
 
-        initDatabase();
-
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line,
-                new ArrayList<String>());
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice,
+                arrayList);
         listView.setAdapter(adapter);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-        sendbt.setOnClickListener((v) -> {
-            msg = editdt.getText().toString();
-            databaseReference.child("to do").push().setValue(msg);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference().child("Todo");
+
+        getValue();
+
+
+
+        //오늘의 할 일 등록
+        sendbt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String sName = editdt.getText().toString();
+                if (sendbt.getText().toString().equals("등록")) {
+                    String sKey = databaseReference.push().getKey();
+
+                    if (sKey != null) {
+                        databaseReference.child(sKey).child("work").setValue(sName);
+                        editdt.setText("");
+                    }
+                } else {
+                    Query query = databaseReference.orderByChild("work").equalTo(sOldValue);
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                dataSnapshot.getRef().child("work").setValue(sName);
+                                editdt.setText("");
+                                sendbt.setText("등록");
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
         });
 
-        mDatabaseReference = mFirebaseDatabase.getReference("to do");
-        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+        //리스트뷰 아이템 한 번 클릭시 수정 가능 (등록버튼->수정버튼)
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                adapter.clear();
-
-                for (DataSnapshot messageData : dataSnapshot.getChildren()){
-                    String msg2 = messageData.getValue().toString();
-                    Array.add(msg2);
-                    adapter.add(msg2);
-                }
-                adapter.notifyDataSetChanged();
-                listView.setSelection(adapter.getCount()-1);
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                sOldValue = arrayList.get(position);
+                editdt.setText(sOldValue);
+                sendbt.setText("수정");
             }
+        });
 
+        //리스트뷰 아이템 길게 클릭시 삭제 다이얼로그
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
 
+                String sValue = arrayList.get(position);
+                AlertDialog.Builder builder = new AlertDialog.Builder(CheckListActivity.this);
+                builder.setTitle("삭제");
+                builder.setMessage("삭제하시겠습니까?");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Query query = databaseReference.orderByChild("work").equalTo(sValue);
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    dataSnapshot.getRef().removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(CheckListActivity.this, "error:" +
+                                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+                builder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.show();
+                return true;
             }
         });
 
@@ -95,45 +158,25 @@ public class CheckListActivity extends AppCompatActivity {
             }
         });
     }
-    private void initDatabase() {
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-
-        mDatabaseReference = mFirebaseDatabase.getReference("log");
-        mDatabaseReference.child("log").setValue("check");
-
-        mChildEventListener = new ChildEventListener() {
-
+    //파이어베이스에서 데이터 불러오기
+    private void getValue(){
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrayList.clear();
 
-            }
-
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String sValue = dataSnapshot.child("work").getValue(String.class);
+                    arrayList.add(sValue);
+                }
+                listView.setAdapter(adapter);
+                }
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(CheckListActivity.this, "error:" + error.getMessage(),
+                        Toast.LENGTH_SHORT).show();
             }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        mDatabaseReference.addChildEventListener(mChildEventListener);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mDatabaseReference.removeEventListener(mChildEventListener);
+        });
     }
 }
