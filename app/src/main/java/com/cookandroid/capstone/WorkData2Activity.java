@@ -3,6 +3,9 @@ package com.cookandroid.capstone;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,11 +19,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 public class WorkData2Activity extends AppCompatActivity {
 
@@ -39,21 +47,37 @@ public class WorkData2Activity extends AppCompatActivity {
         TextView btnBack = (TextView) findViewById(R.id.btnBack);
         Button btnNext = (Button) findViewById(R.id.btnNext);
         Button btnHome = (Button) findViewById(R.id.btnHome);
-        TextView btnDate = (findViewById(R.id.btnDate));
         TextView startTime = (TextView)findViewById(R.id.startTime) ;
         TextView endTime = (TextView)findViewById(R.id.endTime);
         EditText money = (EditText)findViewById(R.id.money);
+        TextView workDay = (TextView)findViewById(R.id.btnWorkDay);
+        //BottomSheet_Calendar 에서 선택된 날짜 Textview(workDay)에 출력하기
 
+        // Intent에서 데이터 가져오기
+        Intent intent = getIntent();
+        String selectedDatesString = intent.getStringExtra("test");
+
+        // 가져온 데이터를 사용하여 작업 수행
+        if (selectedDatesString != null) {
+            // 선택된 날짜 데이터가 있는 경우
+            workDay.setText(selectedDatesString);
+            //Log.d("Selected Dates", "Selected dates: " + selectedDatesString);
+            // TODO: 이후 작업 수행
+        } else {
+            // 선택된 날짜 데이터가 없는 경우
+            workDay.setText("날짜를 선택 해 주세요");
+            //Log.d("Selected Dates", "No selected dates");
+            // TODO: 이후 작업 수행
+        }
+
+        Log.d("Selected Dates", "Selected dates string: " + selectedDatesString);
         Intent intent2 = getIntent();
         String name = intent2.getStringExtra("name");
         String workPeriod = intent2.getStringExtra("workPeriod");
         String payDay = intent2.getStringExtra("payDay");
 
 
-        //BottomSheet_Calendar 에서 선택된 날짜 Textview(btnDate)에 출력하기
-        Intent intent = getIntent();
-        String text = intent.getStringExtra("text");
-        btnDate.setText(text);
+
 
 
         //스피너
@@ -75,13 +99,17 @@ public class WorkData2Activity extends AppCompatActivity {
 
 
         //달력바텀시트 연결
-        btnDate.setOnClickListener(new View.OnClickListener() {
+        workDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 bottomSheet = new BottomSheet_Calendar();
                 bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
             }
         });
+
+
+
+
 
 
         //타임피커
@@ -149,10 +177,11 @@ public class WorkData2Activity extends AppCompatActivity {
                 String getName = name;
                 String getWorkPeriod = workPeriod;
                 String getPayDay = payDay;
-               String getMoney = money.getText().toString();
-               String getStartTime = startTime.getText().toString();
-               String getEndTime = endTime.getText().toString();
-               String getSelectPay = spnPay.getSelectedItem().toString(); //스피너 선택값 가져오기
+                String getMoney = money.getText().toString();
+
+                String getStartTime = startTime.getText().toString();
+                String getEndTime = endTime.getText().toString();
+                String getSelectPay = spnPay.getSelectedItem().toString(); //스피너 선택값 가져오기
                 String getSelectRestTime = spnRestTime.getSelectedItem().toString();
 
 
@@ -162,6 +191,7 @@ public class WorkData2Activity extends AppCompatActivity {
                 result.put("workPeriod",getWorkPeriod);
                 result.put("payDay",getPayDay);
                 result.put("money",getMoney);
+
                 result.put("startTime",getStartTime);
                 result.put("endTime",getEndTime);
                 result.put("Pay",getSelectPay);
@@ -183,7 +213,7 @@ public class WorkData2Activity extends AppCompatActivity {
     }
 
 
-   private void writeData(String name,String workPeriod, String payDay, String money,String startTime,String endTime,String selectPay, String selectRestTime){
+   private void writeData(String name,String workPeriod, String payDay, String money, String startTime,String endTime,String selectPay, String selectRestTime){
        workdata2_firebase workdata2_firebase = new workdata2_firebase(name,workPeriod,payDay,money,startTime,endTime,selectPay,selectRestTime);
 
        databaseReference.child("data").child(name).push().setValue(workdata2_firebase);
