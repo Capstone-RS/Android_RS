@@ -3,8 +3,10 @@ package com.cookandroid.capstone;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 
 import com.cookandroid.capstone.Fragment.CalendarFragment;
@@ -13,14 +15,17 @@ import com.cookandroid.capstone.Fragment.CommunityFragment;
 import com.cookandroid.capstone.Fragment.HomeFragment;
 import com.cookandroid.capstone.Fragment.ProfileFragment;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity{
 
     HomeFragment homeFragment;
     CalendarFragment calendarFragment;
     ChatFragment chatFragment;
     CommunityFragment communityFragment;
     ProfileFragment profileFragment;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         chatFragment = new ChatFragment();
         communityFragment = new CommunityFragment();
         profileFragment = new ProfileFragment();
+
+        auth = FirebaseAuth.getInstance();
 
         // 기본 화면 설정
         getSupportFragmentManager().beginTransaction().replace(R.id.containers, homeFragment).commit();
