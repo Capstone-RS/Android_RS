@@ -10,12 +10,18 @@ public class workdata2_firebase {
     String name;
     String selectPay;
     String selectRestTime;
+    String workPeriod;
+    String payDay;
+
 
     public workdata2_firebase(){};
 
-    public workdata2_firebase(String name,String money, String startTime,String endTime,String selectPay,String selectRestTime){
+    public workdata2_firebase(String name,String workPeriod, String payDay,String money,String startTime,String endTime,String selectPay,String selectRestTime){
         this.name = name;
+        this.workPeriod = workPeriod;
+        this.payDay = payDay;
         this.money = money;
+
         this.startTime = startTime;
         this.endTime = endTime;
         this.selectPay = selectPay;
@@ -29,6 +35,22 @@ public class workdata2_firebase {
         this.name = name;
     }
 
+    public String getWorkPeriod(){
+        return workPeriod;
+    }
+
+    public void setWorkPeriod(String workPeriod){
+        this.workPeriod = workPeriod;
+    }
+
+    public String getPayDay(){
+        return payDay;
+    }
+
+    public void setPayDay(String payDay){
+        this.payDay = payDay;
+    }
+
     public String getMoney() {
         return money;
     }
@@ -36,6 +58,8 @@ public class workdata2_firebase {
     public void setMoney(String money) {
         this.money = money;
     }
+
+
 
     public String getStartTime(){
         return startTime;
@@ -75,10 +99,13 @@ public class workdata2_firebase {
         return "User{" +
                 "name='" + name + '\'' +
                 "money='" + money + '\'' +
+
                 ", startTime='" + startTime + '\'' +
                 ", endTime=" + endTime + '\'' +
                 ", selectPay=" + selectPay + '\'' +
-                ", selectRestTime=" + selectRestTime +
+                ", selectRestTime=" + selectRestTime + '\'' +
+                ", workPeriod=" + workPeriod + '\'' +
+                ", payDay=" + payDay +
                 '}';
     }
 
