@@ -27,28 +27,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".WorkDataActivity"
-            android:label="정보입력 액티비티" />
-        <activity
-            android:name=".WorkData2Activity"
-            android:label="정보입력2 액티비티" />
-        <activity
-            android:name=".CheckListActivity"
-            android:label="체크리스트 액티비티" />
-        <activity
-            android:name=".WorkDetailActivity"
-            android:label="정보상세 액티비티" />
-        <activity
-            android:name=".WorkDetail2Activity"
-            android:label="정보상세2 액티비티" />
-        <activity
-            android:name=".HelpActivity"
-            android:label="도움말 액티비티" />
-        <activity
-            android:name=".ChooseWorkActivity"
-            android:label="근무등록 액티비티" />
-        <activity android:name=".WorkDetailEditActivity" />
+
+        <activity android:name=".WorkDataActivity" android:label="정보입력 액티비티"/>
+        <activity android:name=".WorkData2Activity" android:label="정보입력2 액티비티"/>
+        <activity android:name=".CheckListActivity" android:label="체크리스트 액티비티"/>
+        <activity android:name=".WorkDetailActivity" android:label="정보상세 액티비티"/>
+        <activity android:name=".WorkDetail2Activity" android:label="정보상세2 액티비티"/>
+        <activity android:name=".HelpActivity" android:label="도움말 액티비티"/>
+        <activity android:name=".ChooseWorkActivity" android:label="근무등록 액티비티"/>
+        <activity android:name=".WorkDetailEditActivity"/>
+        <activity android:name=".comActivity" android:label="커뮤니티 액티비티" />
+        <activity android:name=".Com_listActivity" android:label="커뮤니티 게시판 리스트 액티비티" />
+
     </application>
 
 </manifest>
