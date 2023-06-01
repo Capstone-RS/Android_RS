@@ -1,14 +1,11 @@
 package com.cookandroid.capstone;
 
+
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,17 +21,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import org.w3c.dom.Text;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 public class WorkData2Activity extends AppCompatActivity {
 
@@ -74,18 +66,6 @@ public class WorkData2Activity extends AppCompatActivity {
         }
 
 
-//            // TODO: 이후 작업 수행
-//        } else {
-//            // 선택된 날짜 데이터가 없는 경우
-//            workDay.setText("날짜를 선택 해 주세요");
-//            //Log.d("Selected Dates", "No selected dates");
-//            // TODO: 이후 작업 수행
-//        }
-//        for (String str : stringArray) {
-//            Log.d("Split String", "Element: " +str);
-//        }
-
-// 이후
 
 
         //Log.d("Selected Dates", "Selected dates string: " + stringArray);
@@ -185,6 +165,7 @@ public class WorkData2Activity extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String getName = name;
                 String getWorkPeriod = workPeriod;
                 String getPayDay = payDay;
@@ -194,52 +175,62 @@ public class WorkData2Activity extends AppCompatActivity {
                 String getSelectPay = spnPay.getSelectedItem().toString(); //스피너 선택값 가져오기
                 String getSelectRestTime = spnRestTime.getSelectedItem().toString();
 
+                if (TextUtils.isEmpty(getMoney)) {
+                    // 사용자가 돈을 입력하지 않은 경우 처리
+                    Toast.makeText(getApplicationContext(), "돈을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(getStartTime)) {
+                    // 사용자가 시작 시간을 입력하지 않은 경우 처리
+                    Toast.makeText(getApplicationContext(), "시작 시간을 선택해주세요.", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(getEndTime)) {
+                    // 사용자가 종료 시간을 입력하지 않은 경우 처리
+                    Toast.makeText(getApplicationContext(), "종료 시간을 선택해주세요.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // 모든 필수 입력값이 존재하는 경우 처리 로직
+                    HashMap result = new HashMap<>();
+                    result.put("name", getName);
+                    result.put("workPeriod", getWorkPeriod);
+                    result.put("payDay", getPayDay);
+                    result.put("money", getMoney);
+                    result.put("startTime", getStartTime);
+                    result.put("endTime", getEndTime);
+                    result.put("Pay", getSelectPay);
+                    result.put("RestTime", getSelectRestTime);
 
-                HashMap result = new HashMap<>();
-                result.put("name", getName);
-                result.put("workPeriod", getWorkPeriod);
-                result.put("payDay", getPayDay);
-                result.put("money", getMoney);
-                result.put("startTime", getStartTime);
-                result.put("endTime", getEndTime);
-                result.put("Pay", getSelectPay);
-                result.put("RestTime", getSelectRestTime);
+                    DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
 
+                    // 각 등록에 대해 고유한 키를 생성합니다.
+                    String key = databaseRef.push().getKey();
 
-                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
+                    // 선택된 날짜 데이터를 HashMap에 추가
+                    HashMap<String, Object> dates = new HashMap<>();
+                    for (int i = 0; i < selectedDatesList.size(); i++) {
+                        String dateKey = "Date" + (i + 1);
+                        String dateValue = selectedDatesList.get(i);
+                        dates.put(dateKey, dateValue);
+                    }
+                    result.put("dates", dates);
 
-                // 각 등록에 대해 고유한 키를 생성합니다.
-                String key = databaseRef.push().getKey();
+                    // 고유한 키를 가진 하위 노드를 생성하고 그 값을 "result" 데이터로 설정합니다.
+                    HashMap<String, Object> registrationData = new HashMap<>();
+                    registrationData.put(key, result);
 
-                // 선택된 날짜 데이터를 HashMap에 추가
-                HashMap<String, Object> dates = new HashMap<>();
-                for (int i = 0; i < selectedDatesList.size(); i++) {
-                    String dateKey = "Date" + (i + 1);
-                    String dateValue = selectedDatesList.get(i);
-                    dates.put(dateKey, dateValue);
+                    databaseRef.updateChildren(registrationData)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // Firebase에 데이터가 성공적으로 등록됨
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Firebase에 데이터 등록 실패
+                                    Toast.makeText(getApplicationContext(), "Firebase에 데이터를 등록하는 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 }
-                result.put("dates", dates);
-
-                // 고유한 키를 가진 하위 노드를 생성하고 그 값을 "result" 데이터로 설정합니다.
-                HashMap<String, Object> registrationData = new HashMap<>();
-                registrationData.put(key, result);
-
-                databaseRef.updateChildren(registrationData)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                // Firebase에 데이터가 성공적으로 등록됨
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intent);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // Firebase에 데이터 등록 실패
-                                Toast.makeText(getApplicationContext(), "Firebase에 데이터를 등록하는 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
             }
         });
         //나중에하기 버튼
