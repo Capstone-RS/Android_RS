@@ -23,11 +23,11 @@
         android:textStyle="bold"/>
 
     <LinearLayout
-        android:layout_width="380sp"
+        android:layout_width="377dp"
         android:layout_height="wrap_content"
         android:background="@drawable/com_border"
-        android:padding="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
             android:layout_width="343dp"
@@ -55,12 +55,6 @@
                 android:text="카페"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/button123"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button" />
 
             <TextView
                 android:id="@+id/com1.2"
@@ -91,7 +85,7 @@
 
             <TextView
                 android:id="@+id/com2.2"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20sp"
                 android:layout_marginTop="5sp"

@@ -18,9 +18,16 @@
 
         <Spinner
             android:id="@+id/spncom"
-            android:layout_width="160sp"
+            android:layout_width="223dp"
             android:layout_height="48sp"
             android:spinnerMode="dropdown" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="취소" />
     </LinearLayout>
 
     <EditText
