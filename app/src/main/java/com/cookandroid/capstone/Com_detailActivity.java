@@ -5,12 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Com_detailActivity extends Activity {
 
-    Button btn_back;
+    TextView btn_back;
     Button btn_reg;
 
     @Override
@@ -18,7 +19,7 @@ public class Com_detailActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_detail);
 
-        btn_back = findViewById(R.id.btnBack);
+        btn_back = findViewById(R.id.btn_Back);
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override

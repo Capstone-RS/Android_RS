@@ -56,12 +56,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/button123"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button" />
-
             <TextView
                 android:id="@+id/com1.2"
                 android:layout_width="294dp"
@@ -91,7 +85,7 @@
 
             <TextView
                 android:id="@+id/com2.2"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20sp"
                 android:layout_marginTop="5sp"
