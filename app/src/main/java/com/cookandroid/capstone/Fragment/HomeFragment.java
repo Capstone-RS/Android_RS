@@ -60,7 +60,9 @@ public class HomeFragment extends Fragment {
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference().child("Todo");
-
+        
+       //초기화함 (오류수정부분)
+        arrayList = new ArrayList<>();
         getValue();
 
 
