@@ -55,19 +55,20 @@
 
                 <TextView
                     android:id="@+id/title_tv"
-                    android:layout_width="356dp"
+                    android:layout_width="334dp"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
-                    android:textSize="20dp"
-                    android:text="제목" />
+                    android:text="제목"
+                    android:textSize="20dp" />
 
                 <ImageButton
-                    android:id="@+id/buttonex"
-                    android:layout_width="35dp"
-                    android:layout_height="34dp"
+                    android:id="@+id/btn_ex"
+                    android:layout_width="59dp"
+                    android:layout_height="62dp"
                     android:layout_gravity="center_vertical"
                     android:background="@null"
-                    android:src="@mipmap/ic_settingdf_foreground" />
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/ic_setting_foreground" />
             </LinearLayout>
 
             <LinearLayout
