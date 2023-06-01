@@ -6,8 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-
 
 import com.cookandroid.capstone.Fragment.CalendarFragment;
 import com.cookandroid.capstone.Fragment.ChatFragment;
@@ -17,8 +15,7 @@ import com.cookandroid.capstone.Fragment.ProfileFragment;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 
-
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     HomeFragment homeFragment;
     CalendarFragment calendarFragment;
@@ -41,8 +38,7 @@ public class MainActivity extends AppCompatActivity{
         auth = FirebaseAuth.getInstance();
 
         // 기본 화면 설정
-        getSupportFragmentManager().beginTransaction().replace(R.id.containers, homeFragment).commit();
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.containers,homeFragment).commit();
 
         NavigationBarView navigationBarView = findViewById(R.id.bottomNav);
         navigationBarView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -68,5 +64,14 @@ public class MainActivity extends AppCompatActivity{
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
