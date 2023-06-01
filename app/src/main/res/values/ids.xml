@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="btn_open_bt_sheet" type="id" />
+    <item name="txt_result" type="id" />
+</resources>
