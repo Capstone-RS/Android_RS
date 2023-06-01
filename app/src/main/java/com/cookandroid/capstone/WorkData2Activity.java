@@ -33,7 +33,8 @@ public class WorkData2Activity extends AppCompatActivity {
     //파이어베이스 데이터 연동
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
-
+    private TextView startTime;
+    private TextView endTime;
     BottomSheet_Calendar bottomSheet;
     int i = 1;
 
@@ -45,8 +46,8 @@ public class WorkData2Activity extends AppCompatActivity {
         TextView btnBack = (TextView) findViewById(R.id.btnBack);
         Button btnNext = (Button) findViewById(R.id.btnNext);
         Button btnHome = (Button) findViewById(R.id.btnHome);
-        TextView startTime = (TextView) findViewById(R.id.startTime);
-        TextView endTime = (TextView) findViewById(R.id.endTime);
+        startTime = (TextView) findViewById(R.id.startTime);
+        endTime = (TextView) findViewById(R.id.endTime);
         EditText money = (EditText) findViewById(R.id.money);
         TextView workDay = (TextView) findViewById(R.id.btnWorkDay);
         //BottomSheet_Calendar 에서 선택된 날짜 Textview(workDay)에 출력하기
@@ -146,7 +147,7 @@ public class WorkData2Activity extends AppCompatActivity {
                 dialog.setTitle("Select Time");
                 dialog.show();
             }
-        });
+    });
 
 
         //뒤로가기버튼
