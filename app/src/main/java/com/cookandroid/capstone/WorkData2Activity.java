@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,7 +29,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-public class WorkData2Activity extends AppCompatActivity {
+public class WorkData2Activity extends AppCompatActivity implements BottomSheetListener {
 
     //파이어베이스 데이터 연동
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -36,6 +37,9 @@ public class WorkData2Activity extends AppCompatActivity {
     private TextView startTime;
     private TextView endTime;
     BottomSheet_Calendar bottomSheet;
+    private TextView workDay;
+    private List<String> selectedDatesList;
+
     int i = 1;
 
     @Override
@@ -43,28 +47,16 @@ public class WorkData2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workdata2);
 
+
         TextView btnBack = (TextView) findViewById(R.id.btnBack);
         Button btnNext = (Button) findViewById(R.id.btnNext);
         Button btnHome = (Button) findViewById(R.id.btnHome);
         startTime = (TextView) findViewById(R.id.startTime);
         endTime = (TextView) findViewById(R.id.endTime);
         EditText money = (EditText) findViewById(R.id.money);
-        TextView workDay = (TextView) findViewById(R.id.btnWorkDay);
+        workDay = (TextView) findViewById(R.id.btnWorkDay);
         //BottomSheet_Calendar 에서 선택된 날짜 Textview(workDay)에 출력하기
 
-        // Intent에서 데이터 가져오기
-        Intent intent = getIntent();
-        String selectedDatesString = intent.getStringExtra("test");
-        List<String> selectedDatesList;
-        // 가져온 데이터를 사용하여 작업 수행
-        if (selectedDatesString != null) {
-            // 선택된 날짜 데이터가 있는 경우
-            selectedDatesList = Arrays.asList(selectedDatesString.split(","));
-            workDay.setText(selectedDatesString);
-        } else {
-            selectedDatesList = new ArrayList<>();
-            workDay.setText("날짜를 선택 해 주세요");
-        }
 
 
 
@@ -97,6 +89,7 @@ public class WorkData2Activity extends AppCompatActivity {
             public void onClick(View view) {
                 bottomSheet = new BottomSheet_Calendar();
                 bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
+                bottomSheet.setListener(WorkData2Activity.this);
             }
         });
 
@@ -175,8 +168,10 @@ public class WorkData2Activity extends AppCompatActivity {
                 String getEndTime = endTime.getText().toString();
                 String getSelectPay = spnPay.getSelectedItem().toString(); //스피너 선택값 가져오기
                 String getSelectRestTime = spnRestTime.getSelectedItem().toString();
-
-                if (TextUtils.isEmpty(getMoney)) {
+                if (selectedDatesList == null || selectedDatesList.isEmpty()) {
+                    // 선택된 날짜가 없는 경우 처리
+                    Toast.makeText(getApplicationContext(), "날짜를 선택해주세요.", Toast.LENGTH_SHORT).show();
+                } else if(TextUtils.isEmpty(getMoney)) {
                     // 사용자가 돈을 입력하지 않은 경우 처리
                     Toast.makeText(getApplicationContext(), "돈을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(getStartTime)) {
@@ -242,6 +237,21 @@ public class WorkData2Activity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onDataReceived(String selectedDates) {
+
+        // 가져온 데이터를 사용하여 작업 수행
+        if (selectedDates != null) {
+            // 선택된 날짜 데이터가 있는 경우
+            selectedDatesList = Arrays.asList(selectedDates.split(","));
+            workDay.setText(selectedDates);
+        } else {
+            selectedDatesList = new ArrayList<>();
+            workDay.setText("날짜를 선택 해 주세요");
+        }
+        Log.d("Selected Dates", "Selected dates: " + selectedDates);
     }
 }
 
