@@ -37,6 +37,7 @@ public class BottomSheet_Calendar extends BottomSheetDialogFragment {
     private MaterialCalendarView calendarView;
     Button btnFinish;
     private List<CalendarDay> selectedDates;
+    private BottomSheetListener listener;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -68,13 +69,20 @@ public class BottomSheet_Calendar extends BottomSheetDialogFragment {
                     selectedDatesStringList.add(dateString);
                 }
                 String selectedDatesString = TextUtils.join(", ", selectedDatesStringList);
-
-                Intent intent = new Intent(getActivity(), WorkData2Activity.class);
-                intent.putExtra("test", selectedDatesString);
-                startActivity(intent);
+                if (listener != null) {
+                    listener.onDataReceived(selectedDatesString);
+                }
+                dismiss();
+//                Intent intent = new Intent(getActivity(), WorkData2Activity.class);
+//                intent.putExtra("test", selectedDatesString);
+//                startActivity(intent);
             }
         });
 
         return v;
+    }
+
+    public void setListener(WorkData2Activity workData2Activity) {
+    listener = workData2Activity;
     }
 }
