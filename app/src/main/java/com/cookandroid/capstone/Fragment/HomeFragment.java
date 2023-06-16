@@ -5,12 +5,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.cookandroid.capstone.CheckListActivity;
@@ -41,15 +43,32 @@ public class HomeFragment extends Fragment {
         Button btnAdd = view.findViewById(R.id.btnAdd);
         TextView textView_checklistadd = view.findViewById(R.id.btnChecklistAdd);
         ListView listView_todo = view.findViewById(R.id.lvWork);
+        ScrollView scrollView = view.findViewById(R.id.scrollView);
+
 
         arrayList = new ArrayList<>();
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, arrayList);
         listView_todo.setAdapter(adapter);
 
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference().child("Todo");
 
         getValue();
+
+        listView_todo.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP){
+                    scrollView.requestDisallowInterceptTouchEvent(false);
+                } else {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                }
+                return false;
+            }
+        });
+
+
 
         fragHelp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +85,7 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
 
         textView_checklistadd.setOnClickListener(new View.OnClickListener() {
             @Override
