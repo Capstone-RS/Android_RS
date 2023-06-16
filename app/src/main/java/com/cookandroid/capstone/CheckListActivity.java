@@ -2,6 +2,7 @@ package com.cookandroid.capstone;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,6 +35,9 @@ public class CheckListActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     ArrayList<String> arrayList = new ArrayList<>();
+    ArrayList<Boolean> checkedList = new ArrayList<>();
+    private  static final  String PREFS_NAME = "CheckListPrefs";
+    private static final String CHECKED_PREF_PREFIX = "checked_";
     ArrayAdapter<String> adapter;
     ListView listView;
     String sOldValue;
@@ -55,6 +59,7 @@ public class CheckListActivity extends AppCompatActivity {
         databaseReference = firebaseDatabase.getReference().child("Todo");
 
         getValue();
+        restoreCheckedState();
 
         sendbt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,15 +93,18 @@ public class CheckListActivity extends AppCompatActivity {
             }
         });
 
+        //수정
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                sOldValue = arrayList.get(position);
-                editdt.setText(sOldValue);
-                sendbt.setText("수정");
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                checkedList.set(position, listView.isItemChecked(position));
+                String selectedItem = arrayList.get(position);
+                showEditDialog(selectedItem);
             }
         });
 
+
+        //길게 클릭시 삭제 다이얼로그
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -146,18 +154,85 @@ public class CheckListActivity extends AppCompatActivity {
         });
     }
 
+    //한번 클릭시 수정 다이얼로그
+    private void showEditDialog(final String selectedItem) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("아이템 수정");
+
+        final EditText editText = new EditText(this);
+        editText.setText(selectedItem);
+        builder.setView(editText);
+
+        builder.setPositiveButton("수정", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String updatedItem = editText.getText().toString().trim();
+                if (!updatedItem.isEmpty()) {
+                    int position = arrayList.indexOf(selectedItem);
+                    if (position != -1) {
+                        arrayList.set(position, updatedItem);
+                        adapter.notifyDataSetChanged();
+                        updateItem(selectedItem, updatedItem);
+                    }
+                }
+            }
+        });
+
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    // 아이템 업데이트 메서드
+    private void updateItem(String oldItem, String newItem) {
+        Query query = databaseReference.orderByChild("work").equalTo(oldItem);
+
+        int index = arrayList.indexOf(oldItem);
+        if(index != -1){
+            checkedList.set(index, false);
+        }
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    dataSnapshot.getRef().child("work").setValue(newItem);
+                    dataSnapshot.getRef().child(newItem).setValue(true);
+                    dataSnapshot.getRef().child(oldItem).removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(CheckListActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void getValue() {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrayList.clear();
+                checkedList.clear();
+
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     String sValue = dataSnapshot.child("work").getValue(String.class);
                     if (sValue != null) {
                         arrayList.add(sValue);
+                        checkedList.add(false);
                     }
                 }
                 adapter.notifyDataSetChanged();
+
+                for(int i=0; i<arrayList.size(); i++){
+                    listView.setItemChecked(i, checkedList.get(i));
+                }
+                restoreCheckedState();
             }
 
             @Override
@@ -165,5 +240,34 @@ public class CheckListActivity extends AppCompatActivity {
                 Toast.makeText(CheckListActivity.this, "error:" + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        restoreCheckedState();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveCheckedState();
+    }
+    private void saveCheckedState() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        for (int i = 0; i < arrayList.size(); i++) {
+            String key = CHECKED_PREF_PREFIX + i;
+            editor.putBoolean(key, checkedList.get(i));
+        }
+        editor.apply();
+    }
+    private void restoreCheckedState() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        checkedList.clear();
+        for (int i = 0; i < arrayList.size(); i++) {
+            String key = CHECKED_PREF_PREFIX + i;
+            boolean isChecked = prefs.getBoolean(key, false);
+            checkedList.add(isChecked);
+            listView.setItemChecked(i, isChecked);
+        }
     }
 }
