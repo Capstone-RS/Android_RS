@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class WorkData2Activity extends AppCompatActivity implements BottomSheetListener {
 
@@ -95,6 +96,7 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
 
 
         //타임피커
+
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,14 +106,8 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                 TimePickerDialog dialog = new TimePickerDialog(WorkData2Activity.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        String state = "AM";
-                        // 선택한 시간이 12를 넘을경우 "PM"으로 변경 및 -12시간하여 출력 (ex : PM 6시 30분)
-                        if (selectedHour > 12) {
-                            selectedHour -= 12;
-                            state = "PM";
-                        }
-                        // TextView에 출력할 형식 지정
-                        startTime.setText(state + " " + selectedHour + ": " + selectedMinute);
+            // TextView에 출력할 형식 지정
+                        startTime.setText(String.format(Locale.US, "%02d:%02d", selectedHour, selectedMinute));
                     }
                 }, hour, minute, false); // true의 경우 24시간 형식의 TimePicker 출현
                 dialog.setTitle("Select Time");
@@ -127,20 +123,14 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                 TimePickerDialog dialog = new TimePickerDialog(WorkData2Activity.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        String state = "AM";
-                        // 선택한 시간이 12를 넘을경우 "PM"으로 변경 및 -12시간하여 출력 (ex : PM 6시 30분)
-                        if (selectedHour > 12) {
-                            selectedHour -= 12;
-                            state = "PM";
-                        }
                         // TextView에 출력할 형식 지정
-                        endTime.setText(state + " " + selectedHour + ": " + selectedMinute);
+                        endTime.setText(String.format(Locale.US, "%02d:%02d", selectedHour, selectedMinute));
                     }
                 }, hour, minute, false); // true의 경우 24시간 형식의 TimePicker 출현
                 dialog.setTitle("Select Time");
                 dialog.show();
             }
-    });
+        });
 
 
         //뒤로가기버튼
