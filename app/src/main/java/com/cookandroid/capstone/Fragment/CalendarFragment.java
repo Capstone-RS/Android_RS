@@ -1,19 +1,23 @@
 package com.cookandroid.capstone.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.cookandroid.capstone.ChooseWorkActivity;
 import com.cookandroid.capstone.R;
+import com.cookandroid.capstone.WorkDataActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,6 +46,7 @@ public class CalendarFragment extends Fragment {
     private TextView selectedDateTextView;
     ListView workList;
     CustomAdapter adapter ;
+    Button btnAdd;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +60,18 @@ public class CalendarFragment extends Fragment {
         calendarView = v.findViewById(R.id.calendar);
         selectedDateTextView = v.findViewById(R.id.btn);
         workList = v.findViewById(R.id.workList);
+        btnAdd = v.findViewById(R.id.btnAdd);
         adapter = new CustomAdapter(getContext(), R.layout.calendar_customlistview);
+
+        //근무 추가 버튼
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ChooseWorkActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         if (workList == null) {
             Log.e("CalendarFragment", "workList is null");
