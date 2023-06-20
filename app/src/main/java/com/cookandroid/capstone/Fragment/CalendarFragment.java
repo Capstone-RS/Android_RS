@@ -143,13 +143,14 @@ public class CalendarFragment extends Fragment {
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    DecimalFormat decimalFormat = new DecimalFormat("#,###");
+                    DecimalFormat decimalFormat = new DecimalFormat("#,##0");// 소수점 이하 자리수 제거
                     textView2.setText("");
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String money = snapshot.child("money").getValue(String.class);
                         String startTime = snapshot.child("startTime").getValue(String.class);
                         String endTime = snapshot.child("endTime").getValue(String.class);
+                        String restTime = snapshot.child("RestTime").getValue(String.class);
 
                         // startTime과 endTime을 시간 형식("HH:mm")에서 분으로 변환
                         String[] startTimeParts = startTime.split(":");
@@ -160,14 +161,23 @@ public class CalendarFragment extends Fragment {
                         int endHour = Integer.parseInt(endTimeParts[0]);
                         int endMinute = Integer.parseInt(endTimeParts[1]);
 
+                        // restTime에서 "분" 문자열 제거 및 숫자 값만 추출
+                        int restMinutes = 0; // 기본값 설정
 
+                        if (restTime != null) {
+                            String restTimeString = restTime.replace("분", "").trim();
+                            restMinutes = Integer.parseInt(restTimeString);
+                        }
 
                         // startTime과 endTime을 분으로 변환
                         int startTotalMinutes = startHour * 60 + startMinute;
                         int endTotalMinutes = endHour * 60 + endMinute;
 
-                        // 근무 시간 계산 (분 단위)
-                        int workMinutes = endTotalMinutes - startTotalMinutes;
+                        // 휴게 시간을 분으로 변환
+                        int restTotalMinutes = restMinutes;
+
+                        // 근무 시간 계산 (분 단위)에서 휴게 시간 제외
+                        int workMinutes = endTotalMinutes - startTotalMinutes - restTotalMinutes;
 
                         // 시급 계산
                         double hourlyRate = Double.parseDouble(money);
