@@ -1,5 +1,6 @@
 package com.cookandroid.capstone.Fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,12 +41,12 @@ public class CalendarFragment extends Fragment {
     private MaterialCalendarView calendarView;
     private TextView selectedDateTextView;
     ListView workList;
-    private ArrayAdapter<String> adapter;
+    CustomAdapter adapter ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        adapter = new CustomAdapter(getContext(), R.layout.calendar_customlistview);
     }
 
     @Override
@@ -52,8 +54,8 @@ public class CalendarFragment extends Fragment {
         View v = inflater.inflate(R.layout.activity_calendar, container, false);
         calendarView = v.findViewById(R.id.calendar);
         selectedDateTextView = v.findViewById(R.id.btn);
-        workList = v.findViewById(R.id.selectStartTime);
-        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
+        workList = v.findViewById(R.id.workList);
+        adapter = new CustomAdapter(getContext(), R.layout.calendar_customlistview);
 
         if (workList == null) {
             Log.e("CalendarFragment", "workList is null");
@@ -113,5 +115,85 @@ public class CalendarFragment extends Fragment {
 
 
         return v;
+    }
+
+    public class CustomAdapter extends ArrayAdapter<String> {
+        private Context context;
+
+        public CustomAdapter(Context context, int resource) {
+            super(context, resource);
+            this.context = context;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View rowView = inflater.inflate(R.layout.calendar_customlistview, parent, false);
+
+            TextView textView1 = rowView.findViewById(R.id.textView1);
+            TextView textView2 = rowView.findViewById(R.id.textView2); // 추가된 부분
+
+            String itemName = getItem(position); // 해당 position에 있는 데이터 가져오기
+            textView1.setText(itemName); // 데이터를 textView1에 설정
+            textView2.setText("");
+
+            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
+            Query query = databaseRef.orderByChild("name").equalTo(itemName);
+
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    DecimalFormat decimalFormat = new DecimalFormat("#,###");
+                    textView2.setText("");
+
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String money = snapshot.child("money").getValue(String.class);
+                        String startTime = snapshot.child("startTime").getValue(String.class);
+                        String endTime = snapshot.child("endTime").getValue(String.class);
+
+                        // startTime과 endTime을 시간 형식("HH:mm")에서 분으로 변환
+                        String[] startTimeParts = startTime.split(":");
+                        int startHour = Integer.parseInt(startTimeParts[0]);
+                        int startMinute = Integer.parseInt(startTimeParts[1]);
+
+                        String[] endTimeParts = endTime.split(":");
+                        int endHour = Integer.parseInt(endTimeParts[0]);
+                        int endMinute = Integer.parseInt(endTimeParts[1]);
+
+
+
+                        // startTime과 endTime을 분으로 변환
+                        int startTotalMinutes = startHour * 60 + startMinute;
+                        int endTotalMinutes = endHour * 60 + endMinute;
+
+                        // 근무 시간 계산 (분 단위)
+                        int workMinutes = endTotalMinutes - startTotalMinutes;
+
+                        // 시급 계산
+                        double hourlyRate = Double.parseDouble(money);
+
+                        // 근무 시간을 시간 단위로 변환
+                        double workHours = workMinutes / 60.0;
+
+                        // 총 급여 계산
+                        double earnings = hourlyRate * workHours;
+
+                        // 시급을 원하는 형식으로 포맷팅
+                        String formattedEarnings = decimalFormat.format(earnings);
+
+                        // 이후의 코드는 동일하게 유지
+                        String previousText = textView2.getText().toString();
+                        String newText = previousText + formattedEarnings + "\n";
+                        textView2.setText(newText);
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // 에러 처리 로직을 작성해주세요.
+                }
+            });
+
+            return rowView;
+        }
     }
 }
