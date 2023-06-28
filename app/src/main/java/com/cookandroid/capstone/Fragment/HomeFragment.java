@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -46,9 +47,7 @@ public class HomeFragment extends Fragment {
         TextView textView_checklistadd = view.findViewById(R.id.btnChecklistAdd);
         ListView listView_todo = view.findViewById(R.id.lvWork);
         ScrollView scrollView = view.findViewById(R.id.scrollView);
-        TextView tv_workdetail_1 = view.findViewById(R.id.tv_workdetail_1);
-        TextView tv_workdetail_2 = view.findViewById(R.id.tv_workdetail_2);
-
+        LinearLayout linnearLayout = view.findViewById(R.id.layout_work1);
 
         arrayList = new ArrayList<>();
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, arrayList);
@@ -99,19 +98,9 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        tv_workdetail_1.setOnClickListener(new View.OnClickListener() {
+        linnearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(getActivity(), WorkDetailActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        tv_workdetail_2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
                 Intent intent = new Intent(getActivity(), WorkDetailActivity.class);
                 startActivity(intent);
             }
