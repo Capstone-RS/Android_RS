@@ -177,8 +177,6 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                     result.put("workPeriod", getWorkPeriod);
                     result.put("payDay", getPayDay);
                     result.put("money", getMoney);
-                    result.put("startTime", getStartTime);
-                    result.put("endTime", getEndTime);
                     result.put("Pay", getSelectPay);
                     result.put("RestTime", getSelectRestTime);
 
@@ -192,7 +190,11 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                     for (int i = 0; i < selectedDatesList.size(); i++) {
                         String dateKey = "Date" + (i + 1);
                         String dateValue = selectedDatesList.get(i);
-                        dates.put(dateKey, dateValue);
+                        HashMap<String, Object> dateData = new HashMap<>();
+                        dateData.put("date", dateValue);
+                        dateData.put("startTime", getStartTime);
+                        dateData.put("endTime", getEndTime);
+                        dates.put(dateKey, dateData);
                     }
                     result.put("dates", dates);
 
