@@ -176,9 +176,6 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                     result.put("name", getName);
                     result.put("workPeriod", getWorkPeriod);
                     result.put("payDay", getPayDay);
-                    result.put("money", getMoney);
-                    result.put("Pay", getSelectPay);
-                    result.put("RestTime", getSelectRestTime);
 
                     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
 
@@ -194,6 +191,9 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                         dateData.put("date", dateValue);
                         dateData.put("startTime", getStartTime);
                         dateData.put("endTime", getEndTime);
+                        dateData.put("restTime", getSelectRestTime);
+                        dateData.put("money", getMoney);
+                        dateData.put("Pay", getSelectPay);
                         dates.put(dateKey, dateData);
                     }
                     result.put("dates", dates);
