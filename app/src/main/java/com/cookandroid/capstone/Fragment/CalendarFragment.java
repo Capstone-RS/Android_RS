@@ -66,7 +66,12 @@ public class CalendarFragment extends Fragment {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String selectedDate = selectedDateTextView.getText().toString();
+
+                // 선택된 날짜를 다른 활동으로 전달하기 위한 인텐트 생성
                 Intent intent = new Intent(getActivity(), ChooseWorkActivity.class);
+                intent.putExtra("selectedDate", selectedDate); // 선택된 날짜를 인텐트에 첨부
+
                 startActivity(intent);
             }
         });
@@ -155,74 +160,64 @@ public class CalendarFragment extends Fragment {
             String itemName = items.get(position);
             textView1.setText(itemName);
 
-            Query query = databaseRef.orderByChild("name").equalTo(itemName);
+            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
 
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
+            Query query = databaseRef.orderByChild("name").equalTo(itemName);
+            query.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     DecimalFormat decimalFormat = new DecimalFormat("#,##0");
                     double totalEarnings = 0.0;
 
-                    // 첫 번째 일치하는 자식 데이터 가져오기
-                    DataSnapshot firstChild = dataSnapshot.getChildren().iterator().next();
-                    DataSnapshot datesSnapshot = firstChild.child("dates");
-                    if (datesSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        DataSnapshot datesSnapshot = snapshot.child("dates");
+                        if (datesSnapshot.exists()) {
+                            for (DataSnapshot dateSnapshot : datesSnapshot.getChildren()) {
+                                String date = dateSnapshot.child("date").getValue(String.class);
+                                String money = dateSnapshot.child("money").getValue(String.class);
+                                String startTime = dateSnapshot.child("startTime").getValue(String.class);
+                                String endTime = dateSnapshot.child("endTime").getValue(String.class);
+                                String restTime = dateSnapshot.child("restTime").getValue(String.class);
 
-                        for (DataSnapshot dateSnapshot : datesSnapshot.getChildren()) {
-                            String money = firstChild.child("money").getValue(String.class);
-                            String startTime = dateSnapshot.child("startTime").getValue(String.class);
-                            String endTime = dateSnapshot.child("endTime").getValue(String.class);
-                            String restTime = firstChild.child("RestTime").getValue(String.class);
+                                // 선택된 날짜와 일치하는 경우에만 계산
+                                if (date != null && date.trim().equals(selectedDateTextView.getText().toString().trim())) {
+                                    // startTime과 endTime을 시간 형식("HH:mm")에서 분으로 변환
+                                    String[] startTimeParts = startTime.split(":");
+                                    int startHour = Integer.parseInt(startTimeParts[0]);
+                                    int startMinute = Integer.parseInt(startTimeParts[1]);
 
-                            // startTime과 endTime을 시간 형식("HH:mm")에서 분으로 변환
-                            String[] startTimeParts = startTime.split(":");
-                            int startHour = Integer.parseInt(startTimeParts[0]);
-                            int startMinute = Integer.parseInt(startTimeParts[1]);
+                                    String[] endTimeParts = endTime.split(":");
+                                    int endHour = Integer.parseInt(endTimeParts[0]);
+                                    int endMinute = Integer.parseInt(endTimeParts[1]);
 
-                            String[] endTimeParts = endTime.split(":");
-                            int endHour = Integer.parseInt(endTimeParts[0]);
-                            int endMinute = Integer.parseInt(endTimeParts[1]);
+                                    // restTime에서 "분" 문자열 제거 및 숫자 값만 추출
+                                    int restMinutes = 0; // 기본값 설정
 
-                            // restTime에서 "분" 문자열 제거 및 숫자 값만 추출
-                            int restMinutes = 0; // 기본값 설정
+                                    if (restTime != null && !restTime.trim().isEmpty()) {
+                                        String restTimeValue = restTime.replace("분", "").trim();
+                                        restMinutes = Integer.parseInt(restTimeValue);
+                                    }
 
-                            if (restTime != null) {
-                                String restTimeString = restTime.replace("분", "").trim();
-                                restMinutes = Integer.parseInt(restTimeString);
+                                    // 근무 시간 계산
+                                    int totalMinutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute) - restMinutes;
+
+                                    // 시급 가져오기 (Firebase에서 "money" 필드의 값을 가져옴)
+                                    double hourlyRate = Double.parseDouble(money);
+                                    double earnings = (double) totalMinutes / 60 * hourlyRate;
+
+                                    totalEarnings += earnings;
+                                }
                             }
-
-                            // startTime과 endTime을 분으로 변환
-                            int startTotalMinutes = startHour * 60 + startMinute;
-                            int endTotalMinutes = endHour * 60 + endMinute;
-
-                            // 휴게 시간을 분으로 변환
-                            int restTotalMinutes = restMinutes;
-
-                            // 근무 시간 계산 (분 단위)에서 휴게 시간 제외
-                            int workMinutes = endTotalMinutes - startTotalMinutes - restTotalMinutes;
-
-                            // 시급 계산
-                            double hourlyRate = Double.parseDouble(money);
-
-                            // 근무 시간을 시간 단위로 변환
-                            double workHours = workMinutes / 60.0;
-
-                            // 총 급여 계산
-                            double earnings = hourlyRate * workHours;
-
-                            totalEarnings = earnings;
                         }
-
-                        String formattedTotalEarnings = decimalFormat.format(totalEarnings);
-                        String newText = formattedTotalEarnings;
-                        textView2.setText(newText);
                     }
-                }
 
+                    String formattedEarnings = decimalFormat.format(totalEarnings);
+                    textView2.setText(formattedEarnings + "원");
+                }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    // 에러 처리
+                    // 에러 처리 로직을 작성해주세요.
                 }
             });
 
