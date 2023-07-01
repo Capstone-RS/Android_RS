@@ -1,7 +1,11 @@
 package com.cookandroid.capstone;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -32,6 +36,11 @@ public class ChooseWorkActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choosework);
 
         workList = findViewById(R.id.workList);
+
+        String selectedDate = getIntent().getStringExtra("selectedDate");
+        Log.d("ChooseWorkActivity", "Selected Date: " + selectedDate);
+
+
 
         // workNames 리스트 초기화
         workNames = new ArrayList<>();
@@ -70,5 +79,29 @@ public class ChooseWorkActivity extends AppCompatActivity {
                 // 에러 처리 로직을 작성해주세요.
             }
         });
+
+        // ListView 아이템 클릭 이벤트 처리
+        workList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // 클릭된 아이템의 데이터 가져오기
+                String selectedItem = (String) parent.getItemAtPosition(position);
+
+                // 선택된 날짜와 아이템 데이터를 함께 전달하기 위해 Intent 생성
+                Intent intent = new Intent(ChooseWorkActivity.this, WorkRegistrationActivity.class);
+                intent.putExtra("selectedDate", selectedDate);
+                intent.putExtra("selectedItem", selectedItem);
+
+                // Intent를 사용하여 WorkRegistrationActivity 실행
+                startActivity(intent);
+            }
+        });
+
+
+
+
+
+
+
     }
 }
