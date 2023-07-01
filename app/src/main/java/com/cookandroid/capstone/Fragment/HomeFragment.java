@@ -11,14 +11,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 
 import com.cookandroid.capstone.CheckListActivity;
 import com.cookandroid.capstone.HelpActivity;
 import com.cookandroid.capstone.R;
 import com.cookandroid.capstone.WorkDataActivity;
+import com.cookandroid.capstone.WorkDetailActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +47,7 @@ public class HomeFragment extends Fragment {
         TextView textView_checklistadd = view.findViewById(R.id.btnChecklistAdd);
         ListView listView_todo = view.findViewById(R.id.lvWork);
         ScrollView scrollView = view.findViewById(R.id.scrollView);
-
+        LinearLayout linnearLayout = view.findViewById(R.id.layout_work1);
 
         arrayList = new ArrayList<>();
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, arrayList);
@@ -91,6 +94,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), CheckListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        linnearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), WorkDetailActivity.class);
                 startActivity(intent);
             }
         });

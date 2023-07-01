@@ -112,6 +112,7 @@
                     android:layout_marginTop="20dp"
                     android:orientation="vertical">
                     <LinearLayout
+                        android:id="@+id/layout_work1"
                         android:layout_width="match_parent"
                         android:layout_height="140dp"
                         android:background="@drawable/edge"
@@ -119,7 +120,7 @@
                         android:paddingStart="8dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="8dp"
-                        android:paddingBottom="32dp">
+                        android:paddingBottom="28dp">
                         <!-- 카페 대신 @string/work_place
                              412,000원 대신 @string/salary
                              03.01 ~ 03.31 대신 @string/this_month-->
@@ -136,51 +137,56 @@
                             android:layout_marginStart="4dp"
                             android:text="03.01 ~ 03.31"/>
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+
+                            android:layout_width="350dp"
+                            android:layout_height="80dp"
                             android:layout_gravity="center"
+                            android:gravity="center"
                             android:text="412,000원"
                             android:textSize="30sp"
                             android:textColor="@color/black"
                             android:textStyle="bold"/>
 
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="140dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/edge"
-                        android:orientation="vertical"
-                        android:paddingStart="8dp"
-                        android:paddingTop="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingBottom="32dp">
-                        <!-- 카페 대신 @string/work_place
-                        412,000원 대신 @string/salary
-                        03.01 ~ 03.31 대신 @string/this_month-->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="카페"
-                            android:textSize="20sp"
-                            android:textColor="@color/black"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="03.01 ~ 03.31"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="412,000원"
-                            android:textSize="30sp"
-                            android:textColor="@color/black"
-                            android:textStyle="bold"/>
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/layout_work2"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="140dp"-->
+<!--                        android:layout_marginTop="5dp"-->
+<!--                        android:background="@drawable/edge"-->
+<!--                        android:orientation="vertical"-->
+<!--                        android:paddingStart="8dp"-->
+<!--                        android:paddingTop="8dp"-->
+<!--                        android:paddingEnd="8dp"-->
+<!--                        android:paddingBottom="28dp">-->
+<!--                        &lt;!&ndash; 카페 대신 @string/work_place-->
+<!--                        412,000원 대신 @string/salary-->
+<!--                        03.01 ~ 03.31 대신 @string/this_month&ndash;&gt;-->
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginStart="4dp"-->
+<!--                            android:text="카페"-->
+<!--                            android:textSize="20sp"-->
+<!--                            android:textColor="@color/black"/>-->
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginStart="4dp"-->
+<!--                            android:text="03.01 ~ 03.31"/>-->
+<!--                        <TextView-->
+
+<!--                            android:layout_width="350dp"-->
+<!--                            android:layout_height="80dp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:gravity="center"-->
+<!--                            android:text="412,000원"-->
+<!--                            android:textSize="30sp"-->
+<!--                            android:textColor="@color/black"-->
+<!--                            android:textStyle="bold"/>-->
 
 
-                    </LinearLayout>
+<!--                    </LinearLayout>-->
 
 
                 </LinearLayout>
