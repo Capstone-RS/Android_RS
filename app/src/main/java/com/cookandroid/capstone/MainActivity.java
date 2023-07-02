@@ -38,8 +38,15 @@ public class MainActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        // 기본 화면 설정
-        getSupportFragmentManager().beginTransaction().replace(R.id.containers,homeFragment).commit();
+        Intent intent = getIntent();
+        boolean showCalendar = intent.getBooleanExtra("showCalendar", false); // 전달받은 정보 확인
+
+        if (showCalendar) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.containers, calendarFragment).commit(); // calendarFragment 표시
+        } else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.containers, homeFragment).commit(); // 기본으로 HomeFragment 표시
+        }
+
 
         NavigationBarView navigationBarView = findViewById(R.id.bottomNav);
         navigationBarView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
