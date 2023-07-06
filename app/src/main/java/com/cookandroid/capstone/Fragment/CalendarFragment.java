@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.cookandroid.capstone.ChooseWorkActivity;
 import com.cookandroid.capstone.R;
 import com.cookandroid.capstone.WorkDataActivity;
+import com.cookandroid.capstone.WorkDetail2Activity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -213,6 +214,8 @@ public class CalendarFragment extends Fragment {
 
                     String formattedEarnings = decimalFormat.format(totalEarnings);
                     textView2.setText(formattedEarnings + "원");
+                    // 클릭 이벤트를 위해 값을 태그로 저장
+                    rowView.setTag(formattedEarnings);
                 }
 
                 @Override
@@ -221,6 +224,22 @@ public class CalendarFragment extends Fragment {
                 }
             });
 
+            rowView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 클릭한 아이템에 해당하는 다른 페이지로 이동하는 코드를 작성합니다.
+                    // 저장된 formattedEarnings 값을 가져옵니다.
+                    String formattedEarnings = (String) rowView.getTag();
+                    // 선택된 날짜 가져오기
+                    String selectedDate = selectedDateTextView.getText().toString();
+
+                    Intent intent = new Intent(getContext(), WorkDetail2Activity.class);
+                    intent.putExtra("itemName", itemName); // 클릭한 아이템의 이름을 인텐트에 첨부합니다.
+                    intent.putExtra("formattedEarnings", formattedEarnings); // formattedEarnings 값을 인텐트에 첨부합니다.
+                    intent.putExtra("selectedDate", selectedDate); // 선택된 날짜를 인텐트에 첨부
+                    startActivity(intent);
+                }
+            });
             return rowView;
         }
     }
