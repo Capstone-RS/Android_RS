@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".BottomSheet_Community_Comment"
+    tools:context=".BottomSheet_Community"
     android:orientation="vertical"
     android:padding="24dp"
     android:background="@drawable/rounded_dialog"
     android:clipToOutline="true">
 
     <LinearLayout
-        android:id="@+id/layout_delete"
+        android:id="@+id/layout_comment_delete"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="148dp"
-            android:text="삭제 하기"
+            android:text="댓글 삭제"
             android:textColor="@android:color/black"
             android:textSize="18sp"/>
     </LinearLayout>
@@ -31,7 +31,7 @@
         android:background="#E5E5E5"/>
 
     <LinearLayout
-        android:id="@+id/layout_edit"
+        android:id="@+id/layout_chat"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
@@ -41,7 +41,28 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="148dp"
-            android:text="수정 하기"
+            android:text="채팅 걸기"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#E5E5E5"/>
+
+    <LinearLayout
+        android:id="@+id/layout_block"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:clickable="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="148dp"
+            android:text="차단 하기"
             android:textColor="@android:color/black"
             android:textSize="18sp"/>
     </LinearLayout>
