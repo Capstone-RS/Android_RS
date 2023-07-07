@@ -65,7 +65,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
     private void openBottomSheet() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_community_comment, null);
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_community, null);
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
 
