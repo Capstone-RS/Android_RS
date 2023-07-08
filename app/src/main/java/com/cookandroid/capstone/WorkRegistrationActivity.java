@@ -1,6 +1,7 @@
 package com.cookandroid.capstone;
 
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +14,10 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.cookandroid.capstone.Fragment.CalendarFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +31,7 @@ import java.util.Locale;
 public class WorkRegistrationActivity extends AppCompatActivity {
 
     private DatabaseReference databaseRef;
+    CalendarFragment calendarFragment;
 
 
     @Override
@@ -39,6 +44,7 @@ public class WorkRegistrationActivity extends AppCompatActivity {
         TextView startTime = findViewById(R.id.startTime);
         TextView endTime = findViewById(R.id.endTime);
         Button btnNext = findViewById(R.id.btnNext);
+        Button btnBack = findViewById(R.id.btnBack);
 
         // 선택된 날짜를 받아옴
         String selectedDate = getIntent().getStringExtra("selectedDate");
@@ -150,8 +156,27 @@ public class WorkRegistrationActivity extends AppCompatActivity {
                         // 데이터베이스 조회 중 오류 발생 시 처리할 내용을 여기에 작성합니다.
                     }
                 });
+                Intent intent = new Intent(WorkRegistrationActivity.this, MainActivity.class);
+                intent.putExtra("showCalendar", true); // calendarFragment를 표시하기 위한 정보 전달
+                startActivity(intent);
             }
         });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(WorkRegistrationActivity.this, MainActivity.class);
+                intent.putExtra("showCalendar", true); // calendarFragment를 표시하기 위한 정보 전달
+                startActivity(intent);
+            }
+        });
+
+
+
+
+
+
+
     }
 
     // dates 하위의 마지막 자식의 키 값을 가져오는 메소드

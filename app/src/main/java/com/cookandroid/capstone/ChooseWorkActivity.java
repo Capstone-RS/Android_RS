@@ -7,12 +7,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.cookandroid.capstone.Fragment.CalendarFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +39,7 @@ public class ChooseWorkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choosework);
 
+        Button btnBack = findViewById(R.id.btnBack);
         workList = findViewById(R.id.workList);
 
         String selectedDate = getIntent().getStringExtra("selectedDate");
@@ -97,11 +102,26 @@ public class ChooseWorkActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 이전 프래그먼트로 돌아가기 위해 액티비티의 onBackPressed() 메서드 호출
+                onBackPressed();
+            }
+        });
 
     }
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();
+            // 이전 프래그먼트로 돌아갈 때 수행할 동작 추가
+        } else {
+            super.onBackPressed();
+            // 백 스택에 이전 프래그먼트가 없는 경우, 기본적으로 뒤로 가기 버튼을 처리
+        }
+    }
+
+
 }
