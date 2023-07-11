@@ -11,8 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class CommunityListActivity extends AppCompatActivity {
-
-    Button writebtn;
+    Button btnWrite;
     ListView listView;
     CommunityCustomListAdapter adapter;
 
@@ -21,7 +20,7 @@ public class CommunityListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_list);
 
-        writebtn = findViewById(R.id.btn_write);
+        btnWrite = findViewById(R.id.btnWrite);
         listView = findViewById(R.id.listView);
 
         // 데이터 리스트 생성 (임의의 데이터로 예시)
@@ -37,7 +36,7 @@ public class CommunityListActivity extends AppCompatActivity {
         adapter = new CommunityCustomListAdapter(this, itemList);
         listView.setAdapter(adapter);
 
-        writebtn.setOnClickListener(new View.OnClickListener() {
+        btnWrite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CommunityWriteActivity.class);
