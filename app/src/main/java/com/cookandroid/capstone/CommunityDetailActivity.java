@@ -8,6 +8,7 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -15,11 +16,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.util.ArrayList;
+
 public class CommunityDetailActivity extends AppCompatActivity {
 
     private ScaleAnimation scaleAnimation;
     private BounceInterpolator bounceInterpolator;
     private CompoundButton button_favorite;
+    CommunityCommentCustomListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +38,23 @@ public class CommunityDetailActivity extends AppCompatActivity {
         ToggleButton buttonFavorite = findViewById(R.id.button_favorite);
         ImageButton btn_bottomsheet = findViewById(R.id.btn_bottomsheet);
         TextView textView_backbtn = findViewById(R.id.btnBack);
+        ListView listView_comment = findViewById(R.id.lv_comment);
 
         buttonFavorite.setOnCheckedChangeListener(null);
         buttonFavorite.setChecked(false);
+
+        //댓글 커스텀리스트 적용
+        ArrayList<String> commentList = new ArrayList<>();
+        commentList.add("아이템 1");
+        commentList.add("아이템 2");
+        commentList.add("아이템 3");
+        commentList.add("아이템 4");
+        commentList.add("아이템 5");
+        commentList.add("아이템 6");
+
+        adapter = new CommunityCommentCustomListAdapter(this, commentList);
+        listView_comment.setAdapter(adapter);
+
 
         buttonFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -53,6 +71,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
             }
         });
 
+        //뒤로가기
         textView_backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
