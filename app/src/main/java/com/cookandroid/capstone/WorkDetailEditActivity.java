@@ -209,6 +209,59 @@ public class WorkDetailEditActivity extends AppCompatActivity {
         });
 
 
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 수정한 데이터 가져오기
+                String selectedDate = date.getText().toString();
+                String startTimeValue = startTime.getText().toString();
+                String endTimeValue = endTime.getText().toString();
+                String moneyValue = money.getText().toString();
+                String payMethod = spnPay.getSelectedItem().toString();
+                String restTimeMethod = spnRestTime.getSelectedItem().toString();
+
+                // DatabaseReference 참조 가져오기
+                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
+                Query query = databaseRef.orderByChild("name").equalTo(itemName);
+                query.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            DataSnapshot datesSnapshot = snapshot.child("dates");
+                            if (datesSnapshot.exists()) {
+                                for (DataSnapshot dateSnapshot : datesSnapshot.getChildren()) {
+                                    String dateValue = dateSnapshot.child("date").getValue(String.class);
+
+                                    if (dateValue != null && dateValue.trim().equals(selectedDate.trim())) {
+                                        // 해당 데이터 수정
+                                        dateSnapshot.child("startTime").getRef().setValue(startTimeValue);
+                                        dateSnapshot.child("endTime").getRef().setValue(endTimeValue);
+                                        dateSnapshot.child("money").getRef().setValue(moneyValue);
+                                        dateSnapshot.child("pay").getRef().setValue(payMethod);
+                                        dateSnapshot.child("restTime").getRef().setValue(restTimeMethod);
+                                        break;
+                                    }
+                                }
+                            } else {
+                                Log.e("WorkDetailEditActivity", "dates is null");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // 에러 처리 로직을 작성해주세요.
+                    }
+                });
+
+                // 수정 후 다시 MainActivity로 이동
+                Intent intent = new Intent(WorkDetailEditActivity.this, MainActivity.class);
+                intent.putExtra("showCalendar", true); // calendarFragment를 표시하기 위한 정보 전달
+                startActivity(intent);
+            }
+        });
+
+
 
 
 
