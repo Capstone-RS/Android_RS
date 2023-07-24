@@ -193,7 +193,7 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                         dateData.put("endTime", getEndTime);
                         dateData.put("restTime", getSelectRestTime);
                         dateData.put("money", getMoney);
-                        dateData.put("Pay", getSelectPay);
+                        dateData.put("pay", getSelectPay);
                         dates.put(dateKey, dateData);
                     }
                     result.put("dates", dates);

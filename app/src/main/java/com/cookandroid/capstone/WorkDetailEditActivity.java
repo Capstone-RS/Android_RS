@@ -42,6 +42,8 @@ public class WorkDetailEditActivity extends AppCompatActivity {
         TextView endTime = findViewById(R.id.endTime);
         Button btnNext = findViewById(R.id.btnNext);
         TextView btnCorrect = findViewById(R.id.btnCorrect);
+        Spinner spnPay = findViewById(R.id.spnPay);
+        Spinner spnRestTime = findViewById(R.id.spnRestTime);
 
 
         Intent intent = getIntent();
@@ -64,6 +66,8 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                                 String startTimeValue = dateSnapshot.child("startTime").getValue(String.class);
                                 String endTimeValue = dateSnapshot.child("endTime").getValue(String.class);
                                 String moneyValue = dateSnapshot.child("money").getValue(String.class);
+                                String payMethod = dateSnapshot.child("pay").getValue(String.class);
+                                String restTimeMethod = dateSnapshot.child("restTime").getValue(String.class);
 
                                 if (dateValue != null && dateValue.trim().equals(selectedDate.trim())) {
                                     if (startTimeValue != null) {
@@ -74,6 +78,43 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                                     }
                                     if (moneyValue != null) {
                                         money.setText(moneyValue);
+                                    }
+                                    // "Pay" 값에 따라 다른 스피너 값 설정
+                                    if (payMethod != null) {
+                                        int arrayResource;
+                                        if (payMethod.equals("시급")) {
+                                            arrayResource = R.array.array_workdata2_pay_method1;
+                                        } else if (payMethod.equals("일급")) {
+                                            arrayResource = R.array.array_workdata2_pay_method2;
+                                        } else {
+                                            // 기본적으로 시급 배열 사용
+                                            arrayResource = R.array.array_workdata2_pay_method1;
+                                        }
+
+                                        ArrayAdapter<CharSequence> payAdapter = ArrayAdapter.createFromResource(WorkDetailEditActivity.this,
+                                                arrayResource, android.R.layout.simple_spinner_item);
+                                        payAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                        spnPay.setAdapter(payAdapter);
+                                    }
+
+                                    // "restTime" 값에 따라 다른 스피너 값 설정
+                                    if (restTimeMethod != null) {
+                                        int arrayResource;
+                                        if (restTimeMethod.equals("10분")) {
+                                            arrayResource = R.array.array_workdata2_restTime_method1;
+                                        } else if (restTimeMethod.equals("20분")) {
+                                            arrayResource = R.array.array_workdata2_restTime_method2;
+                                        }else if (restTimeMethod.equals("30분")) {
+                                                arrayResource = R.array.array_workdata2_restTime_method3;
+                                        } else {
+                                            // 기본적으로 시급 배열 사용
+                                            arrayResource = R.array.array_workdata2_restTime_method1;
+                                        }
+
+                                        ArrayAdapter<CharSequence> payAdapter = ArrayAdapter.createFromResource(WorkDetailEditActivity.this,
+                                                arrayResource, android.R.layout.simple_spinner_item);
+                                        payAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                        spnRestTime.setAdapter(payAdapter);
                                     }
                                     break;
                                 }
@@ -129,19 +170,6 @@ public class WorkDetailEditActivity extends AppCompatActivity {
         });
 
 
-        //스피너
-        Spinner spnPay = (Spinner) findViewById(R.id.spnPay);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.array_workdata2_howpay, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnPay.setAdapter(adapter);
-
-
-        Spinner spnRestTime = (Spinner) findViewById(R.id.spnRestTime);
-        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this,
-                R.array.array_workdata2_rest, android.R.layout.simple_spinner_item);
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnRestTime.setAdapter(adapter1);
 
 
         //타임피커 생성
