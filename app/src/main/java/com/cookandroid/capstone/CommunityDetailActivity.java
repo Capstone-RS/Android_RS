@@ -2,6 +2,7 @@ package com.cookandroid.capstone;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.BounceInterpolator;
@@ -11,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+import android.widget.ScrollView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +25,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     private ScaleAnimation scaleAnimation;
     private BounceInterpolator bounceInterpolator;
     private CompoundButton button_favorite;
+    private ScrollView scrollView;
     CommunityCommentCustomListAdapter adapter;
 
     @Override
@@ -39,6 +42,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
         ImageButton btn_bottomsheet = findViewById(R.id.btn_bottomsheet);
         TextView textView_backbtn = findViewById(R.id.btnBack);
         ListView listView_comment = findViewById(R.id.lv_comment);
+        scrollView = findViewById(R.id.scrollView);
 
         buttonFavorite.setOnCheckedChangeListener(null);
         buttonFavorite.setChecked(false);
@@ -54,6 +58,18 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
         adapter = new CommunityCommentCustomListAdapter(this, commentList);
         listView_comment.setAdapter(adapter);
+
+        listView_comment.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP){
+                    scrollView.requestDisallowInterceptTouchEvent(false);
+                } else {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                }
+                return false;
+            }
+        });
 
 
         buttonFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
