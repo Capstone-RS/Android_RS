@@ -14,9 +14,16 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.ScrollView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -43,6 +50,9 @@ public class CommunityDetailActivity extends AppCompatActivity {
         TextView textView_backbtn = findViewById(R.id.btnBack);
         ListView listView_comment = findViewById(R.id.lv_comment);
         scrollView = findViewById(R.id.scrollView);
+        TextView community_title = findViewById(R.id.community_title);
+        TextView community_content = findViewById(R.id.community_content);
+
 
         buttonFavorite.setOnCheckedChangeListener(null);
         buttonFavorite.setChecked(false);
@@ -58,6 +68,47 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
         adapter = new CommunityCommentCustomListAdapter(this, commentList);
         listView_comment.setAdapter(adapter);
+
+        // Firebase Realtime Database 인스턴스를 초기화합니다.
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            String title = intent.getStringExtra("title");
+            String content = intent.getStringExtra("content");
+
+            if (title != null) {
+                community_title.setText(title);
+            }
+
+            if (content != null) {
+                community_content.setText(content);
+            }
+
+            // 파이어베이스에서 해당 커뮤니티 데이터를 가져오기 위한 레퍼런스를 만듭니다.
+            DatabaseReference communityRef = database.getReference("Community");
+
+            communityRef.orderByChild("title").equalTo(title).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    // 데이터를 가져오는 작업을 수행합니다.
+                    if (snapshot.exists()) {
+                        for (DataSnapshot categorySnapshot : snapshot.getChildren()) {
+                            for (DataSnapshot postSnapshot : categorySnapshot.getChildren()) {
+                                String postContent = postSnapshot.child("content").getValue(String.class);
+
+                                // TODO: 가져온 커뮤니티 데이터의 내용을 사용하여 화면에 표시하거나 처리합니다.
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // 데이터 가져오기 실패
+                }
+            });
+
+        }
 
         listView_comment.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -87,15 +138,14 @@ public class CommunityDetailActivity extends AppCompatActivity {
             }
         });
 
-        //뒤로가기
+        // 뒤로가기
         textView_backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), CommunityListActivity.class);
-                startActivity(intent);
-                finish();
+                onBackPressed();
             }
         });
+
     }
 
     private void openBottomSheet() {
