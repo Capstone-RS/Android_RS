@@ -3,46 +3,141 @@ package com.cookandroid.capstone;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class CommunityListActivity extends AppCompatActivity {
-
-    Button writebtn;
+    Button btnWrite;
     ListView listView;
     CommunityCustomListAdapter adapter;
+    ArrayList<String> itemList;
+
+    String selectedCategory;
+    FirebaseDatabase firebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_list);
 
-        writebtn = findViewById(R.id.btn_write);
+        btnWrite = findViewById(R.id.btnWrite);
         listView = findViewById(R.id.listView);
 
-        // 데이터 리스트 생성 (임의의 데이터로 예시)
-        ArrayList<String> itemList = new ArrayList<>();
-        itemList.add("아이템 1");
-        itemList.add("아이템 2");
-        itemList.add("아이템 3");
-        itemList.add("아이템 4");
-        itemList.add("아이템 5");
-        itemList.add("아이템 6");
+        itemList = new ArrayList<>();
 
-        // 커스텀 어댑터 생성 및 리스트뷰에 설정
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference().child("Community");
+
+        // 추가: 사용자가 선택한 카테고리를 Intent로 전달받음
+        selectedCategory = getIntent().getStringExtra("category");
+
+        // selectedCategory가 null인 경우 기본값 설정
+        if (selectedCategory == null) {
+            selectedCategory = "default"; // 적절한 기본값으로 설정해주세요.
+        }
+
+        // 어댑터 먼저 생성
         adapter = new CommunityCustomListAdapter(this, itemList);
         listView.setAdapter(adapter);
 
-        writebtn.setOnClickListener(new View.OnClickListener() {
+        // 선택된 카테고리에 해당하는 레퍼런스 생성
+        DatabaseReference categoryReference = databaseReference.child(selectedCategory);
+
+        // ValueEventListener를 사용하여 선택된 카테고리의 글 목록을 가져옴
+        categoryReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CommunityWriteActivity.class);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                itemList.clear(); // 데이터를 실시간으로 업데이트하기 위해 리스트 초기화
+
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    String title = postSnapshot.child("title").getValue(String.class);
+                    String content = postSnapshot.child("content").getValue(String.class);
+                    String itemData = selectedCategory + ";" + title + ";" + content;
+                    itemList.add(itemData);
+                }
+
+                adapter.notifyDataSetChanged(); // 데이터가 변경되었음을 어댑터에 알려서 리스트뷰를 갱신
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItemData = itemList.get(position);
+                Intent intent = new Intent(getApplicationContext(), CommunityDetailActivity.class);
+                intent.putExtra("selectedItemData", selectedItemData);
                 startActivity(intent);
             }
         });
+
+        // CommunityWriteActivity 호출
+        btnWrite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), CommunityWriteActivity.class);
+                intent.putExtra("category", selectedCategory);
+                startActivityForResult(intent, 1); // requestCode는 1로 설정
+            }
+        });
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            boolean dataChanged = data.getBooleanExtra("dataChanged", false);
+            if (dataChanged) {
+                // 데이터가 변경되었을 때, 리스트뷰를 업데이트하는 작업 수행
+                updateListView();
+            }
+        }
+    }
+
+    private void updateListView() {
+        // 선택된 카테고리에 해당하는 레퍼런스 생성
+        DatabaseReference categoryReference = firebaseDatabase.getReference().child("Community").child(selectedCategory);
+
+        // ValueEventListener를 사용하여 선택된 카테고리의 글 목록을 가져옴
+        categoryReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                itemList.clear(); // 데이터를 실시간으로 업데이트하기 위해 리스트 초기화
+
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    String title = postSnapshot.child("title").getValue(String.class);
+                    String content = postSnapshot.child("content").getValue(String.class);
+                    String itemData = selectedCategory + ";" + title + ";" + content;
+                    itemList.add(itemData);
+                }
+
+                adapter.notifyDataSetChanged(); // 데이터가 변경되었음을 어댑터에 알려서 리스트뷰를 갱신
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 }

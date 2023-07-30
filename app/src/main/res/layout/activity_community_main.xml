@@ -280,7 +280,7 @@
                             android:layout_width="40dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="음료"
+                            android:text="빵집"
                             android:textSize="18sp"
                             android:textColor="@android:color/black"/>
                         <TextView
