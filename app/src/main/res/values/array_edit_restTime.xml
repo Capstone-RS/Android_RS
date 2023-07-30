@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="array_workdata2_restTime_method1">
+        <item>10분</item>
+        <item>20분</item>
+        <item>30분</item>
+    </string-array>
+
+    <string-array name="array_workdata2_restTime_method2">
+        <item>20분</item>
+        <item>30분</item>
+        <item>10분</item>
+    </string-array>
+
+    <string-array name="array_workdata2_restTime_method3">
+        <item>30분</item>
+        <item>10분</item>
+        <item>20분</item>
+    </string-array>
+
+</resources>

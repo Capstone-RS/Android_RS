@@ -175,6 +175,7 @@ public class CalendarFragment extends Fragment {
                         if (datesSnapshot.exists()) {
                             for (DataSnapshot dateSnapshot : datesSnapshot.getChildren()) {
                                 String date = dateSnapshot.child("date").getValue(String.class);
+                                String payType = dateSnapshot.child("pay").getValue(String.class); // "시급" 또는 "일급" 가져오기
                                 String money = dateSnapshot.child("money").getValue(String.class);
                                 String startTime = dateSnapshot.child("startTime").getValue(String.class);
                                 String endTime = dateSnapshot.child("endTime").getValue(String.class);
@@ -182,31 +183,39 @@ public class CalendarFragment extends Fragment {
 
                                 // 선택된 날짜와 일치하는 경우에만 계산
                                 if (date != null && date.trim().equals(selectedDateTextView.getText().toString().trim())) {
-                                    // startTime과 endTime을 시간 형식("HH:mm")에서 분으로 변환
-                                    String[] startTimeParts = startTime.split(":");
-                                    int startHour = Integer.parseInt(startTimeParts[0]);
-                                    int startMinute = Integer.parseInt(startTimeParts[1]);
+                                    // payType이 "시급"인 경우만 계산
+                                    if (payType != null && payType.trim().equals("시급")) {
+                                        // 계산 코드
+                                        // startTime과 endTime을 시간 형식("HH:mm")에서 분으로 변환
+                                        String[] startTimeParts = startTime.split(":");
+                                        int startHour = Integer.parseInt(startTimeParts[0]);
+                                        int startMinute = Integer.parseInt(startTimeParts[1]);
 
-                                    String[] endTimeParts = endTime.split(":");
-                                    int endHour = Integer.parseInt(endTimeParts[0]);
-                                    int endMinute = Integer.parseInt(endTimeParts[1]);
+                                        String[] endTimeParts = endTime.split(":");
+                                        int endHour = Integer.parseInt(endTimeParts[0]);
+                                        int endMinute = Integer.parseInt(endTimeParts[1]);
 
-                                    // restTime에서 "분" 문자열 제거 및 숫자 값만 추출
-                                    int restMinutes = 0; // 기본값 설정
+                                        // restTime에서 "분" 문자열 제거 및 숫자 값만 추출
+                                        int restMinutes = 0; // 기본값 설정
 
-                                    if (restTime != null && !restTime.trim().isEmpty()) {
-                                        String restTimeValue = restTime.replace("분", "").trim();
-                                        restMinutes = Integer.parseInt(restTimeValue);
+                                        if (restTime != null && !restTime.trim().isEmpty()) {
+                                            String restTimeValue = restTime.replace("분", "").trim();
+                                            restMinutes = Integer.parseInt(restTimeValue);
+                                        }
+
+                                        // 근무 시간 계산
+                                        int totalMinutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute) - restMinutes;
+
+                                        // 시급 가져오기 (Firebase에서 "money" 필드의 값을 가져옴)
+                                        double hourlyRate = Double.parseDouble(money);
+                                        double earnings = (double) totalMinutes / 60 * hourlyRate;
+
+                                        totalEarnings += earnings;
+                                    } else if (payType != null && payType.trim().equals("일급")) {
+                                        // "일급"인 경우 money 값을 출력
+                                        double earnings = Double.parseDouble(money);
+                                        totalEarnings += earnings;
                                     }
-
-                                    // 근무 시간 계산
-                                    int totalMinutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute) - restMinutes;
-
-                                    // 시급 가져오기 (Firebase에서 "money" 필드의 값을 가져옴)
-                                    double hourlyRate = Double.parseDouble(money);
-                                    double earnings = (double) totalMinutes / 60 * hourlyRate;
-
-                                    totalEarnings += earnings;
                                 }
                             }
                         }
