@@ -6,10 +6,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class CommunityListActivity extends AppCompatActivity {
+    TextView btnBack;
     Button btnWrite;
     ListView listView;
     CommunityCustomListAdapter adapter;
@@ -33,6 +36,7 @@ public class CommunityListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_list);
 
+        btnBack = findViewById(R.id.btnBack);
         btnWrite = findViewById(R.id.btnWrite);
         listView = findViewById(R.id.listView);
 
@@ -98,6 +102,26 @@ public class CommunityListActivity extends AppCompatActivity {
             }
         });
 
+        //뒤로가기
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();
+            // 이전 프래그먼트로 돌아갈 때 수행할 동작 추가
+        } else {
+            super.onBackPressed();
+            // 백 스택에 이전 프래그먼트가 없는 경우, 기본적으로 뒤로 가기 버튼을 처리
+        }
     }
 
     @Override
