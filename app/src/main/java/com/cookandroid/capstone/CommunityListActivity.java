@@ -57,6 +57,24 @@ public class CommunityListActivity extends AppCompatActivity {
         adapter = new CommunityCustomListAdapter(this, itemList);
         listView.setAdapter(adapter);
 
+        // CommunityWriteActivity 호출
+        btnWrite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), CommunityWriteActivity.class);
+                intent.putExtra("category", selectedCategory);
+                startActivityForResult(intent, 1); // requestCode는 1로 설정
+            }
+        });
+
+        //뒤로가기
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         // 선택된 카테고리에 해당하는 레퍼런스 생성
         DatabaseReference categoryReference = databaseReference.child(selectedCategory);
 
@@ -70,7 +88,7 @@ public class CommunityListActivity extends AppCompatActivity {
                     String title = postSnapshot.child("title").getValue(String.class);
                     String content = postSnapshot.child("content").getValue(String.class);
                     String itemData = selectedCategory + ";" + title + ";" + content;
-                    itemList.add(itemData);
+                    itemList.add(0, itemData);
                 }
 
                 adapter.notifyDataSetChanged(); // 데이터가 변경되었음을 어댑터에 알려서 리스트뷰를 갱신
@@ -91,25 +109,6 @@ public class CommunityListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        // CommunityWriteActivity 호출
-        btnWrite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CommunityWriteActivity.class);
-                intent.putExtra("category", selectedCategory);
-                startActivityForResult(intent, 1); // requestCode는 1로 설정
-            }
-        });
-
-        //뒤로가기
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
     }
 
     @Override
@@ -126,7 +125,6 @@ public class CommunityListActivity extends AppCompatActivity {
             // 백 스택에 이전 프래그먼트가 없는 경우, 기본적으로 뒤로 가기 버튼을 처리
         }
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -161,7 +159,7 @@ public class CommunityListActivity extends AppCompatActivity {
                     String title = postSnapshot.child("title").getValue(String.class);
                     String content = postSnapshot.child("content").getValue(String.class);
                     String itemData = selectedCategory + ";" + title + ";" + content;
-                    itemList.add(itemData);
+                    itemList.add(0, itemData);
                 }
 
                 adapter.notifyDataSetChanged(); // 데이터가 변경되었음을 어댑터에 알려서 리스트뷰를 갱신
@@ -173,5 +171,4 @@ public class CommunityListActivity extends AppCompatActivity {
             }
         });
     }
-
 }
