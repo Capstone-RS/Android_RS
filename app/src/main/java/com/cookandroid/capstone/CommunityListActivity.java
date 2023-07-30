@@ -119,10 +119,14 @@ public class CommunityListActivity extends AppCompatActivity {
             fragmentManager.popBackStack();
             // 이전 프래그먼트로 돌아갈 때 수행할 동작 추가
         } else {
+            Intent intent = new Intent();
+            intent.putExtra("dataChanged", true); // 데이터가 변경되었음을 알려주는 플래그
+            setResult(RESULT_OK, intent);
             super.onBackPressed();
             // 백 스택에 이전 프래그먼트가 없는 경우, 기본적으로 뒤로 가기 버튼을 처리
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -135,6 +139,12 @@ public class CommunityListActivity extends AppCompatActivity {
                 updateListView();
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateListView();
     }
 
     private void updateListView() {
