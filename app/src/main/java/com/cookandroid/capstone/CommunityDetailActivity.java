@@ -53,6 +53,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
         ToggleButton buttonFavorite = findViewById(R.id.button_favorite);
         ImageButton btn_bottomsheet = findViewById(R.id.btn_bottomsheet);
         TextView textView_backbtn = findViewById(R.id.btnBack);
+        TextView topic = findViewById(R.id.community_topic);
         ListView listView_comment = findViewById(R.id.lv_comment);
         scrollView = findViewById(R.id.scrollView);
         community_title = findViewById(R.id.community_title);
@@ -82,6 +83,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
             finish();
             return;
         }
+        topic.setText(selectedCategory);
 
         // Firebase Realtime Database 인스턴스를 초기화합니다.
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -166,13 +168,31 @@ public class CommunityDetailActivity extends AppCompatActivity {
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_community, null);
         bottomSheetDialog.setContentView(bottomSheetView);
 
-        // 바텀시트에서 삭제하기 버튼을 클릭했을 때 처리
         TextView btnDelete = bottomSheetView.findViewById(R.id.btn_delete);
+        TextView btnEdit = bottomSheetView.findViewById(R.id.btn_edit);
+        TextView btnCancle = bottomSheetView.findViewById(R.id.btn_cancle);
+
+        // 바텀시트에서 삭제하기 버튼을 클릭했을 때 처리
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 삭제 작업 수행
                 deletePostFromFirebase();
+                bottomSheetDialog.dismiss();
+            }
+        });
+        //바텀시트에서 수정하기 버튼을 클릭했을 때 처리
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 수정 작업 수행
+            }
+        });
+
+        // 바텀시트에서 취소 버튼을 클릭했을 때 처리
+        btnCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 bottomSheetDialog.dismiss();
             }
         });

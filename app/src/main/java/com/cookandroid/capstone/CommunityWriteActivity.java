@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class CommunityWriteActivity extends AppCompatActivity {
 
     TextView textView_backbtn;
+    TextView topic;
     Button btn_done;
     EditText et_title;
     EditText et_content;
@@ -29,6 +30,7 @@ public class CommunityWriteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_community_write);
 
         textView_backbtn = findViewById(R.id.btnBack);
+        topic = findViewById(R.id.community_topic);
         btn_done = findViewById(R.id.btn_write_done);
         et_title = findViewById(R.id.write_title);
         et_content = findViewById(R.id.write_content);
@@ -44,6 +46,8 @@ public class CommunityWriteActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        topic.setText(selectedCategory);
 
         // 선택된 카테고리에 해당하는 레퍼런스 생성
         databaseReference = firebaseDatabase.getReference().child("Community").child(selectedCategory);
@@ -88,4 +92,3 @@ public class CommunityWriteActivity extends AppCompatActivity {
         });
     }
 }
-

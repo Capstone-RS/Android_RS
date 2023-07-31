@@ -30,8 +30,8 @@ public class CommunityFragment extends Fragment {
         // TextView 배열과 카테고리 이름 배열 초기화
         communityTextViews = new TextView[11];
         categoryNames = new String[]{
-                "Cafe", "Academy", "Icecream", "Fastfood", "Clothes,Shoes",
-                "Restaurant", "Movie", "Wedding", "ConvenienceStore", "Bread", "Other"
+                "카페", "학원, 과외", "아이스크림", "패스트푸드", "의류, 신발",
+                "음식점", "영화관", "웨딩홀", "편의점", "빵집", "그 외 기타"
         };
 
         // TextView 배열 초기화

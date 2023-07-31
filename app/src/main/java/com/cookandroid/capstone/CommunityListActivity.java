@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 public class CommunityListActivity extends AppCompatActivity {
     TextView btnBack;
+    TextView topic;
     Button btnWrite;
     ListView listView;
     CommunityCustomListAdapter adapter;
@@ -38,8 +39,10 @@ public class CommunityListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_community_list);
 
         btnBack = findViewById(R.id.btnBack);
+        topic = findViewById(R.id.community_topic);
         btnWrite = findViewById(R.id.btnWrite);
         listView = findViewById(R.id.listView);
+
 
         itemList = new ArrayList<>();
 
@@ -53,6 +56,8 @@ public class CommunityListActivity extends AppCompatActivity {
         if (selectedCategory == null) {
             selectedCategory = "default"; // 적절한 기본값으로 설정해주세요.
         }
+
+        topic.setText(selectedCategory);
 
         // 어댑터 먼저 생성
         adapter = new CommunityCustomListAdapter(this, itemList);
@@ -146,7 +151,6 @@ public class CommunityListActivity extends AppCompatActivity {
         super.onResume();
         updateListView();
     }
-
 
     private void updateListView() {
         // 선택된 카테고리에 해당하는 레퍼런스 생성
