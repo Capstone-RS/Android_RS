@@ -36,6 +36,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     private CompoundButton button_favorite;
     private ScrollView scrollView;
     private TextView community_title;
+    private TextView community_content;
     private String selectedCategory;
     private static final int REQUEST_DELETE_POST = 100;
     CommunityCommentCustomListAdapter adapter;
@@ -57,7 +58,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
         ListView listView_comment = findViewById(R.id.lv_comment);
         scrollView = findViewById(R.id.scrollView);
         community_title = findViewById(R.id.community_title);
-        TextView community_content = findViewById(R.id.community_content);
+        community_content = findViewById(R.id.community_content);
         EditText editText_comment = findViewById(R.id.etComment);
         Button btn_comment = findViewById(R.id.btn_comment);
 
@@ -102,28 +103,29 @@ public class CommunityDetailActivity extends AppCompatActivity {
             }
 
             // 파이어베이스에서 해당 커뮤니티 데이터를 가져오기 위한 레퍼런스를 만듭니다.
-            DatabaseReference communityRef = database.getReference("Community");
+            DatabaseReference communityRef = database.getReference("Community").child(selectedCategory);
 
             communityRef.orderByChild("title").equalTo(title).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     // 데이터를 가져오는 작업을 수행합니다.
                     if (snapshot.exists()) {
-                        for (DataSnapshot categorySnapshot : snapshot.getChildren()) {
-                            for (DataSnapshot postSnapshot : categorySnapshot.getChildren()) {
-                                String postContent = postSnapshot.child("content").getValue(String.class);
+                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                            String postContent = postSnapshot.child("content").getValue(String.class);
 
-                                // TODO: 가져온 커뮤니티 데이터의 내용을 사용하여 화면에 표시하거나 처리합니다.
+                            // 수정된 데이터로 제목과 내용을 갱신합니다.
+                            if (postContent != null) {
+                                community_content.setText(postContent);
                             }
                         }
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     // 데이터 가져오기 실패
                 }
             });
-
         }
 
         listView_comment.setOnTouchListener(new View.OnTouchListener() {
@@ -186,6 +188,8 @@ public class CommunityDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 수정 작업 수행
+                openEditActivity(community_title.getText().toString(), community_content.getText().toString());
+                bottomSheetDialog.dismiss();
             }
         });
 
@@ -199,6 +203,17 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
         bottomSheetDialog.show();
     }
+
+
+    // CommunityDetailEdit 페이지 열기 및 데이터 전달
+    private void openEditActivity(String title, String content) {
+        Intent intent = new Intent(this, CommunityDetailEditActivity.class);
+        intent.putExtra("title", title);
+        intent.putExtra("content", content);
+        intent.putExtra("category", selectedCategory); // 선택한 카테고리 데이터 추가
+        startActivity(intent);
+    }
+
 
     // Firebase에서 해당 게시글 삭제하는 함수
     private void deletePostFromFirebase() {
@@ -224,6 +239,37 @@ public class CommunityDetailActivity extends AppCompatActivity {
                     resultIntent.putExtra("dataChanged", true);
                     setResult(RESULT_OK, resultIntent);
                     finish(); // 액티비티 종료
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // 데이터 가져오기 실패
+            }
+        });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // 파이어베이스에서 해당 커뮤니티 데이터를 가져오기 위한 레퍼런스를 만듭니다.
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference communityRef = database.getReference("Community").child(selectedCategory);
+        String title = community_title.getText().toString();
+
+        communityRef.orderByChild("title").equalTo(title).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // 데이터를 가져오는 작업을 수행합니다.
+                if (snapshot.exists()) {
+                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                        String postContent = postSnapshot.child("content").getValue(String.class);
+
+                        // 수정된 데이터로 내용을 갱신합니다.
+                        if (postContent != null) {
+                            community_content.setText(postContent);
+                        }
+                    }
                 }
             }
 
