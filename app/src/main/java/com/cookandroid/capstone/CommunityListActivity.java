@@ -29,6 +29,7 @@ public class CommunityListActivity extends AppCompatActivity {
     ArrayList<String> itemList;
 
     String selectedCategory;
+    private static final int REQUEST_DELETE_POST = 100;
     FirebaseDatabase firebaseDatabase;
 
     @Override
@@ -117,6 +118,7 @@ public class CommunityListActivity extends AppCompatActivity {
         if (fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStack();
             // 이전 프래그먼트로 돌아갈 때 수행할 동작 추가
+            updateListView();
         } else {
             Intent intent = new Intent();
             intent.putExtra("dataChanged", true); // 데이터가 변경되었음을 알려주는 플래그
@@ -144,6 +146,7 @@ public class CommunityListActivity extends AppCompatActivity {
         super.onResume();
         updateListView();
     }
+
 
     private void updateListView() {
         // 선택된 카테고리에 해당하는 레퍼런스 생성
