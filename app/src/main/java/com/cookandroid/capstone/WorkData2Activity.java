@@ -68,7 +68,7 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
         String workPeriod = intent2.getStringExtra("workPeriod");
         String payDay = intent2.getStringExtra("payDay");
         boolean isTaxEnabled = intent2.getBooleanExtra("isTaxEnabled", false);
-
+        String insurance = intent2.getStringExtra("Insurance");
 
         //스피너
         Spinner spnPay = (Spinner) findViewById(R.id.spnPay);
@@ -178,6 +178,7 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                     result.put("workPeriod", getWorkPeriod);
                     result.put("payDay", getPayDay);
                     result.put("isTaxEnabled", isTaxEnabled);
+                    result.put("Insurance",insurance);
 
                     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
 

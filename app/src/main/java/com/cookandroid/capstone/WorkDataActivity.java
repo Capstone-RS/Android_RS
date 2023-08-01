@@ -110,12 +110,26 @@ public class WorkDataActivity extends AppCompatActivity {
                 String getWorkPeriod = spn1.getSelectedItem().toString();
                 String getPayDay = spn2.getSelectedItem().toString();
                 boolean isTaxEnabled = swTax.isChecked();
-                Intent intent = new Intent(getApplicationContext(), WorkData2Activity.class);
-                intent.putExtra("name",getName);
-                intent.putExtra("workPeriod",getWorkPeriod);
-                intent.putExtra("payDay",getPayDay);
-                intent.putExtra("isTaxEnabled", isTaxEnabled); //토글버튼의 상태 넘기기
-                startActivity(intent);
+                if (swInsurance.isChecked()) {
+                    String getInsurance = spnInsurance.getSelectedItem().toString();
+                    Intent intent = new Intent(getApplicationContext(), WorkData2Activity.class);
+                    intent.putExtra("name", getName);
+                    intent.putExtra("workPeriod", getWorkPeriod);
+                    intent.putExtra("payDay", getPayDay);
+                    intent.putExtra("isTaxEnabled", isTaxEnabled);
+                    intent.putExtra("Insurance", getInsurance);
+                    startActivity(intent);
+                } else {
+                    // The toggle button is not checked, set the insurance data to empty string
+                    String getInsurance = ""; // Or you can set it to null if needed
+                    Intent intent = new Intent(getApplicationContext(), WorkData2Activity.class);
+                    intent.putExtra("name", getName);
+                    intent.putExtra("workPeriod", getWorkPeriod);
+                    intent.putExtra("payDay", getPayDay);
+                    intent.putExtra("isTaxEnabled", isTaxEnabled);
+                    intent.putExtra("Insurance", getInsurance);
+                    startActivity(intent);
+                }
             }
         });
         //나중에하기버튼
