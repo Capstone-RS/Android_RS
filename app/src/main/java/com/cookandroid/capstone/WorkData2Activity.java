@@ -67,6 +67,7 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
         String name = intent2.getStringExtra("name");
         String workPeriod = intent2.getStringExtra("workPeriod");
         String payDay = intent2.getStringExtra("payDay");
+        boolean isTaxEnabled = intent2.getBooleanExtra("isTaxEnabled", false);
 
 
         //스피너
@@ -176,6 +177,7 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                     result.put("name", getName);
                     result.put("workPeriod", getWorkPeriod);
                     result.put("payDay", getPayDay);
+                    result.put("isTaxEnabled", isTaxEnabled);
 
                     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
 

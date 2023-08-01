@@ -86,13 +86,67 @@
             android:layout_gravity="center"
             android:textColor="@android:color/black"/>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="세금"
+            android:textColor="@android:color/black"
+            android:textSize="18dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(개인소득자(알바생,프리랜서)가 주로 선택"
+            android:textColor="@android:color/black"
+            android:textSize="13dp" />
+
+        <Switch
+            android:id="@+id/swTax"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4대보험"
+            android:textColor="@android:color/black"
+            android:textSize="18dp" />
+
+        <Switch
+            android:id="@+id/swInsurance"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/spinnerContainer">
+        <Spinner
+            android:id="@+id/spnInsurance"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="150dp">
+        android:layout_marginTop="120dp">
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
