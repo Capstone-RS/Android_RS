@@ -6,7 +6,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -32,8 +34,20 @@ public class WorkDataActivity extends AppCompatActivity {
         //토글버튼
         Switch swTax = (Switch) findViewById(R.id.swTax);
         Switch swInsurance = (Switch) findViewById(R.id.swInsurance);
+        LinearLayout spinnerContainer = (LinearLayout) findViewById(R.id.spinnerContainer);
 
-
+        // 토글 버튼의 상태를 감지하는 리스너 추가
+        swInsurance.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // 토글 버튼의 상태에 따라 스피너의 가시성 조정
+                if (isChecked) {
+                    spinnerContainer.setVisibility(View.VISIBLE); // 보이도록 설정
+                } else {
+                    spinnerContainer.setVisibility(View.GONE);    // 숨기도록 설정
+                }
+            }
+        });
 
         //스피너
         //스피너 workperiod(한달, 일주일) Adapter로 연결
