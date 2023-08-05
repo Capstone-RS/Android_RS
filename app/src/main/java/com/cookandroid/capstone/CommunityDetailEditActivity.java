@@ -90,6 +90,13 @@ public class CommunityDetailEditActivity extends AppCompatActivity {
                 resultIntent.putExtra("title", updatedTitle); // 수정된 제목 전달
                 resultIntent.putExtra("content", updatedContent); // 수정된 내용 전달
                 setResult(RESULT_OK, resultIntent);
+
+                // CommunityDetail 화면으로 이동하면서 수정된 데이터 전달
+                Intent detailIntent = new Intent(getApplicationContext(), CommunityDetailActivity.class);
+                detailIntent.putExtra("title", updatedTitle);
+                detailIntent.putExtra("content", updatedContent);
+                startActivity(detailIntent);
+
                 finish(); // 액티비티 종료
             }
         });
