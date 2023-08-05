@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -40,6 +41,8 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
     BottomSheet_Calendar bottomSheet;
     private TextView workDay;
     private List<String> selectedDatesList;
+    private Switch swPlusPay; // 연장 수당 토글 버튼
+    private Switch swHollidayPay; // 휴일 수당 토글 버튼
 
     int i = 1;
 
@@ -56,9 +59,9 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
         endTime = (TextView) findViewById(R.id.endTime);
         EditText money = (EditText) findViewById(R.id.money);
         workDay = (TextView) findViewById(R.id.btnWorkDay);
-        //BottomSheet_Calendar 에서 선택된 날짜 Textview(workDay)에 출력하기
-
-
+        //연장수당, 휴일수당 토글버튼
+        swPlusPay = (Switch) findViewById(R.id.swPlusPay);
+        swHollidayPay = (Switch) findViewById(R.id.swHollidayPay);
 
 
 
@@ -179,6 +182,9 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                     result.put("payDay", getPayDay);
                     result.put("isTaxEnabled", isTaxEnabled);
                     result.put("Insurance",insurance);
+                    // 연장 수당과 휴일 수당을 파이어베이스에 저장
+                    result.put("swPlusPay", swPlusPay.isChecked());
+                    result.put("swHolliDayPay", swHollidayPay.isChecked());
 
                     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
 
