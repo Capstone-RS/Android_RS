@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,6 +34,7 @@
             android:textStyle="bold"
             android:textColor="@android:color/black"/>
     </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -118,8 +123,39 @@
         android:layout_width="130dp"
         android:layout_height="50dp"
         android:spinnerMode="dropdown"
-        android:layout_marginBottom="100dp"/>
+        android:layout_marginBottom="20dp"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="연장 수당"
+            android:textStyle="bold"
+            android:textSize="15sp"/>
+        <Switch
+            android:id="@+id/swPlusPay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="휴일 수당"
+            android:textStyle="bold"
+            android:textSize="15sp"/>
+        <Switch
+            android:id="@+id/swHollidayPay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -128,6 +164,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:text="계산하기"
             android:id="@+id/btnNext"
             android:background="@drawable/button_round_black"
@@ -139,9 +176,7 @@
             android:id="@+id/btnHome"
             android:background="@drawable/button_round_gray"
             android:textColor="@android:color/white"/>
-
     </LinearLayout>
 
-
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>
