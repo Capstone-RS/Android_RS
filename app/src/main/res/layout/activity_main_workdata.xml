@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:text="&lt;"/>
+
+        <TextView
+            android:layout_width="278dp"
+            android:layout_height="wrap_content"
+            android:text="근무지 수정"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnCorrect"
+            android:layout_width="62dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="삭제"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="근무지명"
+        android:textSize="15dp"
+        android:textColor="@android:color/black"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="카페"
+        android:textSize="15dp"
+        android:id="@+id/name"
+        android:privateImeOptions="defaultInputmode=english"
+        android:layout_marginBottom="30dp"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="월급일"
+        android:textSize="15dp"
+        android:textColor="@android:color/black"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Spinner
+            android:id="@+id/spn1"
+            android:layout_width="130dp"
+            android:layout_height="50dp"
+            android:spinnerMode="dropdown" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="근무한 돈을"
+            android:textSize="15dp"
+            android:layout_gravity="center"
+            android:textColor="@android:color/black"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Spinner
+            android:id="@+id/spn2"
+            android:layout_width="130dp"
+            android:layout_height="50dp"
+            android:spinnerMode="dropdown" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="에 받아요"
+            android:textSize="15dp"
+            android:layout_gravity="center"
+            android:textColor="@android:color/black"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="세금"
+            android:textColor="@android:color/black"
+            android:textSize="18dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(개인소득자(알바생,프리랜서)가 주로 선택"
+            android:textColor="@android:color/black"
+            android:textSize="13dp" />
+
+        <Switch
+            android:id="@+id/swTax"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="4대보험"
+            android:textColor="@android:color/black"
+            android:textSize="18dp" />
+
+        <Switch
+            android:id="@+id/swInsurance"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/spinnerContainer">
+            <Spinner
+                android:id="@+id/spnInsurance"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="연장수당"
+                android:textColor="@android:color/black"
+                android:textSize="18dp" />
+            <Switch
+                android:id="@+id/swPlusPay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="휴일수당"
+                android:textColor="@android:color/black"
+                android:textSize="18dp" />
+            <Switch
+                android:id="@+id/swHollidayPay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <Button
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnNext"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:text="확인"
+            android:background="@drawable/button_round_black"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
