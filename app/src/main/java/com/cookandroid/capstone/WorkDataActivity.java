@@ -6,20 +6,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import com.cookandroid.capstone.Fragment.HomeFragment;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class WorkDataActivity extends AppCompatActivity {
 
@@ -36,6 +30,24 @@ public class WorkDataActivity extends AppCompatActivity {
         //사용할 스피너 선언
         Spinner spn1 = (Spinner) findViewById(R.id.spn1);
         Spinner spn2 = (Spinner) findViewById(R.id.spn2);
+        Spinner spnInsurance = (Spinner)findViewById(R.id.spnInsurance);
+        //토글버튼
+        Switch swTax = (Switch) findViewById(R.id.swTax);
+        Switch swInsurance = (Switch) findViewById(R.id.swInsurance);
+        LinearLayout spinnerContainer = (LinearLayout) findViewById(R.id.spinnerContainer);
+
+        // 토글 버튼의 상태를 감지하는 리스너 추가
+        swInsurance.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // 토글 버튼의 상태에 따라 스피너의 가시성 조정
+                if (isChecked) {
+                    spinnerContainer.setVisibility(View.VISIBLE); // 보이도록 설정
+                } else {
+                    spinnerContainer.setVisibility(View.GONE);    // 숨기도록 설정
+                }
+            }
+        });
 
         //스피너
         //스피너 workperiod(한달, 일주일) Adapter로 연결
@@ -53,6 +65,12 @@ public class WorkDataActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
                 R.array.array_workdata_payweek, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //스피너 Adapter3로 연결
+        ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(this,
+                R.array.array_workdata_insurance, android.R.layout.simple_spinner_item);
+        adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnInsurance.setAdapter(adapter3); //spnInsurance 위치에 adapter3 연결
 
         //index 값을 사용하여 spn1에 스피너 값 선택시 해당 스피너 출력 되도록 구현
         spn1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -91,11 +109,27 @@ public class WorkDataActivity extends AppCompatActivity {
                 String getName = name.getText().toString();
                 String getWorkPeriod = spn1.getSelectedItem().toString();
                 String getPayDay = spn2.getSelectedItem().toString();
-                Intent intent = new Intent(getApplicationContext(), WorkData2Activity.class);
-                intent.putExtra("name",getName);
-                intent.putExtra("workPeriod",getWorkPeriod);
-                intent.putExtra("payDay",getPayDay);
-                startActivity(intent);
+                boolean isTaxEnabled = swTax.isChecked();
+                if (swInsurance.isChecked()) {
+                    String getInsurance = spnInsurance.getSelectedItem().toString();
+                    Intent intent = new Intent(getApplicationContext(), WorkData2Activity.class);
+                    intent.putExtra("name", getName);
+                    intent.putExtra("workPeriod", getWorkPeriod);
+                    intent.putExtra("payDay", getPayDay);
+                    intent.putExtra("isTaxEnabled", isTaxEnabled);
+                    intent.putExtra("Insurance", getInsurance);
+                    startActivity(intent);
+                } else {
+                    // The toggle button is not checked, set the insurance data to empty string
+                    String getInsurance = ""; // Or you can set it to null if needed
+                    Intent intent = new Intent(getApplicationContext(), WorkData2Activity.class);
+                    intent.putExtra("name", getName);
+                    intent.putExtra("workPeriod", getWorkPeriod);
+                    intent.putExtra("payDay", getPayDay);
+                    intent.putExtra("isTaxEnabled", isTaxEnabled);
+                    intent.putExtra("Insurance", getInsurance);
+                    startActivity(intent);
+                }
             }
         });
         //나중에하기버튼

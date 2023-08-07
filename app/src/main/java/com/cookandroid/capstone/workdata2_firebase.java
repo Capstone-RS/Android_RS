@@ -12,20 +12,23 @@ public class workdata2_firebase {
     String selectRestTime;
     String workPeriod;
     String payDay;
+    boolean isTaxEnabled;
+    String insurance;
 
 
     public workdata2_firebase(){};
 
-    public workdata2_firebase(String name,String workPeriod, String payDay,String money,String startTime,String endTime,String selectPay,String selectRestTime){
+    public workdata2_firebase(String name, String workPeriod, String payDay, String money, String startTime, String endTime, String selectPay, String selectRestTime, boolean isTaxEnabled, String insurance) {
         this.name = name;
         this.workPeriod = workPeriod;
         this.payDay = payDay;
         this.money = money;
-
         this.startTime = startTime;
         this.endTime = endTime;
         this.selectPay = selectPay;
         this.selectRestTime = selectRestTime;
+        this.isTaxEnabled = isTaxEnabled;
+        this.insurance = insurance;
     }
     public String getName(){
         return name;
@@ -91,6 +94,21 @@ public class workdata2_firebase {
 
     public void setSelectRestTime(String selectRestTime){
         this.selectRestTime = selectRestTime;
+    }
+
+    public boolean isTaxEnabled() {
+        return isTaxEnabled;
+    }
+
+    public void setTaxEnabled(boolean taxEnabled) {
+        isTaxEnabled = taxEnabled;
+    }
+    public String getInsurance() {
+        return insurance;
+    }
+
+    public void setInsurance(String insurance) {
+        this.insurance = insurance;
     }
 
 
