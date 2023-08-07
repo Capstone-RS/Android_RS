@@ -20,118 +20,87 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class CommunityFragment extends Fragment {
+    private TextView[] communityTextViews;
+    private String[] categoryNames;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_community_main, container, false);
 
-        TextView textView_community1 = view.findViewById(R.id.community1);
-        TextView textView_community2 = view.findViewById(R.id.community2);
-        TextView textView_community3 = view.findViewById(R.id.community3);
-        TextView textView_community4 = view.findViewById(R.id.community4);
-        TextView textView_community5 = view.findViewById(R.id.community5);
-        TextView textView_community6 = view.findViewById(R.id.community6);
-        TextView textView_community7 = view.findViewById(R.id.community7);
-        TextView textView_community8 = view.findViewById(R.id.community8);
-        TextView textView_community9 = view.findViewById(R.id.community9);
-        TextView textView_community10 = view.findViewById(R.id.community10);
-        TextView textView_community11 = view.findViewById(R.id.community11);
+        // TextView 배열과 카테고리 이름 배열 초기화
+        communityTextViews = new TextView[11];
+        categoryNames = new String[]{
+                "카페", "학원, 과외", "아이스크림", "패스트푸드", "의류, 신발",
+                "음식점", "영화관", "웨딩홀", "편의점", "빵집", "그 외 기타"
+        };
 
+        // TextView 배열 초기화
+        communityTextViews[0] = view.findViewById(R.id.community1);
+        communityTextViews[1] = view.findViewById(R.id.community2);
+        communityTextViews[2] = view.findViewById(R.id.community3);
+        communityTextViews[3] = view.findViewById(R.id.community4);
+        communityTextViews[4] = view.findViewById(R.id.community5);
+        communityTextViews[5] = view.findViewById(R.id.community6);
+        communityTextViews[6] = view.findViewById(R.id.community7);
+        communityTextViews[7] = view.findViewById(R.id.community8);
+        communityTextViews[8] = view.findViewById(R.id.community9);
+        communityTextViews[9] = view.findViewById(R.id.community10);
+        communityTextViews[10] = view.findViewById(R.id.community11);
 
-        //카페
-        textView_community1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveToCommunityList("Cafe");
-            }
-        });
-
-        //학원, 과외
-        textView_community2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveToCommunityList("Academy");
-            }
-        });
-
-        //아이스크림
-        textView_community3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveToCommunityList("Icecream");
-            }
-        });
-
-        //패스트푸드
-        textView_community4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveToCommunityList("Fastfood");
-            }
-        });
-
-        //의류, 신발
-        textView_community5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveToCommunityList("Clothes,Shoes");
-            }
-        });
-
-        //음식점
-        textView_community6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveToCommunityList("Restaurant");
-            }
-        });
-
-        //영화관
-        textView_community7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveToCommunityList("Movie");
-            }
-        });
-
-        //웨딩홀
-        textView_community8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveToCommunityList("Wedding");
-            }
-        });
-
-        //편의점
-        textView_community9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveToCommunityList("ConvenienceStore");
-            }
-        });
-
-        //빵집
-        textView_community10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveToCommunityList("Bread");
-            }
-        });
-
-        //그 외 기타
-        textView_community11.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveToCommunityList("Other");
-            }
-        });
+        // 각 카테고리에 대해 최신 글 내용 가져오기 및 클릭 리스너 설정
+        for (int i = 0; i < communityTextViews.length; i++) {
+            getLatestContent(i);
+            setClickListener(i);
+        }
 
         return view;
+    }
+
+    private void getLatestContent(int index) {
+        DatabaseReference categoryReference = FirebaseDatabase.getInstance().getReference().child("Community").child(categoryNames[index]);
+        categoryReference.orderByKey().limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    String content = postSnapshot.child("content").getValue(String.class);
+                    // 최신 글 내용을 해당 카테고리 TextView에 설정
+                    communityTextViews[index].setText(content);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setClickListener(int index) {
+        communityTextViews[index].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                moveToCommunityList(categoryNames[index]);
+            }
+        });
     }
 
     private void moveToCommunityList(String category) {
         Intent intent = new Intent(getActivity(), CommunityListActivity.class);
         intent.putExtra("category", category); // 선택한 카테고리를 CommunityListActivity로 전달
-        startActivity(intent);
+        startActivityForResult(intent, 1); // requestCode는 1로 설정
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == getActivity().RESULT_OK && data != null) {
+            boolean dataChanged = data.getBooleanExtra("dataChanged", false);
+            if (dataChanged) {
+                // 데이터가 변경되었을 때, 최신 글을 가져오는 작업 수행
+                for (int i = 0; i < communityTextViews.length; i++) {
+                    getLatestContent(i);
+                }
+            }
+        }
     }
 }
