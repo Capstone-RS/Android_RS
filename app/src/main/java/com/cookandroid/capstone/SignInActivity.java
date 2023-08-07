@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class SignInActivity extends AppCompatActivity {
+    private static final String TAG = SignInActivity.class.getSimpleName();
 
     private SignInButton btn_google; // 구글 로그인 버튼
     private LinearLayout btn_logout;
@@ -56,6 +58,7 @@ public class SignInActivity extends AppCompatActivity {
     private GoogleSignInOptions googleSignInOptions;
     @Override
     protected void onCreate(Bundle savedInstanceState) { // 앱이 실행될때 처음 수행되는 곳
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin); // signin xml이랑 연결된 자바파일이라는 뜻
 
@@ -79,13 +82,23 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void signIn() {
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null) {
-            firebaseAuthWithGoogle(account);
-        } else {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if(currentUser != null){
+            updateProfile(currentUser);
+            updateUI(currentUser);
+        }else{
             Intent signInIntent = googleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         }
+//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+//        Log.i(TAG, "signIn => " + account);
+//
+//        if (account != null) {
+//            firebaseAuthWithGoogle(account);
+//        } else {
+//            Intent signInIntent = googleSignInClient.getSignInIntent();
+//            startActivityForResult(signInIntent, RC_SIGN_IN);
+//        }
     }
 
     @Override
@@ -94,17 +107,19 @@ public class SignInActivity extends AppCompatActivity {
 
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            Log.i(TAG, "onActivityResult " + task.isSuccessful() + " " + task.getException());
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
+                Log.e(TAG, "onActivityResult error " + e);
             }
         }
 
     }
 
-//    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    //    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
 //
 //        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
 //        auth.signInWithCredential(credential)
@@ -124,20 +139,21 @@ public class SignInActivity extends AppCompatActivity {
 //    }
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
 
-    AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-    auth.signInWithCredential(credential)
-            .addOnCompleteListener(this, task -> {
-                if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-                    FirebaseUser user = auth.getCurrentUser();
-                    updateProfile(user);
-                    updateUI(user);
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    Log.i(TAG, "signInWithCredential => " + task.isSuccessful() + " " + task.getException());
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        FirebaseUser user = auth.getCurrentUser();
+                        updateProfile(user);
+                        updateUI(user);
                     } else {
                         // If sign in fails, display a message to the user.
                         updateUI(null);
                     }
-            });
-}
+                });
+    }
     private void updateProfile(FirebaseUser user) {
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
