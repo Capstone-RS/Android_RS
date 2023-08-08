@@ -14,6 +14,8 @@ import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,11 +32,18 @@ public class WorkDetailEditActivity extends AppCompatActivity {
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
+    // 사용자 로그인 상태 확인
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser = mAuth.getCurrentUser();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workdetail_edit);
+
+        // 사용자 ID 가져오기
+        String userId = currentUser.getUid();
 
         TextView date = findViewById(R.id.date);
         EditText money = findViewById(R.id.money);
@@ -53,7 +62,7 @@ public class WorkDetailEditActivity extends AppCompatActivity {
         if (selectedDate != null) {
             date.setText(selectedDate);
 
-            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
+            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
             Query query = databaseRef.orderByChild("name").equalTo(itemName);
             query.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -135,7 +144,7 @@ public class WorkDetailEditActivity extends AppCompatActivity {
         btnCorrect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
+                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
                 Query query = databaseRef.orderByChild("name").equalTo(itemName);
                 query.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -221,7 +230,7 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                 String restTimeMethod = spnRestTime.getSelectedItem().toString();
 
                 // DatabaseReference 참조 가져오기
-                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
+                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
                 Query query = databaseRef.orderByChild("name").equalTo(itemName);
                 query.addValueEventListener(new ValueEventListener() {
                     @Override
