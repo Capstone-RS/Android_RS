@@ -21,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -43,6 +45,10 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
     private List<String> selectedDatesList;
     private Switch swPlusPay; // 연장 수당 토글 버튼
     private Switch swHollidayPay; // 휴일 수당 토글 버튼
+
+    // 사용자 로그인 상태 확인
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser = mAuth.getCurrentUser();
 
     int i = 1;
 
@@ -153,6 +159,16 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 사용자가 로그인한 경우에만 데이터를 저장하도록 확인합니다.
+                if (currentUser == null) {
+                    // 사용자가 로그인하지 않은 경우 처리 또는 에러 메시지를 표시합니다.
+                    Toast.makeText(getApplicationContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // 사용자의 고유한 아이디를 가져옵니다.
+                String userId = currentUser.getUid();
+
 
                 String getName = name;
                 String getWorkPeriod = workPeriod;
@@ -211,7 +227,8 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                     HashMap<String, Object> registrationData = new HashMap<>();
                     registrationData.put(key, result);
 
-                    databaseRef.updateChildren(registrationData)
+                    DatabaseReference dataRef = databaseReference.child("Users").child(userId).child("Data").child(name);
+                    dataRef.setValue(result)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
