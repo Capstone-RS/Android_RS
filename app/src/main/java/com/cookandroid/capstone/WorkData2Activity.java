@@ -116,7 +116,7 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                 TimePickerDialog dialog = new TimePickerDialog(WorkData2Activity.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-            // TextView에 출력할 형식 지정
+                        // TextView에 출력할 형식 지정
                         startTime.setText(String.format(Locale.US, "%02d:%02d", selectedHour, selectedMinute));
                     }
                 }, hour, minute, false); // true의 경우 24시간 형식의 TimePicker 출현
