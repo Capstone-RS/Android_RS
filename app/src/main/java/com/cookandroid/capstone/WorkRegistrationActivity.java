@@ -18,6 +18,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.cookandroid.capstone.Fragment.CalendarFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,11 +35,18 @@ public class WorkRegistrationActivity extends AppCompatActivity {
     private DatabaseReference databaseRef;
     CalendarFragment calendarFragment;
 
+    // 사용자 로그인 상태 확인
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser = mAuth.getCurrentUser();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workregistration);
+
+        // 사용자 ID 가져오기
+        String userId = currentUser.getUid();
 
         TextView workDay = findViewById(R.id.workDay);
         EditText money = findViewById(R.id.money);
@@ -116,8 +125,8 @@ public class WorkRegistrationActivity extends AppCompatActivity {
                 String selectedSpnPay = spnPay.getSelectedItem().toString();
                 String selectedRestTime = spnRestTime.getSelectedItem().toString();
 
-                // Firebase 데이터베이스 레퍼런스
-                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+                // Firebase에서 데이터 가져오기
+                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
 
                 // 선택된 아이템의 키 가져오기
                 String selectedItemKey = getIntent().getStringExtra("selectedItem");
@@ -126,7 +135,7 @@ public class WorkRegistrationActivity extends AppCompatActivity {
                 WorkData workData = new WorkData(selectedSpnPay, selectedRestTime, selectedDate, selectedEndTime, selectedMoney, selectedStartTime);
 
                 // 데이터베이스에서 name 값이 selectedItemKey와 일치하는 데이터를 찾기 위한 쿼리 생성
-                Query query = databaseRef.child("Data").orderByChild("name").equalTo(selectedItemKey);
+                Query query = databaseRef.orderByChild("name").equalTo(selectedItemKey);
 
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
