@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,10 +44,18 @@ public class CheckListActivity extends AppCompatActivity {
     ListView listView;
     String sOldValue;
 
+    // 사용자 로그인 상태 확인
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser = mAuth.getCurrentUser();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checklist);
+
+        // 사용자 ID 가져오기
+        String userId = currentUser.getUid();
+
 
         sendbt = findViewById(R.id.btnRegist);
         editdt = findViewById(R.id.etWork);
@@ -56,7 +66,8 @@ public class CheckListActivity extends AppCompatActivity {
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference().child("Todo");
+        // 사용자의 ID를 데이터베이스 참조의 자식 노드로 추가하기
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("Todo");
 
         getValue();
         restoreCheckedState();
