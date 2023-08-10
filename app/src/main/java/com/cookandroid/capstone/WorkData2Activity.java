@@ -219,6 +219,24 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                         dateData.put("restTime", getSelectRestTime);
                         dateData.put("money", getMoney);
                         dateData.put("pay", getSelectPay);
+                        // restTime에서 "분" 문자열 제거 및 숫자 값만 추출
+                        String restTimeValue = getSelectRestTime.replace("분", "").trim();
+                        int restMinutes = Integer.parseInt(restTimeValue);
+
+                        // 시간과 분을 분으로 변환
+                        int startTotalMinutes = calculateTotalMinutes(getStartTime);
+                        int endTotalMinutes = calculateTotalMinutes(getEndTime);
+
+                        // 근무 시간과 휴식 시간을 계산
+                        int workTotalMinutes = endTotalMinutes - startTotalMinutes - restMinutes;
+
+                        // 시급을 기반으로 급여 계산
+                        double earnings = (workTotalMinutes / 60.0) * Double.parseDouble(getMoney);
+                        // earnings 값을 소수점 아래를 제거한 문자열로 변환
+                        String earningsFormatted = String.format(Locale.US, "%.0f", earnings);
+
+                        dateData.put("earnings", earningsFormatted);
+
                         dates.put(dateKey, dateData);
                     }
                     result.put("dates", dates);
@@ -270,6 +288,13 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
             workDay.setText("날짜를 선택 해 주세요");
         }
         Log.d("Selected Dates", "Selected dates: " + selectedDates);
+    }
+
+    private int calculateTotalMinutes(String time) {
+        String[] timeParts = time.split(":");
+        int hours = Integer.parseInt(timeParts[0]);
+        int minutes = Integer.parseInt(timeParts[1]);
+        return hours * 60 + minutes;
     }
 }
 
