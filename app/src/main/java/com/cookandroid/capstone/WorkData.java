@@ -7,6 +7,8 @@ public class WorkData {
     private String endTime;
     private String money;
     private String startTime;
+    private double earnings; // 추가된 부분
+
 
     public WorkData() {
         // Default constructor required for calls to DataSnapshot.getValue(WorkData.class)
@@ -67,5 +69,14 @@ public class WorkData {
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
+    }
+    // earnings의 setter 메소드 추가
+    public void setEarnings(double earnings) {
+        this.earnings = earnings;
+    }
+
+    // earnings의 getter 메소드도 추가하는 것이 좋습니다.
+    public double getEarnings() {
+        return earnings;
     }
 }
