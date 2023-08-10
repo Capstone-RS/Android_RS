@@ -125,6 +125,9 @@ public class WorkRegistrationActivity extends AppCompatActivity {
                 String selectedSpnPay = spnPay.getSelectedItem().toString();
                 String selectedRestTime = spnRestTime.getSelectedItem().toString();
 
+                // 급여 계산
+                double earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney);
+
                 // Firebase에서 데이터 가져오기
                 DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
 
@@ -133,6 +136,7 @@ public class WorkRegistrationActivity extends AppCompatActivity {
 
                 // 데이터베이스에 저장할 WorkData 객체 생성
                 WorkData workData = new WorkData(selectedSpnPay, selectedRestTime, selectedDate, selectedEndTime, selectedMoney, selectedStartTime);
+                workData.setEarnings(earnings); // 계산된 급여 값을 설정
 
                 // 데이터베이스에서 name 값이 selectedItemKey와 일치하는 데이터를 찾기 위한 쿼리 생성
                 Query query = databaseRef.orderByChild("name").equalTo(selectedItemKey);
@@ -202,5 +206,32 @@ public class WorkRegistrationActivity extends AppCompatActivity {
         int lastChildIndex = Integer.parseInt(lastChildKey.replaceAll("[^0-9]+", ""));
         int newChildIndex = lastChildIndex + 1;
         return "Date" + newChildIndex;
+    }
+
+
+    private double calculateEarnings(String startTime, String endTime, String restTime, String money) {
+        // 시작 시간 및 종료 시간을 분으로 변환
+        int startMinutes = calculateTotalMinutes(startTime);
+        int endMinutes = calculateTotalMinutes(endTime);
+
+        // 휴식 시간을 분으로 변환
+        int restMinutes = Integer.parseInt(restTime.replace("분", "").trim());
+
+        // 근무 시간 계산
+        int workMinutes = endMinutes - startMinutes - restMinutes;
+
+        // 시급과 근무 시간을 기반으로 급여 계산
+        double hourlyRate = Double.parseDouble(money);
+        double earnings = (workMinutes / 60.0) * hourlyRate;
+
+        // 소수점 아래를 제거한 정수값으로 변환하여 반환
+        return Math.floor(earnings);
+    }
+
+    private int calculateTotalMinutes(String time) {
+        String[] timeParts = time.split(":");
+        int hours = Integer.parseInt(timeParts[0]);
+        int minutes = Integer.parseInt(timeParts[1]);
+        return hours * 60 + minutes;
     }
 }
