@@ -232,10 +232,12 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
 
                         // 시급을 기반으로 급여 계산
                         double earnings = (workTotalMinutes / 60.0) * Double.parseDouble(getMoney);
-                        // earnings 값을 소수점 아래를 제거한 문자열로 변환
-                        String earningsFormatted = String.format(Locale.US, "%.0f", earnings);
 
-                        dateData.put("earnings", earningsFormatted);
+                        // earnings 값을 소수점 아래를 제거한 값으로 계산
+                        double roundedEarnings = Math.floor(earnings);
+
+                        // Firebase에 데이터를 저장할 때는 소수점 아래를 제거한 값을 저장
+                        dateData.put("earnings", roundedEarnings);
 
                         dates.put(dateKey, dateData);
                     }
