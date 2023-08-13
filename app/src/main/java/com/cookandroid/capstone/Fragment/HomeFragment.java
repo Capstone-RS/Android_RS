@@ -34,6 +34,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -202,19 +204,26 @@ public class HomeFragment extends Fragment {
                         dataNameList.add(nameValue);
 
                         double totalEarnings = 0.0;
+                        double totalmoney = 0.0;
 
                         for (DataSnapshot dateSnapshot : dataSnapshot.child("dates").getChildren()) {
-                            Double earningsValue = dateSnapshot.child("earnings").getValue(Double.class);
-
-                            if (earningsValue != null) {
-                                totalEarnings += earningsValue;
+                            String payType = dateSnapshot.child("pay").getValue(String.class); // "시급" 또는 "일급" 가져오기
+                            if (payType != null && payType.trim().equals("시급")) {
+                                Double earningsValue = dateSnapshot.child("earnings").getValue(Double.class);
+                                if (earningsValue != null) {
+                                    totalEarnings += earningsValue;
+                                }
+                            } else if (payType != null && payType.trim().equals("일급")) {
+                                String moneyString = dateSnapshot.child("money").getValue(String.class);
+                                if (moneyString != null) {
+                                    Double moneyValue = Double.parseDouble(moneyString.replaceAll("[^0-9.]+", ""));
+                                    totalmoney += moneyValue;
+                                }
                             }
                         }
 
-                        // 소수점 없이 정수로 변환
-                        long totalEarningsInt = (long) totalEarnings;
-                        // 천 단위마다 쉼표 추가하여 문자열로 변환
-                        String formattedEarnings = String.format("%,d원", totalEarningsInt);
+
+                        String formattedEarnings = formatCurrency(totalEarnings + totalmoney);
                         dataMoneyList.add(formattedEarnings);
                     }
                 }
@@ -230,6 +239,12 @@ public class HomeFragment extends Fragment {
                 // Handle error
             }
         });
+
     }
+    private String formatCurrency(double amount) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,###원");
+        return decimalFormat.format(amount);
+    }
+
 }
 
