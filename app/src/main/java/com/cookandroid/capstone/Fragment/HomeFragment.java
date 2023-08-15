@@ -221,9 +221,11 @@ public class HomeFragment extends Fragment {
                                 }
                             }
                         }
+                        // isTaxEnabled 가져오기
+                        Boolean isTaxEnabled = dataSnapshot.child("isTaxEnabled").getValue(Boolean.class);
 
 
-                        String formattedEarnings = formatCurrency(totalEarnings + totalmoney);
+                        String formattedEarnings = formatCurrency(totalEarnings + totalmoney, isTaxEnabled);
                         dataMoneyList.add(formattedEarnings);
                     }
                 }
@@ -241,8 +243,14 @@ public class HomeFragment extends Fragment {
         });
 
     }
-    private String formatCurrency(double amount) {
+    private String formatCurrency(double amount, boolean applyTax) {
         DecimalFormat decimalFormat = new DecimalFormat("#,###원");
+
+        // applyTax가 true인 경우에만 0.033을 곱한 값으로 포맷
+        if (applyTax) {
+            amount *= 0.967;
+        }
+
         return decimalFormat.format(amount);
     }
 
