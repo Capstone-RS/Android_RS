@@ -18,6 +18,7 @@ public class CommunityCustomListAdapter extends ArrayAdapter<String> {
         super(context, 0, itemList);
         this.itemList = itemList;
     }
+    
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
