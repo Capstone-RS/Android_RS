@@ -21,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -43,6 +45,10 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
     private List<String> selectedDatesList;
     private Switch swPlusPay; // 연장 수당 토글 버튼
     private Switch swHollidayPay; // 휴일 수당 토글 버튼
+
+    // 사용자 로그인 상태 확인
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser = mAuth.getCurrentUser();
 
     int i = 1;
 
@@ -110,7 +116,7 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                 TimePickerDialog dialog = new TimePickerDialog(WorkData2Activity.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-            // TextView에 출력할 형식 지정
+                        // TextView에 출력할 형식 지정
                         startTime.setText(String.format(Locale.US, "%02d:%02d", selectedHour, selectedMinute));
                     }
                 }, hour, minute, false); // true의 경우 24시간 형식의 TimePicker 출현
@@ -153,6 +159,16 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 사용자가 로그인한 경우에만 데이터를 저장하도록 확인합니다.
+                if (currentUser == null) {
+                    // 사용자가 로그인하지 않은 경우 처리 또는 에러 메시지를 표시합니다.
+                    Toast.makeText(getApplicationContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // 사용자의 고유한 아이디를 가져옵니다.
+                String userId = currentUser.getUid();
+
 
                 String getName = name;
                 String getWorkPeriod = workPeriod;
@@ -203,6 +219,26 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                         dateData.put("restTime", getSelectRestTime);
                         dateData.put("money", getMoney);
                         dateData.put("pay", getSelectPay);
+                        // restTime에서 "분" 문자열 제거 및 숫자 값만 추출
+                        String restTimeValue = getSelectRestTime.replace("분", "").trim();
+                        int restMinutes = Integer.parseInt(restTimeValue);
+
+                        // 시간과 분을 분으로 변환
+                        int startTotalMinutes = calculateTotalMinutes(getStartTime);
+                        int endTotalMinutes = calculateTotalMinutes(getEndTime);
+
+                        // 근무 시간과 휴식 시간을 계산
+                        int workTotalMinutes = endTotalMinutes - startTotalMinutes - restMinutes;
+
+                        // 시급을 기반으로 급여 계산
+                        double earnings = (workTotalMinutes / 60.0) * Double.parseDouble(getMoney);
+
+                        // earnings 값을 소수점 아래를 제거한 값으로 계산
+                        double roundedEarnings = Math.floor(earnings);
+
+                        // Firebase에 데이터를 저장할 때는 소수점 아래를 제거한 값을 저장
+                        dateData.put("earnings", roundedEarnings);
+
                         dates.put(dateKey, dateData);
                     }
                     result.put("dates", dates);
@@ -211,7 +247,8 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                     HashMap<String, Object> registrationData = new HashMap<>();
                     registrationData.put(key, result);
 
-                    databaseRef.updateChildren(registrationData)
+                    DatabaseReference dataRef = databaseReference.child("Users").child(userId).child("Data").child(name);
+                    dataRef.setValue(result)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -253,6 +290,13 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
             workDay.setText("날짜를 선택 해 주세요");
         }
         Log.d("Selected Dates", "Selected dates: " + selectedDates);
+    }
+
+    private int calculateTotalMinutes(String time) {
+        String[] timeParts = time.split(":");
+        int hours = Integer.parseInt(timeParts[0]);
+        int minutes = Integer.parseInt(timeParts[1]);
+        return hours * 60 + minutes;
     }
 }
 

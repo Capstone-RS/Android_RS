@@ -16,13 +16,15 @@
             android:layout_height="70dp"
             android:orientation="horizontal"
             android:padding="20dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="사장님 출입금지"
                 android:textColor="@android:color/black"
-                android:textSize="24sp"/>
+                android:textSize="24sp" />
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -32,8 +34,8 @@
                 android:id="@+id/frag_help"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_help"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:src="@drawable/ic_help" />
         </LinearLayout>
 
         <ScrollView
@@ -57,152 +59,117 @@
                     android:paddingTop="15dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="15dp">
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginStart="6dp"
-                            android:src="@drawable/ic_arrow_left"/>
+                            android:src="@drawable/ic_arrow_left" />
                         <!--03.29(수) 대신 @string/today_date_day-->
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="03.29(수)"
-                            android:textSize="20sp"/>
+                            android:textSize="20sp" />
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_arrow_right"/>
+                            android:src="@drawable/ic_arrow_right" />
+
                         <TextView
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"/>
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1" />
+
                         <TextView
                             android:id="@+id/btnChecklistAdd"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:gravity="center"
                             android:text="+ 메모 추가"
                             android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:gravity="center"
-                            android:layout_marginBottom="5dp"/>
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <ListView
                             android:id="@+id/lvWork"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
 
                 </LinearLayout>
-                <!--근무지-->
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="20dp"
-                    android:orientation="vertical">
-                    <LinearLayout
-                        android:id="@+id/layout_work1"
-                        android:layout_width="match_parent"
-                        android:layout_height="140dp"
-                        android:background="@drawable/edge"
-                        android:orientation="vertical"
-                        android:paddingStart="8dp"
-                        android:paddingTop="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingBottom="28dp">
-                        <!-- 카페 대신 @string/work_place
-                             412,000원 대신 @string/salary
-                             03.01 ~ 03.31 대신 @string/this_month-->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="카페"
-                            android:textSize="20sp"
-                            android:textColor="@color/black"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="03.01 ~ 03.31"/>
-                        <TextView
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
-                            android:layout_width="350dp"
-                            android:layout_height="80dp"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="412,000원"
-                            android:textSize="30sp"
-                            android:textColor="@color/black"
-                            android:textStyle="bold"/>
-
-                    </LinearLayout>
-<!--                    <LinearLayout-->
-<!--                        android:id="@+id/layout_work2"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="140dp"-->
-<!--                        android:layout_marginTop="5dp"-->
-<!--                        android:background="@drawable/edge"-->
-<!--                        android:orientation="vertical"-->
-<!--                        android:paddingStart="8dp"-->
-<!--                        android:paddingTop="8dp"-->
-<!--                        android:paddingEnd="8dp"-->
-<!--                        android:paddingBottom="28dp">-->
-<!--                        &lt;!&ndash; 카페 대신 @string/work_place-->
-<!--                        412,000원 대신 @string/salary-->
-<!--                        03.01 ~ 03.31 대신 @string/this_month&ndash;&gt;-->
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_marginStart="4dp"-->
-<!--                            android:text="카페"-->
-<!--                            android:textSize="20sp"-->
-<!--                            android:textColor="@color/black"/>-->
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_marginStart="4dp"-->
-<!--                            android:text="03.01 ~ 03.31"/>-->
-<!--                        <TextView-->
-
-<!--                            android:layout_width="350dp"-->
-<!--                            android:layout_height="80dp"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:gravity="center"-->
-<!--                            android:text="412,000원"-->
-<!--                            android:textSize="30sp"-->
-<!--                            android:textColor="@color/black"-->
-<!--                            android:textStyle="bold"/>-->
-
-
-<!--                    </LinearLayout>-->
-
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
+
+                //근무지 리스트뷰
+
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/workList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
                 <!--근무지 추가 버튼-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <Button
+                        android:id="@+id/btnAdd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="근무지 추가"
-                        android:textColor="@color/white"
                         android:backgroundTint="@color/black"
-                        android:id="@+id/btnAdd"/>
+                        android:text="근무지 추가"
+                        android:textColor="@color/white" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -212,9 +179,9 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_gravity="center"
-                        android:textSize="18sp"/>
+                        android:layout_weight="1"
+                        android:textSize="18sp" />
 
                 </LinearLayout> <!-- 스크롤뷰 때문에 넣어놓은 레이아웃 -->
             </LinearLayout>

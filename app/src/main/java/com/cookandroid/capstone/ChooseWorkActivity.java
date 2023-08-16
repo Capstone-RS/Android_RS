@@ -17,6 +17,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.cookandroid.capstone.Fragment.CalendarFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,11 +35,17 @@ public class ChooseWorkActivity extends AppCompatActivity {
     private ListView workList;
     private List<String> workNames;
     private ArrayAdapter<String> adapter;
+    // 사용자 로그인 상태 확인
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser = mAuth.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choosework);
+
+        // 사용자 ID 가져오기
+        String userId = currentUser.getUid();
 
         Button btnBack = findViewById(R.id.btnBack);
         workList = findViewById(R.id.workList);
@@ -57,7 +65,7 @@ public class ChooseWorkActivity extends AppCompatActivity {
         workList.setAdapter(adapter);
 
         // Firebase에서 데이터 가져오기
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
         Query query = databaseRef.orderByChild("name");
 
         query.addValueEventListener(new ValueEventListener() {

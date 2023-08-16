@@ -14,6 +14,8 @@ import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,11 +32,18 @@ public class WorkDetailEditActivity extends AppCompatActivity {
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
+    // 사용자 로그인 상태 확인
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser = mAuth.getCurrentUser();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workdetail_edit);
+
+        // 사용자 ID 가져오기
+        String userId = currentUser.getUid();
 
         TextView date = findViewById(R.id.date);
         EditText money = findViewById(R.id.money);
@@ -53,7 +62,7 @@ public class WorkDetailEditActivity extends AppCompatActivity {
         if (selectedDate != null) {
             date.setText(selectedDate);
 
-            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
+            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
             Query query = databaseRef.orderByChild("name").equalTo(itemName);
             query.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -135,7 +144,7 @@ public class WorkDetailEditActivity extends AppCompatActivity {
         btnCorrect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
+                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
                 Query query = databaseRef.orderByChild("name").equalTo(itemName);
                 query.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -220,8 +229,18 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                 String payMethod = spnPay.getSelectedItem().toString();
                 String restTimeMethod = spnRestTime.getSelectedItem().toString();
 
+                // 수정한 값들을 가져옵니다.
+                String selectedStartTime = startTime.getText().toString();
+                String selectedEndTime = endTime.getText().toString();
+                String selectedMoney = money.getText().toString();
+                String selectedRestTime = spnRestTime.getSelectedItem().toString();
+
+                // 수정된 값을 기반으로 급여 계산
+                double earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney);
+
+
                 // DatabaseReference 참조 가져오기
-                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
+                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
                 Query query = databaseRef.orderByChild("name").equalTo(itemName);
                 query.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -239,6 +258,7 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                                         dateSnapshot.child("money").getRef().setValue(moneyValue);
                                         dateSnapshot.child("pay").getRef().setValue(payMethod);
                                         dateSnapshot.child("restTime").getRef().setValue(restTimeMethod);
+                                        dateSnapshot.child("earnings").getRef().setValue(earnings); // 수정된 "earnings" 값 설정
                                         break;
                                     }
                                 }
@@ -261,10 +281,32 @@ public class WorkDetailEditActivity extends AppCompatActivity {
             }
         });
 
+    }
+    // 수정된 값을 기반으로 급여 계산하는 메서드
+    private double calculateEarnings(String startTime, String endTime, String restTime, String money) {
+        // 시작 시간 및 종료 시간을 분으로 변환
+        int startMinutes = calculateTotalMinutes(startTime);
+        int endMinutes = calculateTotalMinutes(endTime);
 
+        // 휴식 시간을 분으로 변환
+        int restMinutes = Integer.parseInt(restTime.replace("분", "").trim());
 
+        // 근무 시간 계산
+        int workMinutes = endMinutes - startMinutes - restMinutes;
 
+        // 시급과 근무 시간을 기반으로 급여 계산
+        double hourlyRate = Double.parseDouble(money);
+        double earnings = (workMinutes / 60.0) * hourlyRate;
 
+        // 소수점 아래를 제거한 정수값으로 변환하여 반환
+        return Math.floor(earnings);
+    }
 
+    // 시간을 분으로 변환하는 메서드
+    private int calculateTotalMinutes(String time) {
+        String[] timeParts = time.split(":");
+        int hours = Integer.parseInt(timeParts[0]);
+        int minutes = Integer.parseInt(timeParts[1]);
+        return hours * 60 + minutes;
     }
 }
