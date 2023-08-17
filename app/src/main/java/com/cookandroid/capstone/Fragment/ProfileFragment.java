@@ -2,6 +2,7 @@ package com.cookandroid.capstone.Fragment;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,6 +22,9 @@ import com.bumptech.glide.Glide;
 import com.cookandroid.capstone.BottomSheet_Push_Notification;
 import com.cookandroid.capstone.R;
 import com.cookandroid.capstone.SignInActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileFragment extends Fragment {
@@ -86,8 +90,19 @@ public class ProfileFragment extends Fragment {
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // 로그아웃 처리
+                        // Firebase Auth 로그아웃 처리
                         FirebaseAuth.getInstance().signOut();
+
+                        // 구글 계정 로그아웃 처리
+                        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                .requestIdToken(getString(R.string.default_web_client_id))
+                                .requestEmail()
+                                .build();
+                        Activity activity = getActivity();
+                        if(activity != null){
+                            GoogleSignIn.getClient(activity, googleSignInOptions).signOut();
+                        }
+
 
                         // SharedPreferences에서 저장된 정보를 삭제
                         SharedPreferences pref = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
