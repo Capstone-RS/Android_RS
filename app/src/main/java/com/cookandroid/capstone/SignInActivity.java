@@ -79,6 +79,12 @@ public class SignInActivity extends AppCompatActivity {
             else
                 signIn();
         });
+
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if(currentUser != null){
+            btn_google.setVisibility(View.GONE);
+            updateUI(currentUser);
+        }
     }
 
     private void signIn() {
