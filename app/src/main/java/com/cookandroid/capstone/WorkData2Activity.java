@@ -247,7 +247,7 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                     HashMap<String, Object> registrationData = new HashMap<>();
                     registrationData.put(key, result);
 
-                    DatabaseReference dataRef = databaseReference.child("Users").child(userId).child("Data").child(name);
+                    DatabaseReference dataRef = databaseReference.child("Users").child(userId).child("Data").push();
                     dataRef.setValue(result)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
