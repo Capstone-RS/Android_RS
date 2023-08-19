@@ -7,7 +7,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="end"> <!-- 화면 오른쪽 정렬 -->
+
         <TextView
             android:id="@+id/btnBack"
             android:layout_width="40dp"
@@ -16,7 +18,23 @@
             android:textSize="30sp"
             android:textStyle="bold"
             android:text="&lt;"/>
+        <TextView
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/btnEdit"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="근무지 수정"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/tvWorkDetail"
@@ -32,6 +50,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/name"
             android:text="카페"
             android:textStyle="bold"
             android:textSize="18sp"
@@ -39,6 +58,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/money"
             android:text="0원"
             android:textSize="30sp"
             android:textStyle="bold"
