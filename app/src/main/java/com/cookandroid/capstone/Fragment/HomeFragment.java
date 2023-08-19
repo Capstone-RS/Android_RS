@@ -162,10 +162,11 @@ public class HomeFragment extends Fragment {
                     // 예: intent.putExtra("key", value);
 
                     // Main_WorkDataActivity로 이동하는 Intent 생성
-                    Intent intent = new Intent(getActivity(), Main_WorkDataActivity.class);
+                    Intent intent = new Intent(getActivity(), WorkDetailActivity.class);
                     // 필요하다면 데이터 전달 설정
                     // intent.putExtra("key", value);
                     intent.putExtra("clicked_name", dataName);
+                    intent.putExtra("clicked_money",dataMoney);
                     startActivity(intent);
 
                 }
