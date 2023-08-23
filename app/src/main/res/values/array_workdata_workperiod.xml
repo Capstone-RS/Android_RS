@@ -5,4 +5,10 @@
         <item>일주일 동안</item>
 
     </string-array>
+    <string-array name="array_workdata_workperiod2">
+
+        <item>일주일 동안</item>
+        <item>한 달 동안</item>
+
+    </string-array>
 </resources>

@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.cookandroid.capstone.CheckListActivity;
 import com.cookandroid.capstone.HelpActivity;
+import com.cookandroid.capstone.Main_WorkDataActivity;
 import com.cookandroid.capstone.R;
 import com.cookandroid.capstone.WorkDataActivity;
 import com.cookandroid.capstone.WorkDetailActivity;
@@ -151,6 +152,25 @@ public class HomeFragment extends Fragment {
             String dataMoney = dataMoneyList.get(position);
             holder.textViewName.setText(dataName);
             holder.textViewMoney.setText(dataMoney);
+
+            // 아이템 클릭 리스너 설정
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 클릭한 아이템의 정보를 가져오거나 필요한 작업을 수행
+                    // 이동할 액티비티로 데이터를 전달하고 싶다면 Intent의 putExtra 메서드 활용
+                    // 예: intent.putExtra("key", value);
+
+                    // Main_WorkDataActivity로 이동하는 Intent 생성
+                    Intent intent = new Intent(getActivity(), WorkDetailActivity.class);
+                    // 필요하다면 데이터 전달 설정
+                    // intent.putExtra("key", value);
+                    intent.putExtra("clicked_name", dataName);
+                    intent.putExtra("clicked_money",dataMoney);
+                    startActivity(intent);
+
+                }
+            });
         }
 
 
