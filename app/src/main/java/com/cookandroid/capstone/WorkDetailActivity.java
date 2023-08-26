@@ -1,6 +1,7 @@
 package com.cookandroid.capstone;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 public class WorkDetailActivity extends AppCompatActivity {
     private String clickedName; // 클릭한 아이템의 이름을 저장하는 변수
     private String clickedMoney; // 클릭한 아이템의 이름을 저장하는 변수
+
     // 사용자 로그인 상태 확인
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -149,9 +151,19 @@ public class WorkDetailActivity extends AppCompatActivity {
             textViewDate.setText(date);
 
             // Firebase에서 가져온 급여 데이터를 가져와서 설정
-            String earnings = this.earningsList.get(position); // 이 부분에서 this를 사용하여 명시적으로 지정
+            String earningsString = this.earningsList.get(position);
+            double earnings = 0.0;
+
+            if (!TextUtils.isEmpty(earningsString)) {
+                try {
+                    earnings = Double.parseDouble(earningsString);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+
             TextView textViewEarnings = view.findViewById(R.id.textViewEarnings);
-            textViewEarnings.setText(earnings);
+            textViewEarnings.setText(String.format("%,.0f원", earnings)); // 정수로 변환된 급여를 설정
 
             // 추가로 원하는 뷰에 데이터를 설정할 수 있습니다.
 
