@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,7 +50,7 @@ public class WorkDetail2Activity extends AppCompatActivity {
         TextView startTime = findViewById(R.id.startTime);
         TextView endTime = findViewById(R.id.endTime);
         TextView restTime = findViewById(R.id.restTime);
-
+        Switch swWork = findViewById(R.id.swWork);
         TextView btnCorrect = findViewById(R.id.btnCorrect);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +61,9 @@ public class WorkDetail2Activity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+
 
         Intent intent = getIntent();
         final String itemName = intent.getStringExtra("itemName");
@@ -151,6 +156,14 @@ public class WorkDetail2Activity extends AppCompatActivity {
                 }
             });
         }
+        // 스위치 버튼 리스너 설정
+        swWork.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // 스위치 버튼 상태를 Firebase에 저장
+                updateSwitchStateInFirebase(itemName, selectedDate, isChecked);
+            }
+        });
 
         btnCorrect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +172,46 @@ public class WorkDetail2Activity extends AppCompatActivity {
                 intent.putExtra("itemName", itemName);
                 intent.putExtra("selectedDate", selectedDate);
                 startActivity(intent);
+            }
+        });
+    }
+    // 스위치 버튼 상태를 Firebase에 저장하는 함수
+    private void updateSwitchStateInFirebase(String itemName, String selectedDate, boolean isChecked) {
+        String userId = currentUser.getUid();
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
+
+        // Firebase에서 해당 데이터를 찾기 위한 쿼리 구성
+        Query query = databaseRef.orderByChild("name").equalTo(itemName);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    DataSnapshot datesSnapshot = snapshot.child("dates");
+                    if (datesSnapshot.exists()) {
+                        // 'name'과 'date'에 해당하는 데이터 찾음
+                        for (DataSnapshot dateSnapshot : datesSnapshot.getChildren()) {
+                            String dateValue = dateSnapshot.child("date").getValue(String.class);
+
+                            if (dateValue != null && dateValue.trim().equals(selectedDate.trim())) {
+                                // 해당 데이터의 'swWork' 값을 업데이트
+                                DatabaseReference swWorkRef = dateSnapshot.child("swWork").getRef();
+                                swWorkRef.setValue(isChecked);
+
+                                // 업데이트가 완료되면 리스너 해제
+                                query.removeEventListener(this);
+
+                                break;
+                            }
+                        }
+                    } else {
+                        Log.e("WorkDetail2Activity", "dates is null");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // 에러 처리 로직을 작성해주세요.
             }
         });
     }

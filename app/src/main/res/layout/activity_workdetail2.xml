@@ -163,7 +163,7 @@
             android:textSize="20dp"/>
 
         <Switch
-            android:id="@+id/swPay"
+            android:id="@+id/swWork"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>
