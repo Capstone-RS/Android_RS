@@ -169,7 +169,6 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                 // 사용자의 고유한 아이디를 가져옵니다.
                 String userId = currentUser.getUid();
 
-
                 String getName = name;
                 String getWorkPeriod = workPeriod;
                 String getPayDay = payDay;
@@ -231,7 +230,13 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                         int workTotalMinutes = endTotalMinutes - startTotalMinutes - restMinutes;
 
                         // 시급을 기반으로 급여 계산
-                        double earnings = (workTotalMinutes / 60.0) * Double.parseDouble(getMoney);
+                        double earnings;
+
+                        if ("시급".equals(getSelectPay)) {
+                            earnings = (workTotalMinutes / 60.0) * Double.parseDouble(getMoney);
+                        } else {
+                            earnings = Double.parseDouble(getMoney);
+                        }
 
                         // earnings 값을 소수점 아래를 제거한 값으로 계산
                         double roundedEarnings = Math.floor(earnings);
