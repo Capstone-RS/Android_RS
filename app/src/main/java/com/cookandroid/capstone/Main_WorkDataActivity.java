@@ -40,7 +40,6 @@ public class Main_WorkDataActivity extends AppCompatActivity {
 
         String userId = currentUser.getUid();
         TextView btnCorrect = (TextView) findViewById(R.id.btnCorrect);
-        TextView btnBack = (TextView) findViewById(R.id.btnBack);
         Button btnNext = (Button) findViewById(R.id.btnNext);
         Button btnHome = (Button) findViewById(R.id.btnHome);
         EditText name = (EditText) findViewById(R.id.name);
@@ -235,13 +234,6 @@ public class Main_WorkDataActivity extends AppCompatActivity {
                         // 에러 처리 로직을 작성해주세요.
                     }
                 });
-            }
-        });
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), WorkDetailActivity.class);
-                startActivity(intent);
             }
         });
 
