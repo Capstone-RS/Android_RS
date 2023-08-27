@@ -19,6 +19,8 @@ import com.cookandroid.capstone.ChooseWorkActivity;
 import com.cookandroid.capstone.R;
 import com.cookandroid.capstone.WorkDataActivity;
 import com.cookandroid.capstone.WorkDetail2Activity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,10 +50,17 @@ public class CalendarFragment extends Fragment {
     ListView workList;
     CustomAdapter adapter;
     Button btnAdd;
+    private String userId;
+
+
+    // 사용자 로그인 상태 확인
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser = mAuth.getCurrentUser();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userId = currentUser.getUid();
         adapter = new CustomAdapter(getContext(), R.layout.calendar_customlistview, new ArrayList<String>());
     }
 
@@ -89,7 +98,7 @@ public class CalendarFragment extends Fragment {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 String formattedDate = sdf.format(date.getDate());
                 selectedDateTextView.setText(formattedDate);
-                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
+                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
 
                 Query query = databaseRef.orderByChild("dates");
                 query.addValueEventListener(new ValueEventListener() {
@@ -147,7 +156,7 @@ public class CalendarFragment extends Fragment {
             super(context, resource, items);
             this.context = context;
             this.items = items;
-            this.databaseRef = FirebaseDatabase.getInstance().getReference("Data");
+            this.databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
         }
 
         @Override
@@ -161,7 +170,7 @@ public class CalendarFragment extends Fragment {
             String itemName = items.get(position);
             textView1.setText(itemName);
 
-            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
+            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
 
             Query query = databaseRef.orderByChild("name").equalTo(itemName);
             query.addValueEventListener(new ValueEventListener() {
