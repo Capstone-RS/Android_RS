@@ -125,8 +125,15 @@ public class WorkRegistrationActivity extends AppCompatActivity {
                 String selectedSpnPay = spnPay.getSelectedItem().toString();
                 String selectedRestTime = spnRestTime.getSelectedItem().toString();
 
-                // 급여 계산
-                double earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney);
+                double earnings;
+
+                if ("시급".equals(selectedSpnPay)) {
+                    // 시급인 경우에만 계산
+                    earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney);
+                } else {
+                    // 시급이 아닌 경우, 입력된 money 값을 그대로 사용
+                    earnings = Double.parseDouble(selectedMoney);
+                }
 
                 // Firebase에서 데이터 가져오기
                 DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
