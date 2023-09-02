@@ -125,37 +125,7 @@
         android:spinnerMode="dropdown"
         android:layout_marginBottom="20dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="연장 수당"
-            android:textStyle="bold"
-            android:textSize="15sp"/>
-        <Switch
-            android:id="@+id/swPlusPay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="휴일 수당"
-            android:textStyle="bold"
-            android:textSize="15sp"/>
-        <Switch
-            android:id="@+id/swHollidayPay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -65,9 +65,7 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
         endTime = (TextView) findViewById(R.id.endTime);
         EditText money = (EditText) findViewById(R.id.money);
         workDay = (TextView) findViewById(R.id.btnWorkDay);
-        //연장수당, 휴일수당 토글버튼
-        swPlusPay = (Switch) findViewById(R.id.swPlusPay);
-        swHollidayPay = (Switch) findViewById(R.id.swHollidayPay);
+
 
 
 
@@ -197,9 +195,7 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                     result.put("payDay", getPayDay);
                     result.put("isTaxEnabled", isTaxEnabled);
                     result.put("Insurance",insurance);
-                    // 연장 수당과 휴일 수당을 파이어베이스에 저장
-                    result.put("swPlusPay", swPlusPay.isChecked());
-                    result.put("swHolliDayPay", swHollidayPay.isChecked());
+
 
                     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
 
