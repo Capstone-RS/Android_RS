@@ -175,6 +175,9 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                 String getEndTime = endTime.getText().toString();
                 String getSelectPay = spnPay.getSelectedItem().toString(); //스피너 선택값 가져오기
                 String getSelectRestTime = spnRestTime.getSelectedItem().toString();
+
+
+
                 if (selectedDatesList == null || selectedDatesList.isEmpty()) {
                     // 선택된 날짜가 없는 경우 처리
                     Toast.makeText(getApplicationContext(), "날짜를 선택해주세요.", Toast.LENGTH_SHORT).show();
@@ -195,6 +198,11 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                     result.put("payDay", getPayDay);
                     result.put("isTaxEnabled", isTaxEnabled);
                     result.put("Insurance",insurance);
+                    // "standard" 노드의 데이터를 추가합니다.
+                    HashMap<String, Object> standardData = new HashMap<>();
+                    standardData.put("startTime", getStartTime);
+                    standardData.put("endTime", getEndTime);
+                    result.put("standard", standardData);
 
 
                     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
