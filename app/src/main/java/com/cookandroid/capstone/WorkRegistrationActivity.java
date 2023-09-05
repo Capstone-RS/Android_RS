@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -54,6 +55,9 @@ public class WorkRegistrationActivity extends AppCompatActivity {
         TextView endTime = findViewById(R.id.endTime);
         Button btnNext = findViewById(R.id.btnNext);
         Button btnBack = findViewById(R.id.btnBack);
+        Switch swPlusPay = findViewById(R.id.swPlusPay);
+
+
 
         // 선택된 날짜를 받아옴
         String selectedDate = getIntent().getStringExtra("selectedDate");
@@ -124,9 +128,19 @@ public class WorkRegistrationActivity extends AppCompatActivity {
                 String selectedMoney = money.getText().toString();
                 String selectedSpnPay = spnPay.getSelectedItem().toString();
                 String selectedRestTime = spnRestTime.getSelectedItem().toString();
+                // 스위치의 상태를 가져오기
+                boolean isPlusPay = swPlusPay.isChecked();
 
-                // 급여 계산
-                double earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney);
+
+                double earnings;
+
+                if ("시급".equals(selectedSpnPay)) {
+                    // 시급인 경우에만 계산
+                    earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney);
+                } else {
+                    // 시급이 아닌 경우, 입력된 money 값을 그대로 사용
+                    earnings = Double.parseDouble(selectedMoney);
+                }
 
                 // Firebase에서 데이터 가져오기
                 DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
@@ -137,6 +151,8 @@ public class WorkRegistrationActivity extends AppCompatActivity {
                 // 데이터베이스에 저장할 WorkData 객체 생성
                 WorkData workData = new WorkData(selectedSpnPay, selectedRestTime, selectedDate, selectedEndTime, selectedMoney, selectedStartTime);
                 workData.setEarnings(earnings); // 계산된 급여 값을 설정
+                workData.setSwpluspay(isPlusPay); // 스위치 상태 저장
+
 
                 // 데이터베이스에서 name 값이 selectedItemKey와 일치하는 데이터를 찾기 위한 쿼리 생성
                 Query query = databaseRef.orderByChild("name").equalTo(selectedItemKey);

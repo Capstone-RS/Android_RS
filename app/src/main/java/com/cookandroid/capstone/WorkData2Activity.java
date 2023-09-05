@@ -65,9 +65,7 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
         endTime = (TextView) findViewById(R.id.endTime);
         EditText money = (EditText) findViewById(R.id.money);
         workDay = (TextView) findViewById(R.id.btnWorkDay);
-        //연장수당, 휴일수당 토글버튼
-        swPlusPay = (Switch) findViewById(R.id.swPlusPay);
-        swHollidayPay = (Switch) findViewById(R.id.swHollidayPay);
+
 
 
 
@@ -177,6 +175,9 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                 String getEndTime = endTime.getText().toString();
                 String getSelectPay = spnPay.getSelectedItem().toString(); //스피너 선택값 가져오기
                 String getSelectRestTime = spnRestTime.getSelectedItem().toString();
+
+
+
                 if (selectedDatesList == null || selectedDatesList.isEmpty()) {
                     // 선택된 날짜가 없는 경우 처리
                     Toast.makeText(getApplicationContext(), "날짜를 선택해주세요.", Toast.LENGTH_SHORT).show();
@@ -197,9 +198,12 @@ public class WorkData2Activity extends AppCompatActivity implements BottomSheetL
                     result.put("payDay", getPayDay);
                     result.put("isTaxEnabled", isTaxEnabled);
                     result.put("Insurance",insurance);
-                    // 연장 수당과 휴일 수당을 파이어베이스에 저장
-                    result.put("swPlusPay", swPlusPay.isChecked());
-                    result.put("swHolliDayPay", swHollidayPay.isChecked());
+                    // "standard" 노드의 데이터를 추가합니다.
+                    HashMap<String, Object> standardData = new HashMap<>();
+                    standardData.put("startTime", getStartTime);
+                    standardData.put("endTime", getEndTime);
+                    result.put("standard", standardData);
+
 
                     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Data");
 

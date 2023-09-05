@@ -8,6 +8,8 @@ public class WorkData {
     private String money;
     private String startTime;
     private double earnings; // 추가된 부분
+    private boolean swpluspay; // swpluspay 필드 추가
+
 
 
     public WorkData() {
@@ -79,4 +81,15 @@ public class WorkData {
     public double getEarnings() {
         return earnings;
     }
+
+    // swpluspay 필드의 getter 및 setter 메서드 추가
+    public boolean isSwpluspay() {
+        return swpluspay;
+    }
+
+    public void setSwpluspay(boolean swpluspay) {
+        this.swpluspay = swpluspay;
+    }
+
+
 }
