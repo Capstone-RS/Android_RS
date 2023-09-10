@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -53,6 +54,9 @@ public class WorkDetailEditActivity extends AppCompatActivity {
         TextView btnCorrect = findViewById(R.id.btnCorrect);
         Spinner spnPay = findViewById(R.id.spnPay);
         Spinner spnRestTime = findViewById(R.id.spnRestTime);
+        Switch swPlusPay = findViewById(R.id.swPlusPay);
+
+
 
 
         Intent intent = getIntent();
@@ -77,6 +81,11 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                                 String moneyValue = dateSnapshot.child("money").getValue(String.class);
                                 String payMethod = dateSnapshot.child("pay").getValue(String.class);
                                 String restTimeMethod = dateSnapshot.child("restTime").getValue(String.class);
+                                // 여기에 swPlusPay 값 가져오는 코드를 추가
+                                Boolean swPlusPayValue = dateSnapshot.child("swpluspay").getValue(Boolean.class);
+                                if (swPlusPayValue != null) {
+                                    swPlusPay.setChecked(swPlusPayValue);
+                                }
 
                                 if (dateValue != null && dateValue.trim().equals(selectedDate.trim())) {
                                     if (startTimeValue != null) {
@@ -235,6 +244,9 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                 String selectedMoney = money.getText().toString();
                 String selectedRestTime = spnRestTime.getSelectedItem().toString();
 
+                // 스위치의 현재 상태 가져오기
+                boolean isSwitchChecked = swPlusPay.isChecked();
+
                 // 수정된 값을 기반으로 급여 계산
                 double earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney);
 
@@ -259,6 +271,8 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                                         dateSnapshot.child("pay").getRef().setValue(payMethod);
                                         dateSnapshot.child("restTime").getRef().setValue(restTimeMethod);
                                         dateSnapshot.child("earnings").getRef().setValue(earnings); // 수정된 "earnings" 값 설정
+                                        dateSnapshot.child("swpluspay").getRef().setValue(isSwitchChecked);
+
                                         break;
                                     }
                                 }
