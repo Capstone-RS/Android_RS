@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -64,30 +65,31 @@ public class CommunityWriteActivity extends AppCompatActivity {
         btn_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                DatabaseReference communityPostsRef = firebaseDatabase.getReference().child("Community");
+
                 String title = et_title.getText().toString().trim();
                 String content = et_content.getText().toString().trim();
 
-                if (title.isEmpty() || content.isEmpty()) {
-                    return;
+                if (!title.isEmpty() && !content.isEmpty()) {
+                    // 카테고리별로 게시물 저장
+                    DatabaseReference categoryRef = communityPostsRef.child(selectedCategory);
+                    DatabaseReference newPostRef = categoryRef.push();
+
+                    newPostRef.child("title").setValue(title);
+                    newPostRef.child("content").setValue(content);
+                    newPostRef.child("userId").setValue(userUid);
+
+                    // 데이터 저장 성공 시에만 결과 설정
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("dataChanged", true);
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                } else {
+                    // 데이터 저장 실패 시에 대응 코드 (옵션)
+                    // 실패 상황에 따라 적절한 처리를 추가할 수 있습니다.
                 }
 
-                DatabaseReference newPostRef = databaseReference.push();
-                newPostRef.child("title").setValue(title);
-                newPostRef.child("content").setValue(content, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                        if (databaseError == null) {
-                            // 데이터 저장 성공 시에만 결과 설정
-                            Intent resultIntent = new Intent();
-                            resultIntent.putExtra("dataChanged", true);
-                            setResult(RESULT_OK, resultIntent);
-                            finish();
-                        } else {
-                            // 데이터 저장 실패 시에 대응 코드 (옵션)
-                            // 실패 상황에 따라 적절한 처리를 추가할 수 있습니다.
-                        }
-                    }
-                });
             }
         });
     }
