@@ -62,9 +62,9 @@ public class CommunityFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    String content = postSnapshot.child("content").getValue(String.class);
+                    String title = postSnapshot.child("title").getValue(String.class);
                     // 최신 글 내용을 해당 카테고리 TextView에 설정
-                    communityTextViews[index].setText(content);
+                    communityTextViews[index].setText(title);
                 }
             }
 
