@@ -82,7 +82,7 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                                 String payMethod = dateSnapshot.child("pay").getValue(String.class);
                                 String restTimeMethod = dateSnapshot.child("restTime").getValue(String.class);
                                 // 여기에 swPlusPay 값 가져오는 코드를 추가
-                                Boolean swPlusPayValue = dateSnapshot.child("swpluspay").getValue(Boolean.class);
+                                Boolean swPlusPayValue = dateSnapshot.child("swPlusPay").getValue(Boolean.class);
                                 if (swPlusPayValue != null) {
                                     swPlusPay.setChecked(swPlusPayValue);
                                 }
@@ -254,7 +254,7 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                 // DatabaseReference 참조 가져오기
                 DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
                 Query query = databaseRef.orderByChild("name").equalTo(itemName);
-                query.addValueEventListener(new ValueEventListener() {
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -271,7 +271,7 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                                         dateSnapshot.child("pay").getRef().setValue(payMethod);
                                         dateSnapshot.child("restTime").getRef().setValue(restTimeMethod);
                                         dateSnapshot.child("earnings").getRef().setValue(earnings); // 수정된 "earnings" 값 설정
-                                        dateSnapshot.child("swpluspay").getRef().setValue(isSwitchChecked);
+                                        dateSnapshot.child("swPlusPay").getRef().setValue(isSwitchChecked);
 
                                         break;
                                     }
