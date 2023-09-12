@@ -151,7 +151,7 @@ public class WorkRegistrationActivity extends AppCompatActivity {
                 // 데이터베이스에 저장할 WorkData 객체 생성
                 WorkData workData = new WorkData(selectedSpnPay, selectedRestTime, selectedDate, selectedEndTime, selectedMoney, selectedStartTime);
                 workData.setEarnings(earnings); // 계산된 급여 값을 설정
-                workData.setSwpluspay(isPlusPay); // 스위치 상태 저장
+                workData.setSwPlusPay(isPlusPay); // 스위치 상태 저장
 
 
                 // 데이터베이스에서 name 값이 selectedItemKey와 일치하는 데이터를 찾기 위한 쿼리 생성
