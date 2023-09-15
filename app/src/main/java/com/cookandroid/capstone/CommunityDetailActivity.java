@@ -21,10 +21,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -39,7 +42,13 @@ public class CommunityDetailActivity extends AppCompatActivity {
     private TextView community_content;
     private String selectedCategory;
     private static final int REQUEST_DELETE_POST = 100;
-    CommunityCommentCustomListAdapter adapter;
+    private ArrayList<String> commentList = new ArrayList<>(); // 댓글 데이터를 저장하는 변수
+    private ArrayList<String> savedCommentList = new ArrayList<>(); // 이전에 저장된 댓글 데이터를 저장하는 변수
+    private CommunityCommentCustomListAdapter adapter; // 어댑터 변수
+    private String communityTitle;
+    private String communityContent;
+    private String title;
+    private static final String SAVED_COMMENT_LIST = "saved_comment_list";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,16 +74,17 @@ public class CommunityDetailActivity extends AppCompatActivity {
         buttonFavorite.setOnCheckedChangeListener(null);
         buttonFavorite.setChecked(false);
 
-        //댓글 커스텀리스트 적용
-        ArrayList<String> commentList = new ArrayList<>();
-        commentList.add("아이템 1");
-        commentList.add("아이템 2");
-        commentList.add("아이템 3");
-        commentList.add("아이템 4");
-        commentList.add("아이템 5");
-        commentList.add("아이템 6");
+        // 이전에 저장된 댓글 데이터를 초기화
+        savedCommentList = new ArrayList<>();
 
-        adapter = new CommunityCommentCustomListAdapter(this, commentList);
+        communityTitle = community_title.getText().toString(); // Add this line to initialize communityTitle
+
+        if (savedInstanceState != null) {
+            // savedInstanceState에서 commentList를 복원합니다.
+            commentList = savedInstanceState.getStringArrayList(SAVED_COMMENT_LIST);
+        }
+
+        adapter = new CommunityCommentCustomListAdapter(getApplicationContext(), commentList, communityTitle, communityContent);
         listView_comment.setAdapter(adapter);
 
         selectedCategory = getIntent().getStringExtra("category");
@@ -91,7 +101,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null) {
-            String title = intent.getStringExtra("title");
+            title = intent.getStringExtra("title");
             String content = intent.getStringExtra("content");
 
             if (title != null) {
@@ -163,12 +173,99 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        // btn_comment 버튼 클릭 시 호출되는 리스너 설정
+        btn_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newComment = editText_comment.getText().toString();
+                if (!newComment.isEmpty()) {
+                    saveCommentToFirebase(newComment);
+                    editText_comment.setText(""); // 입력 필드 초기화
+                }
+            }
+        });
+    }
+    // 댓글 저장 함수
+    private void saveCommentToFirebase(String newComment) {
+        // Firebase Realtime Database 인스턴스 초기화
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference commentRef = database.getReference("Comment");
+
+        // 중첩 구조 아래에 새 댓글 생성
+        String categoryPostTitleContent = selectedCategory;
+        DatabaseReference specificCommentRef = commentRef.child(categoryPostTitleContent).push();
+
+        // 댓글 데이터 저장
+        specificCommentRef.child("comment").setValue(newComment);
+        specificCommentRef.child("PostTitle").setValue(community_title.getText().toString());
+        specificCommentRef.child("PostContent").setValue(community_content.getText().toString());
+
+        // 댓글이 저장된 후에는 리스트뷰에 표시되도록 업데이트
+        commentList.add(newComment); // 댓글 데이터 리스트에 추가
+        adapter.notifyDataSetChanged(); // 어댑터에 변경 사항 알림
+    }
+
+    //현재 사용자의 아이디 가져오기
+    private String getCurrentUserId(){
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser != null){
+            return currentUser.getUid();
+        }else{
+            return null;
+        }
+    }
+
+    // 해당 게시물 작성자의 아이디 가져오기
+    private void getPostUserId(final DataCallback<String> callback) {
+        // Firebase Realtime Database 인스턴스 초기화
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference communityRef = database.getReference("Community").child(selectedCategory);
+
+        // title을 기준으로 해당 게시글 찾아서 작성자의 아이디를 가져옵니다.
+        communityRef.orderByChild("title").equalTo(community_title.getText().toString())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        // 데이터를 가져오는 작업을 수행합니다.
+                        if (snapshot.exists()) {
+                            for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                String postUserId = postSnapshot.child("userId").getValue(String.class);
+                                callback.onDataReceived(postUserId); // 작성자의 아이디를 콜백으로 반환
+                                return; // 아이디를 가져왔으므로 루프를 종료합니다.
+                            }
+                        }
+                        callback.onDataReceived(null); // 게시물을 찾지 못한 경우 null을 반환
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // 데이터 가져오기 실패
+                        callback.onDataReceived(null);
+                    }
+                });
+    }
+    public interface DataCallback<T> {
+        void onDataReceived(T data);
     }
 
     private void openBottomSheet() {
+        String currentUserId = getCurrentUserId();
+        getPostUserId(new DataCallback<String>() {
+            @Override
+            public void onDataReceived(String postUserId) {
+                if (currentUserId != null && postUserId != null && currentUserId.equals(postUserId)) {
+                    openBottomSheetForCurrentUser();
+                } else {
+                    openBottomSheetForOtherUser();
+                }
+            }
+        });
+    }
+
+    private void openBottomSheetForCurrentUser() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_community, null);
-        bottomSheetDialog.setContentView(bottomSheetView);
 
         TextView btnDelete = bottomSheetView.findViewById(R.id.btn_delete);
         TextView btnEdit = bottomSheetView.findViewById(R.id.btn_edit);
@@ -183,7 +280,8 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 bottomSheetDialog.dismiss();
             }
         });
-        //바텀시트에서 수정하기 버튼을 클릭했을 때 처리
+
+        // 바텀시트에서 수정하기 버튼을 클릭했을 때 처리
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,8 +299,29 @@ public class CommunityDetailActivity extends AppCompatActivity {
             }
         });
 
+        bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }
+    private void openBottomSheetForOtherUser() {
+        // 다른 사용자를 위한 바텀시트 열기
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_community2, null);
+
+        TextView btnCancle2 = bottomSheetView.findViewById(R.id.btn_cancle);
+        // 바텀시트에서 취소 버튼을 클릭했을 때 처리
+        btnCancle2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+    }
+
+
+
 
 
     // CommunityDetailEdit 페이지 열기 및 데이터 전달
@@ -249,6 +368,18 @@ public class CommunityDetailActivity extends AppCompatActivity {
         });
     }
     @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // commentList 데이터를 번들에 저장합니다.
+        outState.putStringArrayList(SAVED_COMMENT_LIST, commentList);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -276,6 +407,33 @@ public class CommunityDetailActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // 데이터 가져오기 실패
+            }
+        });
+
+        //댓글 데이터 초기화
+        commentList.clear();
+
+        DatabaseReference commentRef = database.getReference("Comment");
+
+        //해당 게시물의 제목과 동일한 댓글 데이터를 가져옴.
+        String categoryPostTitleContent = selectedCategory;
+        Query query = commentRef.child(categoryPostTitleContent)
+                .orderByChild("PostTitle")
+                .equalTo(community_title.getText().toString());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //댓글 데이터를 가져와 commentList에 추가합니다.
+                for(DataSnapshot commentSnapshot : snapshot.getChildren()){
+                    String comment = commentSnapshot.child("comment").getValue(String.class);
+                    commentList.add(comment);
+                }
+                adapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
