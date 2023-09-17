@@ -74,7 +74,7 @@ public class WorkDetail2Activity extends AppCompatActivity {
             name.setText(itemName);
         }
         if (formattedEarnings != null) {
-            money.setText(formattedEarnings + "원");
+            money.setText(formattedEarnings);
         }
         if (selectedDate != null) {
             date.setText(selectedDate);
@@ -113,7 +113,7 @@ public class WorkDetail2Activity extends AppCompatActivity {
                                     childListA.add(childDataMap);
 
                                     HashMap<String, String> childDataMap2 = new HashMap<>();
-                                    childDataMap2.put("data", "근무 수당: " + formattedEarnings + "원");
+                                    childDataMap2.put("data", "근무 수당: " + formattedEarnings);
                                     childListA.add(childDataMap2);
 
                                     // 값 표시하기
