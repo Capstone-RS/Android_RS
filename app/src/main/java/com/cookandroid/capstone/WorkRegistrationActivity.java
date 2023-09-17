@@ -136,7 +136,7 @@ public class WorkRegistrationActivity extends AppCompatActivity {
 
                 if ("시급".equals(selectedSpnPay)) {
                     // 시급인 경우에만 계산
-                    earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney);
+                    earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney, isPlusPay);
                 } else {
                     // 시급이 아닌 경우, 입력된 money 값을 그대로 사용
                     earnings = Double.parseDouble(selectedMoney);
@@ -225,7 +225,8 @@ public class WorkRegistrationActivity extends AppCompatActivity {
     }
 
 
-    private double calculateEarnings(String startTime, String endTime, String restTime, String money) {
+    // 연장 근무 및 급여 계산 함수
+    private double calculateEarnings(String startTime, String endTime, String restTime, String money, boolean isPlusPay) {
         // 시작 시간 및 종료 시간을 분으로 변환
         int startMinutes = calculateTotalMinutes(startTime);
         int endMinutes = calculateTotalMinutes(endTime);
@@ -239,6 +240,12 @@ public class WorkRegistrationActivity extends AppCompatActivity {
         // 시급과 근무 시간을 기반으로 급여 계산
         double hourlyRate = Double.parseDouble(money);
         double earnings = (workMinutes / 60.0) * hourlyRate;
+
+        // 연장근무 시간과 급여 계산
+        if (isPlusPay && workMinutes > 8 * 60) { // 8시간 초과 근무일 때 연장수당 적용
+            int overtimeMinutes = workMinutes - 8 * 60; // 8시간을 초과한 근무 시간
+            earnings += (overtimeMinutes / 60.0) * hourlyRate * 1.5; // 연장근무 수당 추가
+        }
 
         // 소수점 아래를 제거한 정수값으로 변환하여 반환
         return Math.floor(earnings);
