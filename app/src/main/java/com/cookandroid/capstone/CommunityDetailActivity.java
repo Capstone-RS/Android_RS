@@ -31,6 +31,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CommunityDetailActivity extends AppCompatActivity {
 
@@ -174,36 +175,41 @@ public class CommunityDetailActivity extends AppCompatActivity {
             }
         });
 
-        // btn_comment 버튼 클릭 시 호출되는 리스너 설정
+        // 댓글 추가 버튼 클릭 시 호출되는 리스너 설정
         btn_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String newComment = editText_comment.getText().toString();
                 if (!newComment.isEmpty()) {
-                    saveCommentToFirebase(newComment);
+                    // 새 댓글 데이터를 Firebase Realtime Database에 추가
+                    addCommentToFirebase(newComment);
                     editText_comment.setText(""); // 입력 필드 초기화
                 }
             }
         });
     }
-    // 댓글 저장 함수
-    private void saveCommentToFirebase(String newComment) {
-        // Firebase Realtime Database 인스턴스 초기화
+    private void addCommentToFirebase(String newComment) {
+        // Firebase Realtime Database 인스턴스를 초기화합니다.
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference commentRef = database.getReference("Comment");
 
-        // 중첩 구조 아래에 새 댓글 생성
-        String categoryPostTitleContent = selectedCategory;
-        DatabaseReference specificCommentRef = commentRef.child(categoryPostTitleContent).push();
+        // 카테고리와 게시물 제목을 가져옵니다.
+        String category = selectedCategory;
+        String postTitle = community_title.getText().toString();
 
-        // 댓글 데이터 저장
-        specificCommentRef.child("comment").setValue(newComment);
-        specificCommentRef.child("PostTitle").setValue(community_title.getText().toString());
-        specificCommentRef.child("PostContent").setValue(community_content.getText().toString());
+        // 카테고리와 게시물 제목을 조합하여 고유 식별자를 생성합니다.
+        String categoryPostTitle = category + "_" + postTitle;
 
-        // 댓글이 저장된 후에는 리스트뷰에 표시되도록 업데이트
-        commentList.add(newComment); // 댓글 데이터 리스트에 추가
-        adapter.notifyDataSetChanged(); // 어댑터에 변경 사항 알림
+        // 댓글을 해당 게시물의 'Comments' 노드에 추가합니다.
+        DatabaseReference commentRef = database.getReference("Comments")
+                .child(category)
+                .child(categoryPostTitle);
+
+        String commentId = commentRef.push().getKey(); // 댓글 고유 식별자 생성
+        commentRef.child(commentId).setValue(newComment);
+
+        // 댓글 리스트를 업데이트
+        commentList.add(newComment);
+        adapter.notifyDataSetChanged();
     }
 
     //현재 사용자의 아이디 가져오기
@@ -263,6 +269,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
         });
     }
 
+    //게시물 작성한 유저일 경우
     private void openBottomSheetForCurrentUser() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_community, null);
@@ -302,12 +309,21 @@ public class CommunityDetailActivity extends AppCompatActivity {
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }
+
+    //게시물 작성한 유저와 다를 경우
     private void openBottomSheetForOtherUser() {
         // 다른 사용자를 위한 바텀시트 열기
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_community2, null);
 
+        TextView btnChat = bottomSheetView.findViewById(R.id.btn_chat);
         TextView btnCancle2 = bottomSheetView.findViewById(R.id.btn_cancle);
+
+        // 바텀시트에서 채팅 버튼을 클릭했을 때 처리
+
+
+
+
         // 바텀시트에서 취소 버튼을 클릭했을 때 처리
         btnCancle2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -320,10 +336,6 @@ public class CommunityDetailActivity extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
-
-
-
-
     // CommunityDetailEdit 페이지 열기 및 데이터 전달
     private void openEditActivity(String title, String content) {
         Intent intent = new Intent(this, CommunityDetailEditActivity.class);
@@ -332,7 +344,6 @@ public class CommunityDetailActivity extends AppCompatActivity {
         intent.putExtra("category", selectedCategory); // 선택한 카테고리 데이터 추가
         startActivity(intent);
     }
-
 
     // Firebase에서 해당 게시글 삭제하는 함수
     private void deletePostFromFirebase() {
