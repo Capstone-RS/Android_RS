@@ -63,8 +63,6 @@ public class WorkDetail2Activity extends AppCompatActivity {
         });
 
 
-
-
         Intent intent = getIntent();
         final String itemName = intent.getStringExtra("itemName");
         final String formattedEarnings = intent.getStringExtra("formattedEarnings");
@@ -105,6 +103,8 @@ public class WorkDetail2Activity extends AppCompatActivity {
                                 String endTimeValue = dateSnapshot.child("endTime").getValue(String.class);
                                 String restTimeValue = dateSnapshot.child("restTime").getValue(String.class);
                                 String moneyValue = dateSnapshot.child("money").getValue(String.class);
+                                Boolean swWorkValue = dateSnapshot.child("swWork").getValue(Boolean.class);
+
 
                                 if (dateValue != null && dateValue.trim().equals(selectedDate.trim())) {
                                     // 자식 데이터를 HashMap에 추가
@@ -125,6 +125,9 @@ public class WorkDetail2Activity extends AppCompatActivity {
                                     }
                                     if (restTimeValue != null) {
                                         restTime.setText(restTimeValue);
+                                    }
+                                    if(swWorkValue != null) {
+                                        swWork.setChecked(swWorkValue);
                                     }
                                 }
                             }
