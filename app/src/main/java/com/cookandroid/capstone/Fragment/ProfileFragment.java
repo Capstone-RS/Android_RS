@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.cookandroid.capstone.BottomSheet_Push_Notification;
+import com.cookandroid.capstone.PrefUtils;
 import com.cookandroid.capstone.R;
 import com.cookandroid.capstone.SignInActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,6 +30,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileFragment extends Fragment {
 
+    private static final String PREF_SELECTED_LAYOUT = "selected_layout";
+
     private LinearLayout notificationSettingsLayout;
     private TextView usernameTextView; // 닉네임 text
     private TextView emailTextView; // email text
@@ -37,6 +40,7 @@ public class ProfileFragment extends Fragment {
     private LinearLayout logoutLayout;
 
     private LinearLayout withdrawLayout;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,6 +73,10 @@ public class ProfileFragment extends Fragment {
 //        profileImageView = view.findViewById(R.id.profileImageView);
 //        Glide.with(this).load(photoUrl).into(profileImageView); // 프로필 url을 이미지뷰에 세팅
 
+        TextView selectedTimeTextView = view.findViewById(R.id.selectedTimeTextView);
+
+        String selectedLayout = PrefUtils.getCurrentSelectedLayout(getActivity());
+        selectedTimeTextView.setText(PrefUtils.getSelectedText(selectedLayout));
 
         notificationSettingsLayout = view.findViewById(R.id.notification_settings_layout);
         notificationSettingsLayout.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +86,7 @@ public class ProfileFragment extends Fragment {
                 bottomSheet.show(getParentFragmentManager(), "bottomSheet");
             }
         });
+
 
         logoutLayout = view.findViewById(R.id.logoutLayout);
         // withdrawLayout = view.findViewById(R.id.withdrawLayout);
