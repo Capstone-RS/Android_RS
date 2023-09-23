@@ -17,6 +17,7 @@ import android.widget.ToggleButton;
 import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -50,6 +51,8 @@ public class CommunityDetailActivity extends AppCompatActivity {
     private String communityContent;
     private String title;
     private static final String SAVED_COMMENT_LIST = "saved_comment_list";
+
+    private static final int REQUEST_EDIT_POST = 101; // 임의의 숫자로 설정
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -341,8 +344,9 @@ public class CommunityDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CommunityDetailEditActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("content", content);
-        intent.putExtra("category", selectedCategory); // 선택한 카테고리 데이터 추가
-        startActivity(intent);
+        intent.putExtra("category", selectedCategory);
+        startActivityForResult(intent, REQUEST_EDIT_POST); // 요청 코드 설정
+
     }
 
     // Firebase에서 해당 게시글 삭제하는 함수
@@ -448,4 +452,25 @@ public class CommunityDetailActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_EDIT_POST) {
+            if (resultCode == RESULT_OK && data != null) {
+                // 수정 결과를 처리합니다.
+                String updatedTitle = data.getStringExtra("title");
+                String updatedContent = data.getStringExtra("content");
+
+                // 수정된 제목과 내용을 화면에 반영합니다.
+                if (updatedTitle != null) {
+                    community_title.setText(updatedTitle);
+                }
+                if (updatedContent != null) {
+                    community_content.setText(updatedContent);
+                }
+            }
+        }
+    }
+
 }
