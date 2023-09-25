@@ -139,8 +139,8 @@ public class WorkRegistrationActivity extends AppCompatActivity {
                     // 시급인 경우에만 계산
                     earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney, isPlusPay, isNightPay);
 
-                    // 근무 시간이 야간 수당 적용 시간대인지 확인
-                    if (isNightTime(selectedStartTime, selectedEndTime)) {
+                    // 야간 수당 계산
+                    if (isNightPay) {
                         earnings += calculateNightPay(selectedStartTime, selectedEndTime, selectedMoney);
                     }
                 } else {
@@ -275,12 +275,7 @@ public class WorkRegistrationActivity extends AppCompatActivity {
 
         return totalMinutes;
     }
-    // 근무 시간이 야간 수당 적용 시간대인지 확인하는 메소드
-    private boolean isNightTime(String startTime, String endTime) {
-        int startHour = Integer.parseInt(startTime.split(":")[0]);
-        int endHour = Integer.parseInt(endTime.split(":")[0]);
-        return (startHour >= 22 || startHour <= 5 || endHour >= 22 || endHour <= 5);
-    }
+
 
     // 야간 수당을 계산하는 메소드
     private double calculateNightPay(String startTime, String endTime, String hourlyRate) {
