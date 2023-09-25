@@ -9,6 +9,7 @@ public class WorkData {
     private String startTime;
     private double earnings; // 추가된 부분
     private boolean swPlusPay; // swpluspay 필드 추가
+    private boolean swNightPay;
 
 
 
@@ -89,6 +90,15 @@ public class WorkData {
 
     public void setSwPlusPay(boolean swPlusPay) {
         this.swPlusPay = swPlusPay;
+    }
+
+
+    public boolean isSwNightPay() {
+        return swNightPay;
+    }
+
+    public void setSwNightPay(boolean swNightPay) {
+        this.swNightPay = swNightPay;
     }
 
 
