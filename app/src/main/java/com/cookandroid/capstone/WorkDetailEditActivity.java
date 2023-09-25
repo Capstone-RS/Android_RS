@@ -37,7 +37,7 @@ public class WorkDetailEditActivity extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser = mAuth.getCurrentUser();
 
-
+    private double earnings; // earnings 변수를 여기에 선언합니다.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +55,7 @@ public class WorkDetailEditActivity extends AppCompatActivity {
         Spinner spnPay = findViewById(R.id.spnPay);
         Spinner spnRestTime = findViewById(R.id.spnRestTime);
         Switch swPlusPay = findViewById(R.id.swPlusPay);
+        Switch swNightPay = findViewById(R.id.swNightPay);
 
 
 
@@ -85,6 +86,10 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                                 Boolean swPlusPayValue = dateSnapshot.child("swPlusPay").getValue(Boolean.class);
                                 if (swPlusPayValue != null) {
                                     swPlusPay.setChecked(swPlusPayValue);
+                                }
+                                Boolean swNightPayValue = dateSnapshot.child("swNightPay").getValue(Boolean.class);
+                                if (swNightPayValue != null) {
+                                    swNightPay.setChecked(swNightPayValue);
                                 }
 
                                 if (dateValue != null && dateValue.trim().equals(selectedDate.trim())) {
@@ -246,10 +251,18 @@ public class WorkDetailEditActivity extends AppCompatActivity {
 
                 // 스위치의 현재 상태 가져오기
                 boolean isPlusPay = swPlusPay.isChecked();
+                // 스위치의 현재 상태 가져오기
+                boolean isNightPay = swNightPay.isChecked();
 
                 // 수정된 값을 기반으로 급여 계산
-                double earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney, isPlusPay);
+                earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney, isPlusPay);
 
+                // 야간 수당 계산 스위치 상태 확인 후 계산
+                if (isNightPay) {
+                    if (isNightTime(selectedStartTime, selectedEndTime)) {
+                        earnings += calculateNightPay(selectedStartTime, selectedEndTime, selectedMoney);
+                    }
+                }
 
                 // DatabaseReference 참조 가져오기
                 DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
@@ -272,6 +285,7 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                                         dateSnapshot.child("restTime").getRef().setValue(restTimeMethod);
                                         dateSnapshot.child("earnings").getRef().setValue(earnings); // 수정된 "earnings" 값 설정
                                         dateSnapshot.child("swPlusPay").getRef().setValue(isPlusPay);
+                                        dateSnapshot.child("swNightPay").getRef().setValue(isNightPay);
 
                                         break;
                                     }
@@ -328,5 +342,29 @@ public class WorkDetailEditActivity extends AppCompatActivity {
         int hours = Integer.parseInt(timeParts[0]);
         int minutes = Integer.parseInt(timeParts[1]);
         return hours * 60 + minutes;
+    }
+    // 근무 시간이 야간 수당 적용 시간대인지 확인하는 메소드
+    private boolean isNightTime(String startTime, String endTime) {
+        int startHour = Integer.parseInt(startTime.split(":")[0]);
+        int endHour = Integer.parseInt(endTime.split(":")[0]);
+        return (startHour >= 22 || startHour <= 5 || endHour >= 22 || endHour <= 5);
+    }
+
+    // 야간 수당을 계산하는 메소드
+    private double calculateNightPay(String startTime, String endTime, String hourlyRate) {
+        int startHour = Integer.parseInt(startTime.split(":")[0]);
+        int endHour = Integer.parseInt(endTime.split(":")[0]);
+        int nightHours = 0;
+
+        // 근무 시간 중 야간 수당 시간대 계산
+        for (int hour = startHour; hour < endHour; hour++) {
+            if (hour >= 22 || hour <= 5) {
+                nightHours++;
+            }
+        }
+
+        // 야간 수당 계산 및 반환
+        double rate = Double.parseDouble(hourlyRate);
+        return (nightHours * rate * 0.5);
     }
 }
