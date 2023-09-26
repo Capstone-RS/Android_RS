@@ -56,6 +56,7 @@ public class WorkRegistrationActivity extends AppCompatActivity {
         Button btnNext = findViewById(R.id.btnNext);
         Button btnBack = findViewById(R.id.btnBack);
         Switch swPlusPay = findViewById(R.id.swPlusPay);
+        Switch swNightPay = findViewById(R.id.swNightPay);
 
 
 
@@ -130,13 +131,18 @@ public class WorkRegistrationActivity extends AppCompatActivity {
                 String selectedRestTime = spnRestTime.getSelectedItem().toString();
                 // 스위치의 상태를 가져오기
                 boolean isPlusPay = swPlusPay.isChecked();
-
+                boolean isNightPay = swNightPay.isChecked();
 
                 double earnings;
 
                 if ("시급".equals(selectedSpnPay)) {
                     // 시급인 경우에만 계산
-                    earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney, isPlusPay);
+                    earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney, isPlusPay, isNightPay);
+
+                    // 야간 수당 계산
+                    if (isNightPay) {
+                        earnings += calculateNightPay(selectedStartTime, selectedEndTime, selectedMoney);
+                    }
                 } else {
                     // 시급이 아닌 경우, 입력된 money 값을 그대로 사용
                     earnings = Double.parseDouble(selectedMoney);
@@ -152,7 +158,7 @@ public class WorkRegistrationActivity extends AppCompatActivity {
                 WorkData workData = new WorkData(selectedSpnPay, selectedRestTime, selectedDate, selectedEndTime, selectedMoney, selectedStartTime);
                 workData.setEarnings(earnings); // 계산된 급여 값을 설정
                 workData.setSwPlusPay(isPlusPay); // 스위치 상태 저장
-
+                workData.setSwNightPay(isNightPay);
 
                 // 데이터베이스에서 name 값이 selectedItemKey와 일치하는 데이터를 찾기 위한 쿼리 생성
                 Query query = databaseRef.orderByChild("name").equalTo(selectedItemKey);
@@ -226,7 +232,7 @@ public class WorkRegistrationActivity extends AppCompatActivity {
 
 
     // 연장 근무 및 급여 계산 함수
-    private double calculateEarnings(String startTime, String endTime, String restTime, String money, boolean isPlusPay) {
+    private double calculateEarnings(String startTime, String endTime, String restTime, String money, boolean isPlusPay, boolean isNightPay) {
         // 시작 시간 및 종료 시간을 분으로 변환
         int startMinutes = calculateTotalMinutes(startTime);
         int endMinutes = calculateTotalMinutes(endTime);
@@ -244,8 +250,13 @@ public class WorkRegistrationActivity extends AppCompatActivity {
         // 연장근무 시간과 급여 계산
         if (isPlusPay && workMinutes > 8 * 60) { // 8시간 초과 근무일 때 연장수당 적용
             int overtimeMinutes = workMinutes - 8 * 60; // 8시간을 초과한 근무 시간
-            earnings += (overtimeMinutes / 60.0) * hourlyRate * 1.5; // 연장근무 수당 추가
+            earnings += (overtimeMinutes / 60.0) * hourlyRate * 0.5; // 연장근무 수당 추가
         }
+
+
+
+
+
 
         // 소수점 아래를 제거한 정수값으로 변환하여 반환
         return Math.floor(earnings);
@@ -255,6 +266,32 @@ public class WorkRegistrationActivity extends AppCompatActivity {
         String[] timeParts = time.split(":");
         int hours = Integer.parseInt(timeParts[0]);
         int minutes = Integer.parseInt(timeParts[1]);
-        return hours * 60 + minutes;
+        int totalMinutes = hours * 60 + minutes;
+
+        // 만약 오전 12시 이후의 시간(오후 시간)이라면 24시간을 더해줍니다.
+        if (hours >= 12) {
+            totalMinutes += 24 * 60;
+        }
+
+        return totalMinutes;
+    }
+
+
+    // 야간 수당을 계산하는 메소드
+    private double calculateNightPay(String startTime, String endTime, String hourlyRate) {
+        int startHour = Integer.parseInt(startTime.split(":")[0]);
+        int endHour = Integer.parseInt(endTime.split(":")[0]);
+        int nightHours = 0;
+
+        // 근무 시간 중 야간 수당 시간대 계산
+        for (int hour = startHour; hour < endHour; hour++) {
+            if (hour >= 22 || hour <= 5) {
+                nightHours++;
+            }
+        }
+
+        // 야간 수당 계산 및 반환
+        double rate = Double.parseDouble(hourlyRate);
+        return (nightHours * rate * 0.5);
     }
 }
