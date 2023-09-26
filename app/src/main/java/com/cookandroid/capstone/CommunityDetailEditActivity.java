@@ -7,10 +7,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class CommunityDetailEditActivity extends AppCompatActivity {
 
@@ -69,35 +75,42 @@ public class CommunityDetailEditActivity extends AppCompatActivity {
         btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 수정 내용을 가져옴
-                String updatedTitle = et_title.getText().toString();
-                String updatedContent = et_content.getText().toString();
+                // 수정된 내용을 가져옵니다.
+                String updatedTitle = et_title.getText().toString(); // 수정된 제목을 가져옵니다.
+                String updatedContent = et_content.getText().toString(); // 수정된 내용을 가져옵니다.
 
-                // 기존 게시글의 레퍼런스를 가져옴
+                // 현재 사용자의 userid를 가져옵니다.
+                String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                // 데이터베이스 레퍼런스를 가져옵니다.
                 DatabaseReference postRef = databaseReference;
 
-                // 기존 게시글의 데이터를 삭제
-                postRef.removeValue();
+                // ValueEventListener를 사용하여 기존 게시물의 데이터를 수정합니다.
+                postRef.orderByChild("title").equalTo(title).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                            // 수정 대상 게시물을 찾았으므로 해당 게시물의 내용을 수정합니다.
+                            postSnapshot.child("title").getRef().setValue(updatedTitle); // 수정된 제목 저장
+                            postSnapshot.child("content").getRef().setValue(updatedContent); // 수정된 내용 저장
+                            postSnapshot.child("userId").getRef().setValue(userUid); // 현재 사용자의 userid 저장
+                        }
 
-                // 수정된 데이터를 새로 저장
-                DatabaseReference newPostRef = databaseReference.push();
-                newPostRef.child("title").setValue(updatedTitle);
-                newPostRef.child("content").setValue(updatedContent);
+                        // 수정이 완료되면 CommunityDetailActivity로 결과를 전달합니다.
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("title", updatedTitle); // 수정된 제목 정보를 전달
+                        resultIntent.putExtra("content", updatedContent); // 수정된 내용 정보를 전달
+                        setResult(RESULT_OK, resultIntent);
 
-                // 수정이 완료되면 결과를 CommunityDetailActivity로 전달하여 화면 갱신
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("dataChanged", true);
-                resultIntent.putExtra("title", updatedTitle); // 수정된 제목 전달
-                resultIntent.putExtra("content", updatedContent); // 수정된 내용 전달
-                setResult(RESULT_OK, resultIntent);
+                        // 현재 액티비티를 종료합니다.
+                        finish();
+                    }
 
-                // CommunityDetail 화면으로 이동하면서 수정된 데이터 전달
-                Intent detailIntent = new Intent(getApplicationContext(), CommunityDetailActivity.class);
-                detailIntent.putExtra("title", updatedTitle);
-                detailIntent.putExtra("content", updatedContent);
-                startActivity(detailIntent);
-
-                finish(); // 액티비티 종료
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // 오류 처리 코드
+                    }
+                });
             }
         });
 
