@@ -75,6 +75,7 @@ public class Main_WorkDataActivity extends AppCompatActivity {
                             Boolean swPlusPayValue = snapshot.child("swPlusPay").getValue(Boolean.class);
                             Boolean swHolliDayPayValue = snapshot.child("swHolliDayPay").getValue(Boolean.class);
 
+
                             if (swTaxValue != null) {
                                 swTax.setChecked(swTaxValue); // 토글버튼 상태 설정
                             }
@@ -170,6 +171,10 @@ public class Main_WorkDataActivity extends AppCompatActivity {
                 boolean isTaxEnabled = swTax.isChecked(); // 세금 스위치의 상태 가져오기
                 boolean isPlusPayEnabled = swPlusPay.isChecked(); // 연장수당 스위치의 상태 가져오기
                 boolean isHolidayPayEnabled = swHolliDayPay.isChecked(); // 휴일수당 스위치의 상태 가져오기
+                // 스피너에서 선택한 "Insurance" 값을 가져오기
+                // 토글 버튼 상태에 따라 Insurance 값을 설정
+                String getInsurance = swInsurance.isChecked() ? spnInsurance.getSelectedItem().toString() : "";
+
 
                 // 여기에 다른 수정 내용을 가져오는 코드 추가
 
@@ -191,6 +196,10 @@ public class Main_WorkDataActivity extends AppCompatActivity {
                             dataRef.child("swPlusPay").setValue(isPlusPayEnabled);
                             dataRef.child("swHolliDayPay").setValue(isHolidayPayEnabled);
                             dataRef.child("payDay").setValue(selectedPayDay);
+
+                            // "Insurance" 데이터 업데이트
+                            dataRef.child("Insurance").setValue(getInsurance);
+
                         }
                     }
 
