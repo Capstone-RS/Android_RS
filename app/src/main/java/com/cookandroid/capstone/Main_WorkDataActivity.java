@@ -197,9 +197,13 @@ public class Main_WorkDataActivity extends AppCompatActivity {
                             dataRef.child("swHolliDayPay").setValue(isHolidayPayEnabled);
                             dataRef.child("payDay").setValue(selectedPayDay);
 
-                            // "Insurance" 데이터 업데이트
-                            dataRef.child("Insurance").setValue(getInsurance);
+                            // 상위 스위치 상태 변경
+                            dataRef.child("swPlusPay").setValue(isPlusPayEnabled);
 
+                            // 하위 스위치 상태 변경
+                            for (DataSnapshot dateSnapshot : snapshot.child("dates").getChildren()) {
+                                dateSnapshot.child("swPlusPay").getRef().setValue(isPlusPayEnabled);
+                            }
                         }
                     }
 
