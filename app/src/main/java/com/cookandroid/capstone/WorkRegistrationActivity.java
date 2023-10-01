@@ -57,7 +57,7 @@ public class WorkRegistrationActivity extends AppCompatActivity {
         Button btnBack = findViewById(R.id.btnBack);
         Switch swPlusPay = findViewById(R.id.swPlusPay);
         Switch swNightPay = findViewById(R.id.swNightPay);
-
+        Switch swHolliDayPay = findViewById(R.id.swHollidayPay);
 
 
         // 선택된 날짜를 받아옴
@@ -132,6 +132,7 @@ public class WorkRegistrationActivity extends AppCompatActivity {
                 // 스위치의 상태를 가져오기
                 boolean isPlusPay = swPlusPay.isChecked();
                 boolean isNightPay = swNightPay.isChecked();
+                boolean isHolliDayPay = swHolliDayPay.isChecked();
 
                 double earnings;
 
@@ -159,6 +160,7 @@ public class WorkRegistrationActivity extends AppCompatActivity {
                 workData.setEarnings(earnings); // 계산된 급여 값을 설정
                 workData.setSwPlusPay(isPlusPay); // 스위치 상태 저장
                 workData.setSwNightPay(isNightPay);
+                workData.setSwHolliDayPay(isHolliDayPay); // 휴일 수당 스위치 상태 저장
 
                 // 데이터베이스에서 name 값이 selectedItemKey와 일치하는 데이터를 찾기 위한 쿼리 생성
                 Query query = databaseRef.orderByChild("name").equalTo(selectedItemKey);
@@ -252,10 +254,6 @@ public class WorkRegistrationActivity extends AppCompatActivity {
             int overtimeMinutes = workMinutes - 8 * 60; // 8시간을 초과한 근무 시간
             earnings += (overtimeMinutes / 60.0) * hourlyRate * 0.5; // 연장근무 수당 추가
         }
-
-
-
-
 
 
         // 소수점 아래를 제거한 정수값으로 변환하여 반환

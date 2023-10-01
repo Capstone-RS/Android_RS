@@ -10,6 +10,7 @@ public class WorkData {
     private double earnings; // 추가된 부분
     private boolean swPlusPay; // swpluspay 필드 추가
     private boolean swNightPay;
+    private boolean swHolliDayPay;
 
 
 
@@ -99,6 +100,14 @@ public class WorkData {
 
     public void setSwNightPay(boolean swNightPay) {
         this.swNightPay = swNightPay;
+    }
+
+    public boolean isSwHolliDayPay() {
+        return swHolliDayPay;
+    }
+
+    public void setSwHolliDayPay(boolean swHolliDayPay) {
+        this.swHolliDayPay = swHolliDayPay;
     }
 
 
