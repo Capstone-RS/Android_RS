@@ -193,17 +193,23 @@ public class Main_WorkDataActivity extends AppCompatActivity {
                             dataRef.child("name").setValue(newName); // 이름 업데이트
                             dataRef.child("workPeriod").setValue(selectedWorkPeriod); // 스피너 값 업데이트
                             dataRef.child("isTaxEnabled").setValue(isTaxEnabled);
-                            dataRef.child("swPlusPay").setValue(isPlusPayEnabled);
-                            dataRef.child("swHolliDayPay").setValue(isHolidayPayEnabled);
                             dataRef.child("payDay").setValue(selectedPayDay);
+                            dataRef.child("Insurance").setValue(getInsurance);
 
-                            // 상위 스위치 상태 변경
+                            // 연장 수당 상위 스위치 상태 변경
                             dataRef.child("swPlusPay").setValue(isPlusPayEnabled);
-
-                            // 하위 스위치 상태 변경
+                            // 연장 수당 하위 스위치 상태 변경
                             for (DataSnapshot dateSnapshot : snapshot.child("dates").getChildren()) {
                                 dateSnapshot.child("swPlusPay").getRef().setValue(isPlusPayEnabled);
                             }
+
+                            // 휴일 수당 상위 스위치 상태 변경
+                            dataRef.child("swHolliDayPay").setValue(isHolidayPayEnabled);
+                            // 휴일 수당 하위 스위치 상태 변경
+                            for (DataSnapshot dateSnapshot : snapshot.child("dates").getChildren()) {
+                                dateSnapshot.child("swHolliDayPay").getRef().setValue(isHolidayPayEnabled);
+                            }
+
                         }
                     }
 
