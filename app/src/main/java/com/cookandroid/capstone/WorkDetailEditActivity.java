@@ -56,6 +56,8 @@ public class WorkDetailEditActivity extends AppCompatActivity {
         Spinner spnRestTime = findViewById(R.id.spnRestTime);
         Switch swPlusPay = findViewById(R.id.swPlusPay);
         Switch swNightPay = findViewById(R.id.swNightPay);
+        Switch swHolliDayPay = findViewById(R.id.swHollidayPay);
+
 
 
 
@@ -90,6 +92,10 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                                 Boolean swNightPayValue = dateSnapshot.child("swNightPay").getValue(Boolean.class);
                                 if (swNightPayValue != null) {
                                     swNightPay.setChecked(swNightPayValue);
+                                }
+                                Boolean swHolliDayPayValue = dateSnapshot.child("swHolliDayPay").getValue(Boolean.class);
+                                if (swHolliDayPayValue != null) {
+                                    swHolliDayPay.setChecked(swHolliDayPayValue);
                                 }
 
                                 if (dateValue != null && dateValue.trim().equals(selectedDate.trim())) {
@@ -286,7 +292,7 @@ public class WorkDetailEditActivity extends AppCompatActivity {
                                         dateSnapshot.child("earnings").getRef().setValue(earnings); // 수정된 "earnings" 값 설정
                                         dateSnapshot.child("swPlusPay").getRef().setValue(isPlusPay);
                                         dateSnapshot.child("swNightPay").getRef().setValue(isNightPay);
-
+                                        dateSnapshot.child("swHolliDayPay").getRef().setValue(swHolliDayPay.isChecked());
                                         break;
                                     }
                                 }

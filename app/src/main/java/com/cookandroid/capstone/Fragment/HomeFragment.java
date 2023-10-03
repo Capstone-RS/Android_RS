@@ -244,8 +244,13 @@ public class HomeFragment extends Fragment {
                         // isTaxEnabled 가져오기
                         Boolean isTaxEnabled = dataSnapshot.child("isTaxEnabled").getValue(Boolean.class);
 
+                        // Insurance 값을 가져오기
+                        String insuranceValue = dataSnapshot.child("Insurance").getValue(String.class);
 
-                        String formattedEarnings = formatCurrency(totalEarnings + totalmoney, isTaxEnabled);
+                        // 4대보험 계산 적용
+                        double totalEarningsAfterInsurance = calculateFourMajorInsurances(totalEarnings, insuranceValue);
+
+                        String formattedEarnings = formatCurrency(totalEarningsAfterInsurance + totalmoney, isTaxEnabled);
                         dataMoneyList.add(formattedEarnings);
                     }
                 }
@@ -253,7 +258,7 @@ public class HomeFragment extends Fragment {
                 // 데이터가 변경되었으므로 어댑터 갱신
                 WorkAdapter adapter = new WorkAdapter(dataNameList);
                 recyclerViewWorkList.setAdapter(adapter);
-                adapter.notifyDataSetChanged(); // 어댑터에 데이터 변경을 알려줌
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -261,8 +266,45 @@ public class HomeFragment extends Fragment {
                 // Handle error
             }
         });
-
     }
+
+    // 4대보험 계산 함수
+    private double calculateFourMajorInsurances(double earnings, String insuranceValue) {
+        double fourMajorInsurances = 0.0;
+
+        // Insurance 값에 따라 4대보험 계산 적용
+        switch (insuranceValue) {
+            case "4대보험 모두 가입":
+                // 4대보험 적용 비율 (예: 건강보험 3.06%, 장기요양보험 0.91%, 고용보험 0.65%, 국민연금 9%)
+                double healthInsuranceRate = 0.0306;
+                double longTermCareInsuranceRate = 0.0091;
+                double employmentInsuranceRate = 0.0065;
+                double nationalPensionRate = 0.09;
+
+                // 4대보험 금액 계산
+                double healthInsurance = earnings * healthInsuranceRate;
+                double longTermCareInsurance = earnings * longTermCareInsuranceRate;
+                double employmentInsurance = earnings * employmentInsuranceRate;
+                double nationalPension = earnings * nationalPensionRate;
+
+                // 4대보험 금액 합산
+                fourMajorInsurances = healthInsurance + longTermCareInsurance + employmentInsurance + nationalPension;
+                break;
+            case "고용보험만 가입":
+                // 고용보험만 적용 (고용보험 0.65%)
+                double employmentInsuranceOnlyRate = 0.0065;
+
+                // 고용보험 금액 계산
+                fourMajorInsurances = earnings * employmentInsuranceOnlyRate;
+                break;
+            default:
+                // 기본값 (4대보험 미반영)
+                break;
+        }
+
+        return earnings - fourMajorInsurances;
+    }
+
     private String formatCurrency(double amount, boolean applyTax) {
         DecimalFormat decimalFormat = new DecimalFormat("#,###원");
 

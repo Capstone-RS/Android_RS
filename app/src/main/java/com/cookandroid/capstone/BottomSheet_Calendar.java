@@ -63,7 +63,7 @@ public class BottomSheet_Calendar extends BottomSheetDialogFragment {
             public void onClick(View v) {
                 // 선택된 날짜들을 문자열로 변환
                 List<String> selectedDatesStringList = new ArrayList<>();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd (EEE)", Locale.getDefault());
                 for (CalendarDay calendarDay : selectedDates) {
                     String dateString = sdf.format(calendarDay.getDate());
                     selectedDatesStringList.add(dateString);
@@ -73,9 +73,6 @@ public class BottomSheet_Calendar extends BottomSheetDialogFragment {
                     listener.onDataReceived(selectedDatesString);
                 }
                 dismiss();
-//                Intent intent = new Intent(getActivity(), WorkData2Activity.class);
-//                intent.putExtra("test", selectedDatesString);
-//                startActivity(intent);
             }
         });
 
