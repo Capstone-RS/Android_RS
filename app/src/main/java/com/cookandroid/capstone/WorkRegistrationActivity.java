@@ -316,7 +316,7 @@ public class WorkRegistrationActivity extends AppCompatActivity {
 
                 // 예시: 시급에 1.5배를 곱하여 휴일 수당을 계산하는 경우
                 double rate = Double.parseDouble(hourlyRate);
-                double holidayPay = rate * 1.5; // 시급에 1.5배를 곱함
+                double holidayPay = rate * 0.5; // 시급에 1.5배를 곱함
 
                 return holidayPay;
             }
