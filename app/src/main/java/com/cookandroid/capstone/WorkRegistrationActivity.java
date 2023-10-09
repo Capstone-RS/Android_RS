@@ -136,6 +136,8 @@ public class WorkRegistrationActivity extends AppCompatActivity {
 
                 double earnings;
 
+
+
                 if ("시급".equals(selectedSpnPay)) {
                     // 시급인 경우에만 계산
                     earnings = calculateEarnings(selectedStartTime, selectedEndTime, selectedRestTime, selectedMoney, isPlusPay, isNightPay);
@@ -144,10 +146,17 @@ public class WorkRegistrationActivity extends AppCompatActivity {
                     if (isNightPay) {
                         earnings += calculateNightPay(selectedStartTime, selectedEndTime, selectedMoney);
                     }
+
+                    // 휴일 수당 계산 - 버튼이 눌려있을 때만 계산
+                    if (isHolliDayPay) {
+                        earnings += calculateHolidayPay(selectedDate, selectedMoney);
+                    }
                 } else {
                     // 시급이 아닌 경우, 입력된 money 값을 그대로 사용
                     earnings = Double.parseDouble(selectedMoney);
                 }
+
+
 
                 // Firebase에서 데이터 가져오기
                 DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Data");
@@ -291,5 +300,29 @@ public class WorkRegistrationActivity extends AppCompatActivity {
         // 야간 수당 계산 및 반환
         double rate = Double.parseDouble(hourlyRate);
         return (nightHours * rate * 0.5);
+    }
+
+
+    // 휴일 수당을 계산하는 메소드
+    private double calculateHolidayPay(String selectedDate, String hourlyRate) {
+        // 선택한 날짜에서 괄호 안의 요일 부분을 추출합니다.
+        int startIndex = selectedDate.indexOf('(');
+        int endIndex = selectedDate.indexOf(')');
+        if (startIndex != -1 && endIndex != -1) {
+            String dayOfWeek = selectedDate.substring(startIndex + 1, endIndex);
+
+            // 휴일 수당 계산을 하려는 요일이 (Sun) 또는 (Sat)인 경우에만 계산합니다.
+            if (dayOfWeek.equals("Sun") || dayOfWeek.equals("Sat")) {
+
+                // 예시: 시급에 1.5배를 곱하여 휴일 수당을 계산하는 경우
+                double rate = Double.parseDouble(hourlyRate);
+                double holidayPay = rate * 0.5; // 시급에 1.5배를 곱함
+
+                return holidayPay;
+            }
+        }
+
+        // 휴일이 아니거나 괄호 형식이 아닌 경우 0.0을 반환합니다.
+        return 0.0;
     }
 }
