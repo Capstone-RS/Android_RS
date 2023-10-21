@@ -36,6 +36,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -121,6 +123,9 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
         // 이 부분에서 댓글 데이터를 페이지에 접근할 때 로드합니다.
         loadCommentsFromFirebase(selectedCategory, title);
+
+        //날짜를 파이어베이스에서 불러오기
+        loadPostDateFromFirebase(selectedCategory, title);
 
         listView_comment.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -229,6 +234,35 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
                 // 어댑터를 업데이트하여 댓글 목록을 표시합니다.
                 adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // 데이터 가져오기 실패 처리
+            }
+        });
+    }
+
+    // Firebase에서 작성 날짜를 가져오는 메서드
+    private void loadPostDateFromFirebase(String selectedCategory, String title) {
+        TextView textView_date = findViewById(R.id.write_date_time);
+        DatabaseReference communityRef = database.getReference("Community").child(selectedCategory);
+
+        // "title" 대신 "title" 필드를 사용하여 해당 게시물의 작성 날짜를 가져옵니다.
+        Query query = communityRef.orderByChild("title").equalTo(title);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        String postDate = postSnapshot.child("date").getValue(String.class);
+                        if (postDate != null) {
+                            // 작성 날짜를 textView_date에 설정
+                            textView_date.setText(postDate);
+                        }
+                    }
+                }
             }
 
             @Override
