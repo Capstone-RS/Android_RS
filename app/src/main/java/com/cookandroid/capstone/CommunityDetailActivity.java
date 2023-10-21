@@ -96,6 +96,9 @@ public class CommunityDetailActivity extends AppCompatActivity {
         buttonFavorite.setOnCheckedChangeListener(null);
         buttonFavorite.setChecked(false);
 
+        // 게시물의 좋아요 상태를 Firebase 데이터베이스에서 불러오고 업데이트합니다.
+        updateLikeStatusFromFirebase(selectedCategory, title, buttonFavorite, textView_likeNumber);
+
         communityTitle = community_title.getText().toString();
 
         adapter = new CommunityCommentCustomListAdapter(getApplicationContext(), commentList, communityTitle, communityContent);
@@ -142,21 +145,51 @@ public class CommunityDetailActivity extends AppCompatActivity {
             }
         });
 
+        // 좋아요 버튼의 상태가 변경될 때의 리스너를 설정합니다.
         buttonFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 compoundButton.startAnimation(scaleAnimation);
-                // TODO: 버튼 상태 변경 시 수행할 작업을 추가하세요
 
-                // 버튼이 선택될 때마다 likeCount를 증가시키고 TextView에 업데이트합니다.
-                if (isChecked) {
-                    likeCount++;
-                } else {
-                    likeCount--;
+                // 현재 사용자의 ID 가져오기
+                String currentUserId = getCurrentUserId();
+
+                if (currentUserId != null) {
+                    DatabaseReference communityRef = database.getReference("Community").child(selectedCategory);
+                    Query query = communityRef.orderByChild("title").equalTo(title);
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                    // 해당 게시물의 "Likes" 노드에 사용자 아이디를 저장
+                                    DatabaseReference likesRef = postSnapshot.getRef().child("Likes").child(currentUserId);
+
+                                    if (isChecked) {
+                                        // 사용자가 좋아요를 누른 경우
+                                        likesRef.setValue(true);
+                                        likeCount++;
+                                    } else {
+                                        // 사용자가 좋아요를 취소한 경우
+                                        likesRef.removeValue();
+                                        likeCount--;
+                                    }
+
+                                    // TextView를 업데이트하여 좋아요 수를 표시합니다.
+                                    textView_likeNumber.setText(String.valueOf(likeCount));
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // 데이터 가져오기 실패 처리
+                        }
+                    });
                 }
-                textView_likeNumber.setText(String.valueOf(likeCount));
             }
         });
+
 
         btn_bottomsheet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,6 +283,69 @@ public class CommunityDetailActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // 데이터 가져오기 실패 처리
+            }
+        });
+    }
+
+    // Firebase에서 게시물의 좋아요 상태를 불러오고 업데이트하는 메서드
+    private void updateLikeStatusFromFirebase(String selectedCategory, String title, CompoundButton buttonFavorite, TextView textView_likeNumber) {
+        if (selectedCategory == null || title == null) {
+            // selectedCategory 또는 title이 null이면 처리하지 않음
+            return;
+        }
+
+        DatabaseReference communityRef = database.getReference("Community").child(selectedCategory);
+
+        // "title" 대신 "title" 필드를 사용하여 해당 게시물의 좋아요 상태를 가져옵니다.
+        Query query = communityRef.orderByChild("title").equalTo(title);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        Boolean liked = postSnapshot.child("liked").getValue(Boolean.class);
+
+                        // Firebase에서 가져온 좋아요 상태를 버튼에 반영합니다.
+                        if (liked != null) {
+                            buttonFavorite.setChecked(liked);
+
+                            // 버튼 상태에 따라 좋아요 수를 업데이트합니다.
+                            likeCount = liked ? likeCount + 1 : likeCount;
+                            textView_likeNumber.setText(String.valueOf(likeCount));
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // 데이터 가져오기 실패 처리
+            }
+        });
+    }
+
+    // Firebase에 게시물의 좋아요 상태를 업데이트하는 메서드
+    private void updateLikeStatusToFirebase(String selectedCategory, String title, boolean liked) {
+        DatabaseReference communityRef = database.getReference("Community").child(selectedCategory);
+
+        // "title" 대신 "title" 필드를 사용하여 해당 게시물의 좋아요 상태를 업데이트합니다.
+        Query query = communityRef.orderByChild("title").equalTo(title);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        // Firebase에 좋아요 상태를 업데이트합니다.
+                        postSnapshot.getRef().child("liked").setValue(liked);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // 업데이트 실패 처리
             }
         });
     }
