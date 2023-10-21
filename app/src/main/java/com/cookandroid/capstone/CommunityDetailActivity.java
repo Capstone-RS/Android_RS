@@ -67,6 +67,8 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
     private static final int REQUEST_EDIT_POST = 101; // 임의의 숫자로 설정
 
+    private int likeCount = 0; // 좋아요 수를 추적하는 변수
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +82,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
         scaleAnimation.setInterpolator(bounceInterpolator);
 
         ToggleButton buttonFavorite = findViewById(R.id.button_favorite);
+        TextView textView_likeNumber = findViewById(R.id.like_number);
         ImageButton btn_bottomsheet = findViewById(R.id.btn_bottomsheet);
         TextView textView_backbtn = findViewById(R.id.btnBack);
         TextView topic = findViewById(R.id.community_topic);
@@ -144,6 +147,14 @@ public class CommunityDetailActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 compoundButton.startAnimation(scaleAnimation);
                 // TODO: 버튼 상태 변경 시 수행할 작업을 추가하세요
+
+                // 버튼이 선택될 때마다 likeCount를 증가시키고 TextView에 업데이트합니다.
+                if (isChecked) {
+                    likeCount++;
+                } else {
+                    likeCount--;
+                }
+                textView_likeNumber.setText(String.valueOf(likeCount));
             }
         });
 

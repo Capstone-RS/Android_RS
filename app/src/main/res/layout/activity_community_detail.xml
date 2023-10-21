@@ -91,11 +91,12 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/like_number"
                 android:layout_width="45dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
                 android:gravity="center_vertical"
-                android:text="12"
+                android:text=""
                 android:textColor="@android:color/black"
                 android:textSize="15sp" />
 
