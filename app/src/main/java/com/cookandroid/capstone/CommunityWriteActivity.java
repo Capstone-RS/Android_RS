@@ -14,6 +14,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class CommunityWriteActivity extends AppCompatActivity {
 
     TextView textView_backbtn;
@@ -72,6 +75,10 @@ public class CommunityWriteActivity extends AppCompatActivity {
                 String content = et_content.getText().toString().trim();
 
                 if (!title.isEmpty() && !content.isEmpty()) {
+                    // 현재 날짜를 0000.00.00 형식으로 포맷
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+                    String currentDate = sdf.format(new Date());
+
                     // 카테고리별로 게시물 저장
                     DatabaseReference categoryRef = communityPostsRef.child(selectedCategory);
                     DatabaseReference newPostRef = categoryRef.push();
@@ -79,6 +86,7 @@ public class CommunityWriteActivity extends AppCompatActivity {
                     newPostRef.child("title").setValue(title);
                     newPostRef.child("content").setValue(content);
                     newPostRef.child("userId").setValue(userUid);
+                    newPostRef.child("date").setValue(currentDate); // 날짜 저장
 
                     // 데이터 저장 성공 시에만 결과 설정
                     Intent resultIntent = new Intent();
@@ -89,7 +97,6 @@ public class CommunityWriteActivity extends AppCompatActivity {
                     // 데이터 저장 실패 시에 대응 코드 (옵션)
                     // 실패 상황에 따라 적절한 처리를 추가할 수 있습니다.
                 }
-
             }
         });
     }
