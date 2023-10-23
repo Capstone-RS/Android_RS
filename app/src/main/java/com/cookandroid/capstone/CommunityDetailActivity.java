@@ -325,31 +325,6 @@ public class CommunityDetailActivity extends AppCompatActivity {
         });
     }
 
-    // Firebase에 게시물의 좋아요 상태를 업데이트하는 메서드
-    private void updateLikeStatusToFirebase(String selectedCategory, String title, boolean liked) {
-        DatabaseReference communityRef = database.getReference("Community").child(selectedCategory);
-
-        // "title" 대신 "title" 필드를 사용하여 해당 게시물의 좋아요 상태를 업데이트합니다.
-        Query query = communityRef.orderByChild("title").equalTo(title);
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        // Firebase에 좋아요 상태를 업데이트합니다.
-                        postSnapshot.getRef().child("liked").setValue(liked);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // 업데이트 실패 처리
-            }
-        });
-    }
-
     // Firebase에서 작성 날짜를 가져오는 메서드
     private void loadPostDateFromFirebase(String selectedCategory, String title) {
         TextView textView_date = findViewById(R.id.write_date_time);
