@@ -1,5 +1,6 @@
 package com.cookandroid.capstone;
-
+//솔빈이꺼 내꺼 합친거
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,6 +25,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.cookandroid.capstone.Fragment.ChatFragment;
+import com.cookandroid.capstone.Fragment.model.ChatDTO;
+import com.cookandroid.capstone.Fragment.model.ChatRoomDTO;
+import com.cookandroid.capstone.Fragment.model.UserDTO;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,6 +41,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
@@ -65,14 +74,27 @@ public class CommunityDetailActivity extends AppCompatActivity {
     private static final String SAVED_COMMENT_LIST = "saved_comment_list";
     private SharedPreferences prefs;
 
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private UserDTO mine = new UserDTO();
+
     private static final int REQUEST_EDIT_POST = 101; // 임의의 숫자로 설정
 
     private int likeCount = 0; // 좋아요 수를 추적하는 변수
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        SharedPreferences pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
+        mine.setId(pref.getString("uid", ""));
+        mine.setNickname(pref.getString("nickName", ""));
+        mine.setAvatarUrl(pref.getString("photoUrl", ""));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_detail);
+        onNewIntent(getIntent());
 
         database = FirebaseDatabase.getInstance();
 
@@ -82,6 +104,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
         scaleAnimation.setInterpolator(bounceInterpolator);
 
         ToggleButton buttonFavorite = findViewById(R.id.button_favorite);
+        ImageButton btn_bottomsheet = findViewById(R.id.btn_bottomsheet);
         TextView textView_likeNumber = findViewById(R.id.like_number);
         ImageButton btn_bottomsheet = findViewById(R.id.btn_bottomsheet);
         TextView textView_backbtn = findViewById(R.id.btnBack);
@@ -286,7 +309,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
             }
         });
     }
-
+    //요까지
     // Firebase에서 게시물의 좋아요 상태를 불러오고 업데이트하는 메서드
     private void updateLikeStatusFromFirebase(String selectedCategory, String title, CompoundButton buttonFavorite, TextView textView_likeNumber) {
         if (selectedCategory == null || title == null) {
@@ -366,6 +389,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     }
 
     // 해당 게시물 작성자의 아이디 가져오기
+    // getPostUserId -> getPostUserDTO, 해당 게시물 작성자 정보 가져오기
     private void getPostUserId(final DataCallback<String> callback) {
         // Firebase Realtime Database 인스턴스 초기화
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -380,7 +404,13 @@ public class CommunityDetailActivity extends AppCompatActivity {
                         if (snapshot.exists()) {
                             for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                                 String postUserId = postSnapshot.child("userId").getValue(String.class);
-                                callback.onDataReceived(postUserId); // 작성자의 아이디를 콜백으로 반환
+                                String nickName = postSnapshot.child("nickName").getValue(String.class);
+                                String photoUrl = postSnapshot.child("photoUrl").getValue(String.class);
+                                UserDTO userDTO = new UserDTO();
+                                userDTO.setId(postUserId);
+                                userDTO.setNickname(nickName);
+                                userDTO.setAvatarUrl(photoUrl);
+                                callback.onDataReceived(userDTO); // 작성자의 아이디를 콜백으로 반환
                                 return; // 아이디를 가져왔으므로 루프를 종료합니다.
                             }
                         }
@@ -400,9 +430,10 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
     private void openBottomSheet() {
         String currentUserId = getCurrentUserId();
-        getPostUserId(new DataCallback<String>() {
+        getPostUserId(new DataCallback<UserDTO>() {
             @Override
-            public void onDataReceived(String postUserId) {
+            public void onDataReceived(UserDTO userDTO)) {
+                String postUserId = userDTO.getId();
                 if (currentUserId != null && postUserId != null && currentUserId.equals(postUserId)) {
                     openBottomSheetForCurrentUser();
                 } else {
@@ -465,20 +496,27 @@ public class CommunityDetailActivity extends AppCompatActivity {
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // ChatFragment를 생성합니다.
-                ChatFragment chatFragment = new ChatFragment();
+//                // ChatFragment를 생성합니다.
+//                ChatFragment chatFragment = new ChatFragment();
+//
+//                // 필요한 데이터를 Bundle로 전달할 수 있으면 여기서 전달할 수 있습니다.
+//                Bundle args = new Bundle();
+//                args.putString("key1", "value1");
+//                chatFragment.setArguments(args);
+//
+//                // FragmentManager를 사용하여 ChatFragment를 화면에 표시합니다.
+//                getSupportFragmentManager().beginTransaction()
+//                        //.replace(R.id.fragment_container, chatFragment)
+//                        .addToBackStack(null) // 뒤로 가기 스택에 추가 (선택 사항)
+//                        .commit();
 
-                // 필요한 데이터를 Bundle로 전달할 수 있으면 여기서 전달할 수 있습니다.
-                Bundle args = new Bundle();
-                args.putString("key1", "value1");
-                chatFragment.setArguments(args);
-
-                // FragmentManager를 사용하여 ChatFragment를 화면에 표시합니다.
-                getSupportFragmentManager().beginTransaction()
-                        //.replace(R.id.fragment_container, chatFragment)
-                        .addToBackStack(null) // 뒤로 가기 스택에 추가 (선택 사항)
-                        .commit();
-
+                // 채팅방 이동
+                getPostUserDTO(new DataCallback<UserDTO>() {
+                    @Override
+                    public void onDataReceived(UserDTO userDTO) {
+                        requestChat(userDTO.getId(), userDTO.getNickname(), userDTO.getAvatarUrl());
+                    }
+                });
                 bottomSheetDialog.dismiss(); // 바텀시트를 닫습니다.
             }
         });
@@ -588,6 +626,95 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+    private void requestChat(String otherUserId, String otherNickname, String otherAvatarUrl) {
+        ChatRoomDTO chatRoomDTO = createChatRoom(otherUserId, otherNickname, otherAvatarUrl);
+
+        db.collection("ChatRoom")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ChatRoomDTO existChatRoom = findExistingChatRoom(task.getResult(), chatRoomDTO.getUsers().get(0), chatRoomDTO.getUsers().get(1));
+                            if (existChatRoom != null) {
+                                startChatActivity(existChatRoom);
+                            } else {
+                                createChat(chatRoomDTO);
+                            }
+                        }
+                    }
+                });
+    }
+
+    private ChatRoomDTO createChatRoom(String otherUserId, String otherNickname, String otherAvatarUrl) {
+        ChatRoomDTO chatRoomDTO = new ChatRoomDTO();
+        long timeStamp = System.currentTimeMillis();
+        UserDTO other = createUserDTO(otherUserId, otherNickname, otherAvatarUrl);
+        ChatDTO chat = new ChatDTO();
+        chat.setCreatedAt(timeStamp);
+        chat.setChat("");
+
+        chatRoomDTO.setRoomId(String.valueOf(timeStamp));
+        chatRoomDTO.getUsers().add(mine);
+        chatRoomDTO.getUsers().add(other);
+        chatRoomDTO.setLastChat(chat);
+
+        return chatRoomDTO;
+    }
+
+    private UserDTO createUserDTO(String userId, String nickname, String avatarUrl) {
+        UserDTO user = new UserDTO();
+        user.setId(userId);
+        user.setNickname(nickname);
+        user.setAvatarUrl(avatarUrl);
+        return user;
+    }
+
+    private ChatRoomDTO findExistingChatRoom(QuerySnapshot querySnapshot, UserDTO mine, UserDTO other) {
+        for (QueryDocumentSnapshot document : querySnapshot) {
+            ChatRoomDTO existingRoom = document.toObject(ChatRoomDTO.class);
+            if (isChatRoomAlreadyExist(existingRoom, mine, other)) {
+                return existingRoom;
+            }
+        }
+        return null;
+    }
+
+    // 채팅방이 이미 존재하는지 체크
+    private boolean isChatRoomAlreadyExist(ChatRoomDTO chatRoomDTO, UserDTO mine, UserDTO other) {
+        ArrayList<UserDTO> users = chatRoomDTO.getUsers();
+        String mineId = mine.getId();
+        String otherId = other.getId();
+
+        return (containsUserId(users.get(0), mineId) || containsUserId(users.get(1), mineId))
+                && (containsUserId(users.get(0), otherId) || containsUserId(users.get(1), otherId));
+    }
+
+    private boolean containsUserId(UserDTO user, String userId) {
+        return user.getId().contains(userId);
+    }
+
+    // 채팅 액티비티 시작
+    private void startChatActivity(ChatRoomDTO chatRoomDTO) {
+        Intent intent = new Intent(CommunityDetailActivity.this, ChatActivity.class);
+        intent.putExtra("roomId", chatRoomDTO.getRoomId());
+        startActivity(intent);
+    }
+
+    // 새로운 채팅방 생성
+    private void createChat(ChatRoomDTO chatRoomDTO) {
+        db.collection("ChatRoom")
+                .document(chatRoomDTO.getRoomId())
+                .set(chatRoomDTO)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            startChatActivity(chatRoomDTO);
+                        }
+                    }
+                });
     }
 
 }
