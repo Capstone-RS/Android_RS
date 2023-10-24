@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
@@ -20,47 +21,78 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Capstone"
         tools:targetApi="31">
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".SignInActivity"
+        <activity
+            android:name=".SignInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".WorkDataActivity"
+            android:label="정보입력 액티비티" />
+        <activity
+            android:name=".WorkData2Activity"
+            android:label="정보입력2 액티비티" />
+        <activity
+            android:name=".CheckListActivity"
+            android:label="체크리스트 액티비티" />
+        <activity
+            android:name=".WorkDetail2Activity"
+            android:label="정보상세2 액티비티" />
+        <activity
+            android:name=".HelpActivity"
+            android:label="도움말 액티비티" />
+        <activity
+            android:name=".ChooseWorkActivity"
+            android:label="근무등록 액티비티" />
+        <activity android:name=".WorkRegistrationActivity" />
+        <activity android:name=".WorkDetailEditActivity" />
+        <activity
+            android:name=".CommunityListActivity"
+            android:label="커뮤니티 리스트 액티비티" />
+        <activity
+            android:name=".CommunityWriteActivity"
+            android:label="커뮤니티 글쓰기 액티비티" />
+        <activity
+            android:name=".CommunityDetailActivity"
+            android:label="커뮤니티 내용 액티비티" />
+        <activity
+            android:name=".Main_WorkDataActivity"
+            android:label="메인 근무지 수정 액티비티" />
+        <activity
+            android:name=".CommunityDetailEditActivity"
+            android:label="커뮤니티 내용 수정 액티비티" />
+        <activity
+            android:name=".WorkDetailActivity"
+            android:label="정보상세 액티비티" />
 
-
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".WorkDataActivity" android:label="정보입력 액티비티"/>
-        <activity android:name=".WorkData2Activity" android:label="정보입력2 액티비티"/>
-        <activity android:name=".CheckListActivity" android:label="체크리스트 액티비티"/>
-        <activity android:name=".WorkDetail2Activity" android:label="정보상세2 액티비티"/>
-        <activity android:name=".HelpActivity" android:label="도움말 액티비티"/>
-        <activity android:name=".ChooseWorkActivity" android:label="근무등록 액티비티"/>
-        <activity android:name=".WorkRegistrationActivity"></activity>
-        <activity android:name=".WorkDetailEditActivity"/>
-        <activity android:name=".CommunityListActivity" android:label="커뮤니티 리스트 액티비티"/>
-        <activity android:name=".CommunityWriteActivity" android:label="커뮤니티 글쓰기 액티비티"/>
-        <activity android:name=".CommunityDetailActivity" android:label="커뮤니티 내용 액티비티"/>
-        <activity android:name=".Main_WorkDataActivity" android:label="메인 근무지 수정 액티비티"/>
-        <activity android:name=".CommunityDetailEditActivity" android:label="커뮤니티 내용 수정 액티비티"/>
-        <activity android:name=".WorkDetailActivity" android:label="정보상세 액티비티"/>
-
-        <receiver android:name=".alarm.AlarmReceiver"/>
-        <receiver android:exported="false" android:name=".alarm.BootReceiver">
+        <receiver android:name=".alarm.AlarmReceiver" />
+        <receiver
+            android:name=".alarm.BootReceiver"
+            android:exported="false">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
-                <action android:name="android.intent.action.TIME_SET"/>
-                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
-                <action android:name="android.intent.action.LOCALE_CHANGED"/>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
     </application>
