@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.7"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="12dp"
+        android:background="@drawable/box_5r_white"
+        android:backgroundTint="@color/gray_300"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:text="이것은 테스트 메시지입니다. 과연 잘 될까요? 저도 의문입니다. 제발"
+            android:textSize="13sp"
+            android:textColor="@color/black"
+            android:lineSpacingExtra="4dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_createdAt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        tools:text="23.10.18 06:38 AM"
+        android:textSize="12dp"
+        android:textColor="@color/gray_300"
+        app:layout_constraintStart_toStartOf="@id/layout_chat"
+        app:layout_constraintTop_toBottomOf="@id/layout_chat"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
