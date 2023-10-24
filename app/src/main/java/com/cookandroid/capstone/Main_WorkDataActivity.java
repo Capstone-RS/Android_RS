@@ -51,8 +51,7 @@ public class Main_WorkDataActivity extends AppCompatActivity {
         Switch swTax = (Switch) findViewById(R.id.swTax);
         Switch swInsurance = (Switch) findViewById(R.id.swInsurance);
         LinearLayout spinnerContainer = (LinearLayout) findViewById(R.id.spinnerContainer);
-        Switch swPlusPay = (Switch) findViewById(R.id.swPlusPay);
-        Switch swHolliDayPay = (Switch) findViewById(R.id.swHollidayPay);
+
 
         // 인텐트에서 전달받은 데이터 확인 및 사용
         Intent intent = getIntent();
@@ -72,8 +71,6 @@ public class Main_WorkDataActivity extends AppCompatActivity {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Boolean swTaxValue = snapshot.child("isTaxEnabled").getValue(Boolean.class);
                             String swInsuranceValue = snapshot.child("Insurance").getValue(String.class);
-                            Boolean swPlusPayValue = snapshot.child("swPlusPay").getValue(Boolean.class);
-                            Boolean swHolliDayPayValue = snapshot.child("swHolliDayPay").getValue(Boolean.class);
 
 
                             if (swTaxValue != null) {
@@ -87,12 +84,7 @@ public class Main_WorkDataActivity extends AppCompatActivity {
                             } else {
                                 swInsurance.setChecked(false); // 다른 경우에는 Off로 설정
                             }
-                            if (swPlusPayValue != null) {
-                                swPlusPay.setChecked(swPlusPayValue); // 토글버튼 상태 설정
-                            }
-                            if (swHolliDayPayValue != null) {
-                                swHolliDayPay.setChecked(swHolliDayPayValue); // 토글버튼 상태 설정
-                            }
+
                         }
                     }
 
@@ -169,9 +161,7 @@ public class Main_WorkDataActivity extends AppCompatActivity {
                 String selectedWorkPeriod = spn1.getSelectedItem().toString(); // 수정된 스피너 값
                 String selectedPayDay = spn2.getSelectedItem().toString();
                 boolean isTaxEnabled = swTax.isChecked(); // 세금 스위치의 상태 가져오기
-                boolean isPlusPayEnabled = swPlusPay.isChecked(); // 연장수당 스위치의 상태 가져오기
-                boolean isHolidayPayEnabled = swHolliDayPay.isChecked(); // 휴일수당 스위치의 상태 가져오기
-                // 스피너에서 선택한 "Insurance" 값을 가져오기
+               // 스피너에서 선택한 "Insurance" 값을 가져오기
                 // 토글 버튼 상태에 따라 Insurance 값을 설정
                 String getInsurance = swInsurance.isChecked() ? spnInsurance.getSelectedItem().toString() : "";
 
@@ -196,19 +186,6 @@ public class Main_WorkDataActivity extends AppCompatActivity {
                             dataRef.child("payDay").setValue(selectedPayDay);
                             dataRef.child("Insurance").setValue(getInsurance);
 
-                            // 연장 수당 상위 스위치 상태 변경
-                            dataRef.child("swPlusPay").setValue(isPlusPayEnabled);
-                            // 연장 수당 하위 스위치 상태 변경
-                            for (DataSnapshot dateSnapshot : snapshot.child("dates").getChildren()) {
-                                dateSnapshot.child("swPlusPay").getRef().setValue(isPlusPayEnabled);
-                            }
-
-                            // 휴일 수당 상위 스위치 상태 변경
-                            dataRef.child("swHolliDayPay").setValue(isHolidayPayEnabled);
-                            // 휴일 수당 하위 스위치 상태 변경
-                            for (DataSnapshot dateSnapshot : snapshot.child("dates").getChildren()) {
-                                dateSnapshot.child("swHolliDayPay").getRef().setValue(isHolidayPayEnabled);
-                            }
 
                         }
                     }
