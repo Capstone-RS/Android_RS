@@ -1,5 +1,6 @@
 package com.cookandroid.capstone;
 //솔빈이꺼 내꺼 합친거
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,15 +15,13 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.cookandroid.capstone.Fragment.ChatFragment;
 import com.cookandroid.capstone.Fragment.model.ChatDTO;
@@ -31,10 +30,8 @@ import com.cookandroid.capstone.Fragment.model.UserDTO;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,12 +42,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 public class CommunityDetailActivity extends AppCompatActivity {
 
@@ -106,7 +99,6 @@ public class CommunityDetailActivity extends AppCompatActivity {
         ToggleButton buttonFavorite = findViewById(R.id.button_favorite);
         ImageButton btn_bottomsheet = findViewById(R.id.btn_bottomsheet);
         TextView textView_likeNumber = findViewById(R.id.like_number);
-        ImageButton btn_bottomsheet = findViewById(R.id.btn_bottomsheet);
         TextView textView_backbtn = findViewById(R.id.btnBack);
         TextView topic = findViewById(R.id.community_topic);
         ListView listView_comment = findViewById(R.id.lv_comment);
@@ -390,7 +382,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
     // 해당 게시물 작성자의 아이디 가져오기
     // getPostUserId -> getPostUserDTO, 해당 게시물 작성자 정보 가져오기
-    private void getPostUserId(final DataCallback<String> callback) {
+    private void getPostUserDTO(final DataCallback<UserDTO> callback) {
         // Firebase Realtime Database 인스턴스 초기화
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference communityRef = database.getReference("Community").child(selectedCategory);
@@ -430,9 +422,9 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
     private void openBottomSheet() {
         String currentUserId = getCurrentUserId();
-        getPostUserId(new DataCallback<UserDTO>() {
+        getPostUserDTO(new DataCallback<UserDTO>() {
             @Override
-            public void onDataReceived(UserDTO userDTO)) {
+            public void onDataReceived(UserDTO userDTO) {
                 String postUserId = userDTO.getId();
                 if (currentUserId != null && postUserId != null && currentUserId.equals(postUserId)) {
                     openBottomSheetForCurrentUser();
