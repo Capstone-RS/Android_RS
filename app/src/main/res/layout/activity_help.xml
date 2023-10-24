@@ -31,9 +31,10 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@drawable/edge">
+        android:layout_height="wrap_content"
+        android:background="@drawable/edge"
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,16 +42,17 @@
             android:layout_marginTop="10dp"
             android:text="주휴수당 계산법"
             android:textSize="25sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginRight="15dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:text="1. (1주일동안 일한 시간/40시간) x 8시간 x 시급
         \n2. 1주일근무시간 x 시급 x 20%\n"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -59,16 +61,17 @@
             android:layout_marginTop="10dp"
             android:text="야간수당 기준"
             android:textSize="25sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginRight="15dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:text="[근로기준 제 56조 3항]
         \n야간에 하는 근로 시간에 대해서는 통상임금의 50%를 가산해서 근로자에게 지급을 해야만 한다.\n"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -77,18 +80,40 @@
             android:layout_marginTop="10dp"
             android:text="연장/야간 및 휴일 근로"
             android:textSize="25sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginRight="15dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:text="1. 8시간 이내의 휴일 근로: 통상임금의 100분의 50
         \n2. 8시간을 초과한 휴일근로: 통상임금의 100분의 100"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edge"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="1. 주휴수당은 일주일에 15시간 이상 근무하는 근로자에게만 제공됩니다.\n
+2. 근로자가 일주일 동안의 소정근로일에 모두 출근해야 합니다.\n
+3. 주휴수당은 그 다음 주에 출근할 것으로 예정되어 있는 직원에게만 지급됩니다."
+            android:textSize="18sp" />
+
 
     </LinearLayout>
 
 
-    </LinearLayout>
+</LinearLayout>
